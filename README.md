@@ -9,7 +9,8 @@
 
 # Introduction
 A VSCode extension to render LaTeX formula in comment. Now you can use it in **python**.  
-Extension code is modified from [vscode-iconify](https://github.com/antfu/vscode-iconify)
+Extension code is modified from [vscode-iconify](https://github.com/antfu/vscode-iconify).
+Use [markdown-it](https://github.com/markdown-it/markdown-it) and [markdown-it-mathjax3](https://github.com/tani/markdown-it-mathjax3) to render formula.
 
 ## Feature
 ![](res/feature.png)
