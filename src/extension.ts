@@ -1,5 +1,5 @@
 /**
- * code is modified from vscode-iconify by antfu
+ * code is modified from vscode-iconify
  * https://github.com/antfu/vscode-iconify
  */
 import type { DecorationOptions, ExtensionContext, TextEditor } from 'vscode'

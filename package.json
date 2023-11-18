@@ -2,11 +2,15 @@
   "name": "comment-formula",
   "author": "Casper Huang",
   "displayName": "comment-formula",
-  "description": "Review latex format formula inline the editor!",
+  "description": "Preview latex format formula inline the editor!",
   "version": "0.0.1",
-  "icon": "res/icon.png",
+  "icon": "res/logo.png",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.84.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/howcasperwhat/comment-formula.git"
   },
   "categories": [
     "Other"
