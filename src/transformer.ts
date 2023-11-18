@@ -11,23 +11,28 @@ export function htmlToDateURL(str: string) {
 const md = new MarkdownIt()
 md.use(mathjax3)
 export const markdownToHTML = (markdown: string) => {
+  // originHTML => message
+  // scaleHTML => inline
   const html = md.render(markdown)
   const originDOM = new JSDOM(html)
   const originElement = originDOM.window.document.querySelector('svg')!
   const originWidth = originElement.getAttribute('width')!
   const originHeight = originElement.getAttribute('height')!
   const originFirst = originElement!.firstChild as SVGElement
-  originFirst.setAttribute('fill', getColor())
-  originFirst.setAttribute('stroke', getColor())
+  originFirst.setAttribute('fill', getColor('message'))
+  originFirst.setAttribute('stroke', getColor('message'))
   const originHTML = originElement!.outerHTML
 
-  const scaleElement = originElement.cloneNode(true) as SVGElement
   let big = originHeight > '2.5ex'
+  let scaleElement = originElement.cloneNode(true) as SVGElement
   if (big) {
     const scale = 2.5 / parseFloat(originHeight!)
     scaleElement.setAttribute('width', `${parseFloat(originWidth!) * scale}ex`)
     scaleElement.setAttribute('height', `${parseFloat(originHeight!) * scale}ex`)
   }
+  const scaleFirst = scaleElement!.firstChild as SVGElement
+  scaleFirst.setAttribute('fill', getColor('inline'))
+  scaleFirst.setAttribute('stroke', getColor('inline'))
   const scaleHTML = scaleElement!.outerHTML
   const inline = getInline()
   if (inline == 'all')

@@ -4,7 +4,7 @@
   "publisher": "howcasperwhat",
   "displayName": "comment-formula",
   "description": "Preview latex format formula inline the editor!",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icon": "res/logo.png",
   "engines": {
     "vscode": "^1.84.0"
@@ -25,10 +25,15 @@
     "configuration": {
       "title": "comment-formula",
       "properties": {
-        "comment-formula.color": {
+        "comment-formula.inlineColor": {
           "type": "string",
           "default": "auto",
-          "description": "Color of formula."
+          "description": "Color of formula inline the editor."
+        },
+        "comment-formula.messageColor": {
+          "type": "string",
+          "default": "auto",
+          "description": "Color of formula in message."
         },
         "comment-formula.inline": {
           "type": "string",
