@@ -1,0 +1,1 @@
+export const EXT_NAMESPACE = 'comment-formula'

@@ -1,0 +1,68 @@
+{
+  "name": "comment-formula",
+  "author": "Casper Huang",
+  "displayName": "comment-formula",
+  "description": "Review latex format formula inline the editor!",
+  "version": "0.0.1",
+  "icon": "res/icon.png",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:python"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [],
+    "configuration": {
+      "title": "comment-formula",
+      "properties": {
+        "comment-formula.color": {
+          "type": "string",
+          "default": "auto",
+          "description": "Color of formula."
+        },
+        "comment-formula.inline": {
+          "type": "string",
+          "enum": [
+            "partial",
+            "all",
+            "none"
+          ],
+          "default": "partial",
+          "description": "`partial` means only not-so-large formulas are rendered inline."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.5",
+    "@types/markdown-it": "^13.0.6",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
+    "eslint": "^8.52.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "jsdom": "^22.1.0",
+    "markdown-it": "^13.0.2",
+    "markdown-it-mathjax3": "^4.3.2"
+  }
+}
