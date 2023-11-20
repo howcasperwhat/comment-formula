@@ -1,8 +1,7 @@
-<!-- ![](res/logo.png) -->
 <br>
 
 <p align="center">
-<img src="res/logo.png" style="width: 128px;" />
+<img src="res/logo.png" style="width: 200px;" />
 </p>
 
 <h1 align="center">Comment Formula</h1>
@@ -13,12 +12,14 @@ Extension code is modified from [vscode-iconify](https://github.com/antfu/vscode
 Use [markdown-it](https://github.com/markdown-it/markdown-it) and [markdown-it-mathjax3](https://github.com/tani/markdown-it-mathjax3) to render formula.
 
 ## Feature
+You are supposed to write formula between `$$` and `$$`.
+Now just support write formula in one-line comment.
 ![](res/feature.png)
 
 ## Configure options
 - `comment-formula.inlineColor`: The color of the rendered formula inline the editor. Default is `auto`.
 - `comment-formula.messageColor`: The color of the rendered formula in message. Default is `auto`.
-- `comment-formula.inline`: The inline mode of the rendered formula. Default is `all`.  
+- `comment-formula.inline`: The inline mode of the rendered formula. Default is `partial`.  
   - `all`: Render all formula in inline mode.
   - `none`: You can just hover on the formula to preview it.
   - `partial`: Render formula in inline mode if the formula isn't too large.
