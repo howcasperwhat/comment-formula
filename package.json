@@ -2,9 +2,9 @@
   "name": "comment-formula",
   "author": "Casper Huang",
   "publisher": "howcasperwhat",
-  "displayName": "comment-formula",
-  "description": "Preview latex format formula inline the editor!",
-  "version": "0.0.2",
+  "displayName": "Comment Formula",
+  "description": "Preview LaTex formulas within the line of your editor!",
+  "version": "0.0.3",
   "icon": "res/logo.png",
   "engines": {
     "vscode": "^1.84.0"

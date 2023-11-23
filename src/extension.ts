@@ -48,17 +48,17 @@ export function activate(context: ExtensionContext) {
 			}
 		}
 		decorations = (await Promise.all(keys.map(async ([range, key]) => {
-			const { originHTML, scaleHTML, big } = markdownToHTML(key)
-			const originURL = htmlToDateURL(originHTML)
-			const scaleURL = htmlToDateURL(scaleHTML)
+			const { messageHTML, inlineHTML, big } = markdownToHTML(key)
+			const messageURL = htmlToDateURL(messageHTML)
+			const inlineURL = htmlToDateURL(inlineHTML)
 			const item: DecorationMatch = {
 				range,
 				renderOptions: big ? undefined : {
 					after: {
-						contentIconPath: Uri.parse(scaleURL),
+						contentIconPath: Uri.parse(inlineURL),
 					}
 				},
-				hoverMessage: `![](${originURL})`,
+				hoverMessage: `![](${messageURL})`,
 				key,
 				big: big,
 			}
