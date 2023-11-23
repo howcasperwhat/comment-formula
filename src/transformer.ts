@@ -32,10 +32,10 @@ export function markdownToHTML(markdown: string) {
   const messageHTML = messageElement!.outerHTML
 
   // 2.56 is just like a super parameter.
-  let big = height > 2.5
+  let big = height > 2.58
   const inlineElement = messageElement.cloneNode(true) as SVGElement
   if (big) {
-    const scale_ = 2.5 / height
+    const scale_ = 2.58 / height
     inlineElement.setAttribute('width', `${width * scale * scale_}ex`)
     inlineElement.setAttribute('height', `${height * scale * scale_}ex`)
   }

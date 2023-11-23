@@ -6,5 +6,5 @@
 - 2023-11-18: v0.0.2
   - **Feature**: You can set color in message and inline-editor respectively.
 
-- 2023-11-23: v0.0.3
+- 2023-11-23: v0.1.0
   - **Fix**: Height of formula will adapt to the font size of your editor now.
