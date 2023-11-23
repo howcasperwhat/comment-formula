@@ -41,3 +41,6 @@ For example:
   "comment-formula.inline": "partial",
 }
 ```
+
+## Known Issues
+- When you install or enable this extension, you may find that [ms-python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)'s connection to server got closed. Just restart VSCode and it will be fine.
