@@ -23,7 +23,7 @@ Fonts in the image are from <a href="https://github.com/githubnext/monaspace">mo
 </p>
 
 
-> In `partial inline mode`, if the formula is too large(height is much higher than the line-height in your editor), you can hover the formula and you can find it's rendered in the message box, just like the second formula in the above example.
+> In `partial inline mode`, if the formula is too large(height is much higher than the line-height in your editor), hover the formula and you can find it's rendered in the message box, just like the second formula in the above example.
 
 ## Configuration
 - `comment-formula.inlineColor`: The color of the rendered formula inline the editor. Default is `auto`.
