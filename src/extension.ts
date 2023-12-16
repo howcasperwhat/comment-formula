@@ -13,7 +13,7 @@ interface DecorationMatch extends DecorationOptions {
 
 export function activate(context: ExtensionContext) {
 	const InlineIconDecoration = window.createTextEditorDecorationType({
-		textDecoration: 'none; opacity: 0.8 !important; font-weight: bold;',
+		textDecoration: 'none; font-weight: bold;',
 		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
 	})
 	const HideTextDecoration = window.createTextEditorDecorationType({
@@ -32,8 +32,9 @@ export function activate(context: ExtensionContext) {
 		for (let i = 0; i < document.lineCount; ++i) {
 			regEx.lastIndex = 0
 			let match
-			const text = document.lineAt(i).text
-			const offset = editor.document.offsetAt(document.lineAt(i).range.start)
+			const line = document.lineAt(i)
+			const text = line.text
+			const offset = editor.document.offsetAt(line.range.start)
 			// don't use split, think about the case: `###$$11$$## ##$$ 22 $$ #`
 			const commentIndex = text.indexOf('#')
 			const prefix = text.slice(0, commentIndex)
@@ -52,15 +53,13 @@ export function activate(context: ExtensionContext) {
 			const messageURL = htmlToDateURL(messageHTML)
 			const inlineURL = htmlToDateURL(inlineHTML)
 			const item: DecorationMatch = {
-				range,
+				range, key, big,
 				renderOptions: big ? undefined : {
 					after: {
 						contentIconPath: Uri.parse(inlineURL),
 					}
 				},
 				hoverMessage: `![](${messageURL})`,
-				key,
-				big: big,
 			}
 			return item
 		}))).filter(decoration => decoration !== undefined)

@@ -12,8 +12,6 @@ export function htmlToDateURL(str: string) {
 const md = new MarkdownIt()
 md.use(mathjax3)
 export function markdownToHTML(markdown: string) {
-  // originHTML => message
-  // scaleHTML => inline
   const fontSize = parseFloat(workspace.getConfiguration('editor').get('fontSize')!)
   const scale = fontSize / 14
 
@@ -31,7 +29,7 @@ export function markdownToHTML(markdown: string) {
   messageFirst.setAttribute('stroke', getColor('message'))
   const messageHTML = messageElement!.outerHTML
 
-  // 2.56 is just like a super parameter.
+  // 2.56 is just like a hyperparameters.
   let big = height > 2.58
   const inlineElement = messageElement.cloneNode(true) as SVGElement
   if (big) {

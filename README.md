@@ -8,7 +8,7 @@
 
 ## Introduction
 A VSCode extension to render LaTeX formula in comment. Now you can use it in **python**.
-> This extension is modified from [vscode-iconify](https://github.com/antfu/vscode-iconify) and use [markdown-it](https://github.com/markdown-it/markdown-it) and [markdown-it-mathjax3](https://github.com/tani/markdown-it-mathjax3) to render formula.
+> This project is based on [vscode-iconify](https://github.com/antfu/vscode-iconify) and uses [markdown-it](https://github.com/markdown-it/markdown-it) and [markdown-it-mathjax3](https://github.com/tani/markdown-it-mathjax3) to render formula.
 
 ## Feature and Usage
 You are supposed to write formula between `$$` and `$$`.
