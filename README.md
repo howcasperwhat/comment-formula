@@ -21,7 +21,7 @@ You are supposed to write formula between `$$` and `$$` by default.
 Fonts in the image are from <a href="https://github.com/githubnext/monaspace">monaspace</a>.
 </p>
 
-> - The formula will be rendered in the message box when it is too large in `partial inline mode`, exceeding the line-height of your editor, similar to the second formula shown above
+> - The formula will be rendered in the message box when it is too large in `partial` inline mode, exceeding the line-height of your editor, similar to the second formula shown above
 > - Note that multi-line formula won't be rendered in inline mode due to its height, you can simply hover over it for a preview in the message box.
 
 ## Configuration
@@ -35,12 +35,7 @@ Fonts in the image are from <a href="https://github.com/githubnext/monaspace">mo
   - `\\$`: `$$x^2$$`  
   - `@`: `@@x^2@@`
   - `#`: `##x^2##`
-- `comment-formula.style`: Style of formula code inline the editor.
-  - `underline`: <font style="border-bottom: 1px dashed;">$$f(x)$$</font>  
-  - `bold`: <font style="font-weight: bold;">$$f(x)$$</font>  
-  - `italic`: <font style="font-style: italic;">$$f(x)$$</font>  
-  - `line-through`: <font style="text-decoration: line-through;">$$f(x)$$</font>  
-  - `none`: <font>$$f(x)$$</font>  
+- `comment-formula.style`: Style of formula code inline the editor. Options are `underline`, `bold`, `italic`, `line-through` and `none`. Default is `bold`.
 - `comment-formula.enableLanguages`: Enable comment-formula in these languages. <a href="https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers" target="_blank">LanguageId Reference</a>. Default is `["c", "cpp", "python", "java"]`.  
 
 For example:  
