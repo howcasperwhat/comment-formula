@@ -10,7 +10,7 @@
   - **Fix**: Height of formula will adapt to the font size of your editor now.
 
 - 2024-01-07: v0.2.0
-  - **Feature**: 
+  - **Feature**:
     1. Use it in language that you want.
     2. Multi-line formula is supported.
     3. Style of formula code is supported.

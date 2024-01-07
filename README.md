@@ -43,7 +43,7 @@ Fonts in the image are from <a href="https://github.com/githubnext/monaspace">mo
   - `none`: <font>$$f(x)$$</font>  
 - `comment-formula.enableLanguages`: Enable comment-formula in these languages. <a href="https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers" target="_blank">LanguageId Reference</a>. Default is `["c", "cpp", "python", "java"]`.  
 
-For example:
+For example:  
 ```json
 {
   "comment-formula.inlineColor": "#667466",
@@ -54,3 +54,4 @@ For example:
 
 ## Known Issues
 - When you install or enable this extension, you may find that [ms-python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)'s connection to server got closed. Just restart VSCode and it will be fine.
+- Install this extension in VSCode may takes a long time, please be patient or try install it again. Installing it using `.vsix` file also works.
