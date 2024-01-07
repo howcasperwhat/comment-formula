@@ -17,7 +17,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:python"
+    "*"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -44,6 +44,41 @@
           ],
           "default": "partial",
           "description": "`partial` means only not-so-large formulas are rendered inline."
+        },
+        "comment-formula.style": {
+          "type": "string",
+          "enum": [
+            "underline",
+            "bold",
+            "italic",
+            "line-through",
+            "none"
+          ],
+          "default": "bold",
+          "description": "Style of formula code inline the editor."
+        },
+        "comment-formula.enableLanguages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "c",
+            "cpp",
+            "python",
+            "java"
+          ],
+          "description": "Enable comment-formula in these languages. LanguageId: [ https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers ]"
+        },
+        "comment-formula.symbol": {
+          "type": "string",
+          "enum": [
+            "\\$",
+            "#",
+            "@"
+          ],
+          "default": "\\$",
+          "description": "Identifier symbol of formula code."
         }
       }
     }

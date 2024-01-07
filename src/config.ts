@@ -23,3 +23,28 @@ export const getColor = (type: 'message' | 'inline') => {
 export const getInline = () => {
   return workspace.getConfiguration(EXT_NAMESPACE).get('inline', 'partial')
 }
+
+export const getFontSize = () => {
+  return parseFloat(workspace.getConfiguration('editor').get('fontSize')!)
+}
+
+const styleMapper: { [key: string]: string } = {
+  'underline': 'border-bottom: 1px dashed;',
+  'bold': 'font-weight: bold;',
+  'italic': 'font-style: italic;',
+  'line-through': 'text-decoration: line-through;',
+  'none': '',
+}
+
+export const getStyle = () => {
+  const style: string = workspace.getConfiguration(EXT_NAMESPACE).get('style')!
+  return styleMapper[style]
+}
+
+export const getEnableLanguages = (): string[] => {
+  return workspace.getConfiguration(EXT_NAMESPACE).get('enableLanguages')!
+}
+
+export const getSymbol = () => {
+  return workspace.getConfiguration(EXT_NAMESPACE).get('symbol')!
+}

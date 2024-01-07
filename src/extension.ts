@@ -3,20 +3,24 @@
  * https://github.com/antfu/vscode-iconify
  */
 import type { DecorationOptions, ExtensionContext, TextEditor } from 'vscode'
-import { DecorationRangeBehavior, Range, Uri, window, workspace } from 'vscode'
+import { Range, Uri, window, workspace } from 'vscode'
 import { htmlToDateURL, markdownToHTML } from './transformer'
+import { getFontSize, getStyle, getEnableLanguages, getSymbol } from './config'
 
 interface DecorationMatch extends DecorationOptions {
 	key: string,
 	big: boolean,
 }
 
+function isEnableLanguage(editor: TextEditor | undefined) {
+	return editor && editor.document.languageId && getEnableLanguages().includes(editor.document.languageId)
+}
+
 export function activate(context: ExtensionContext) {
-	const InlineIconDecoration = window.createTextEditorDecorationType({
-		textDecoration: 'none; font-weight: bold;',
-		rangeBehavior: DecorationRangeBehavior.ClosedClosed,
+	let InlineIconDecoration = window.createTextEditorDecorationType({
+		textDecoration: `none; ${getStyle()}`,
 	})
-	const HideTextDecoration = window.createTextEditorDecorationType({
+	let HideTextDecoration = window.createTextEditorDecorationType({
 		textDecoration: 'none; display: none;', // a hack to inject custom style
 	})
 
@@ -26,30 +30,23 @@ export function activate(context: ExtensionContext) {
 	async function updateDecorations() {
 		if (!editor)
 			return
-		const regEx = /(\$\$[\s\S]*?\$\$)/g
-		const document = editor.document
-		const keys: [Range, string][] = []
-		for (let i = 0; i < document.lineCount; ++i) {
-			regEx.lastIndex = 0
-			let match
-			const line = document.lineAt(i)
-			const text = line.text
-			const offset = editor.document.offsetAt(line.range.start)
-			// don't use split, think about the case: `###$$11$$## ##$$ 22 $$ #`
-			const commentIndex = text.indexOf('#')
-			const prefix = text.slice(0, commentIndex)
-			const comment = text.slice(commentIndex)
-			while ((match = regEx.exec(comment))) {
-				const key = match[1]
-				if (!key)
-					continue
-				const startPos = editor.document.positionAt(prefix.length + offset + match.index)
-				const endPos = editor.document.positionAt(prefix.length + offset + match.index + match[0].length)
-				keys.push([new Range(startPos, endPos), key])
-			}
+		const symbol = getSymbol()
+		const regEx = new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
+		const keys: [Range, string, boolean][] = []
+		const text = editor.document.getText()
+		let match
+		regEx.lastIndex = 0
+		while ((match = regEx.exec(text))) {
+			const key = `$$${match[1].slice(2, -2)}$$`
+			if (!key)
+				continue
+			const startPos = editor.document.positionAt(match.index)
+			const endPos = editor.document.positionAt(match.index + match[0].length)
+			keys.push([new Range(startPos, endPos), key, /[\n\r]/.test(key)])
 		}
-		decorations = (await Promise.all(keys.map(async ([range, key]) => {
-			const { messageHTML, inlineHTML, big } = markdownToHTML(key)
+		decorations = (await Promise.all(keys.map(async ([range, key, multiline]) => {
+			const { messageHTML, inlineHTML, textInline } = markdownToHTML(key)
+			const big = textInline || multiline
 			const messageURL = htmlToDateURL(messageHTML)
 			const inlineURL = htmlToDateURL(inlineHTML)
 			const item: DecorationMatch = {
@@ -57,6 +54,8 @@ export function activate(context: ExtensionContext) {
 				renderOptions: big ? undefined : {
 					after: {
 						contentIconPath: Uri.parse(inlineURL),
+						margin: `-${getFontSize()}px 2px; transform: translate(-2px, 3px);`,
+						width: `${getFontSize() * 1.1}px`,
 					}
 				},
 				hoverMessage: `![](${messageURL})`,
@@ -69,6 +68,10 @@ export function activate(context: ExtensionContext) {
 	function refreshDecorations() {
 		if (!editor)
 			return
+		InlineIconDecoration.dispose()
+		InlineIconDecoration = window.createTextEditorDecorationType({
+			textDecoration: `none; ${getStyle()}`,
+		})
 		editor.setDecorations(InlineIconDecoration, decorations)
 		editor.setDecorations(
 			HideTextDecoration,
@@ -87,6 +90,8 @@ export function activate(context: ExtensionContext) {
 
 	let timeout: NodeJS.Timeout | number | undefined = undefined
 	function triggerUpdateDecorations(_editor?: TextEditor) {
+		if (!isEnableLanguage(_editor))
+			return
 		updateEditor(_editor)
 		if (timeout) {
 			clearTimeout(timeout)
@@ -118,8 +123,10 @@ export function activate(context: ExtensionContext) {
 	}, null, context.subscriptions)
 
 	window.onDidChangeTextEditorSelection((e) => {
-		updateEditor(e.textEditor)
-		refreshDecorations()
+		if (isEnableLanguage(e.textEditor)) {
+			updateEditor(e.textEditor)
+			refreshDecorations()
+		}
 	}, null, context.subscriptions)
 }
 
