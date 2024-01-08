@@ -7,7 +7,7 @@
 <h1 align="center">Comment Formula</h1>
 
 ## Introduction
-A VSCode extension to render LaTeX formula in comment. Now you can use it in **python**.
+A VSCode Extensions to preview LaTex formulas within the line of your editor.  
 > This project is based on [vscode-iconify](https://github.com/antfu/vscode-iconify) and uses [markdown-it](https://github.com/markdown-it/markdown-it) and [markdown-it-mathjax3](https://github.com/tani/markdown-it-mathjax3) to render formula.
 
 ## Feature and Usage
@@ -22,16 +22,16 @@ Fonts in the image are from <a href="https://github.com/githubnext/monaspace">mo
 </p>
 
 > - The formula will be rendered in the message box when it is too large in `partial` inline mode, exceeding the line-height of your editor, similar to the second formula shown above
-> - Note that multi-line formula won't be rendered in inline mode due to its height, you can simply hover over it for a preview in the message box.
+> - Note that multi-line formula won't be rendered in inline mode due to its height, you can simply hover it for a preview in the message box.
 
 ## Configuration
 - `comment-formula.inlineColor`: The color of the rendered formula inline the editor. Default is `auto`.
-- `comment-formula.messageColor`: The color of the rendered formula in message. Default is `auto`.
+- `comment-formula.messageColor`: The color of the rendered formula in the message box. Default is `auto`.
 - `comment-formula.inline`: The inline mode of the rendered formula. Default is `partial`.  
   - `all`: Render all formula in inline mode.
   - `none`: You can just hover on the formula to preview it.
   - `partial`: Render formula in inline mode if the formula isn't too large.
-- `comment-formula.symbol`: The symbol to mark formula. Default is `\\$`.
+- `comment-formula.symbol`: The symbol to wrap formula. Default is `\\$`.
   - `\\$`: `$$x^2$$`  
   - `@`: `@@x^2@@`
   - `#`: `##x^2##`
