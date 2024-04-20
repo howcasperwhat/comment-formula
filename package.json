@@ -108,6 +108,7 @@
   "dependencies": {
     "jsdom": "^22.1.0",
     "markdown-it": "^13.0.2",
-    "markdown-it-mathjax3": "^4.3.2"
+    "markdown-it-mathjax3": "^4.3.2",
+    "mathjax": "^3.2.2"
   }
 }
