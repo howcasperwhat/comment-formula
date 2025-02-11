@@ -8,7 +8,8 @@
 
 ## Introduction
 A VSCode Extensions to preview LaTex formulas within the line of your editor.  
-> This project is based on [vscode-iconify](https://github.com/antfu/vscode-iconify) and uses [markdown-it](https://github.com/markdown-it/markdown-it) and [markdown-it-mathjax3](https://github.com/tani/markdown-it-mathjax3) to render formula.
+
+> Render Engine: [MathJax](https://www.mathjax.org/)
 
 ## Feature and Usage
 You are supposed to write formula between `$$` and `$$` by default.
@@ -16,11 +17,6 @@ You are supposed to write formula between `$$` and `$$` by default.
 <p align="center">
 <img src="res/feature.png" style="width: 80%" />
 </p>
-
-<p align="center">
-Fonts in the image are from <a href="https://github.com/githubnext/monaspace">monaspace</a>.
-</p>
-
 
 ## Configurations
 
@@ -40,5 +36,5 @@ Fonts in the image are from <a href="https://github.com/githubnext/monaspace">mo
 
 <!-- configs -->
 
-## Known Issues
-- Install this extension in VSCode may takes a long time, please be patient or try install it again. Installing it using `.vsix` file also works.
+> [!TIP] ANY QUESTION
+> Feel free to new an issue if you encounter any problem or have any suggestion 👉 [New An Issue](https://github.com/howcasperwhat/comment-formula/issues/new).

@@ -97,6 +97,7 @@
     "vscode:prepublish": "npm run build",
     "build": "tsup src/extension.ts --external vscode",
     "dev": "npm run build --watch",
+    "prepare": "npm run update",
     "lint": "eslint .",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
     "pack": "vsce package",

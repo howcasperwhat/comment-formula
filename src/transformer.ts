@@ -35,7 +35,6 @@ class Transformer {
   public async tex2svg(content: string): Promise<SVGAtrributes> {
     let width: number, height: number, code: string
     if (this.useAPI()) {
-      console.log('using api ...')
       const data = await fetch([
         config.extension.api.prefix,
         encodeURIComponent(content),

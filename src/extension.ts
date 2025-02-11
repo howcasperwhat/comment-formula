@@ -11,7 +11,7 @@ import { transformer } from './transformer'
 import { store, config, enabled } from './config'
 interface DecorationMatch extends DecorationOptions {
   content: string,
-  large: boolean,
+  inline: boolean,
 }
 
 function useAnnotations(context: ExtensionContext) {
@@ -31,7 +31,7 @@ function useAnnotations(context: ExtensionContext) {
 
   useActiveEditorDecorations(InlineIconDecoration, decorations)
   useActiveEditorDecorations(HideTextDecoration, () => decorations.value.filter(
-    ({ range, large }) => !large && !selections.value.map(({ start }) => start.line
+    ({ range, inline }) => inline && !selections.value.map(({ start }) => start.line
       ).includes(range.start.line)).map(({ range }) => range))
 
   const reg = computed(() => {
@@ -42,30 +42,30 @@ function useAnnotations(context: ExtensionContext) {
   const update = async () => {
     if (!enabled(editor.value)) return
     if (!editor.value) return
-    const keys: [Range, string, boolean][] = []
+    const contents: [Range, string, boolean][] = []
     const { document } = editor.value
     let match
     reg.value.lastIndex = 0
     while ((match = reg.value.exec(text.value!))) {
-      const key = `${match[1].slice(2, -2)}`
-      if (!key) continue
+      const content = `${match[1].slice(2, -2)}`
+      if (!content) continue
       const startPos = document.positionAt(match.index)
       const endPos = document.positionAt(match.index + match[0].length)
-      keys.push([new Range(startPos, endPos), key, /[\n\r]/.test(key)])
+      contents.push([new Range(startPos, endPos), content, /[\n\r]/.test(content)])
     }
-    decorations.value = (await Promise.all(keys.map(async ([range, key, multiline]) => {
-      return transformer.svg2url(key, store.color.value).then((attr) => {
-        const large = attr.large || multiline
+    decorations.value = (await Promise.all(contents.map(async ([range, content, multiline]) => {
+      return transformer.svg2url(content, store.color.value).then((attr) => {
+        const inline = !attr.large && !multiline
         const item: DecorationMatch = {
-          range, content: key, large: large,
-          renderOptions: large ? undefined : {
+          range, content: content, inline,
+          renderOptions: inline ? {
             after: {
               contentIconPath: Uri.parse(attr.url),
               // a hack to inject custom style
               border: 'none; position: absolute; top: 50%; transform: translateY(-50%);',
               margin: `0 0 0 .25rem;${config.extension.preview}`
             }
-          },
+          } : undefined,
           hoverMessage: `![](${attr.url})`,
         }
         return item
