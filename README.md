@@ -36,5 +36,5 @@ You are supposed to write formula between `$$` and `$$` by default.
 
 <!-- configs -->
 
-> [!TIP] ANY QUESTION
+> [!TIP]
 > Feel free to new an issue if you encounter any problem or have any suggestion 👉 [New An Issue](https://github.com/howcasperwhat/comment-formula/issues/new).
