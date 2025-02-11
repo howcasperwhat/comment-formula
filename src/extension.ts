@@ -15,7 +15,6 @@ interface DecorationMatch extends DecorationOptions {
 }
 
 function useAnnotations(context: ExtensionContext) {
-  // `none; `: a hack to inject custom style
   const InlineIconDecoration = window.createTextEditorDecorationType({
     textDecoration: `none; ${config.extension.code}`,
   })
@@ -38,6 +37,8 @@ function useAnnotations(context: ExtensionContext) {
     const symbol = config.extension.symbol
     return new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
   })
+  const inject = 'position:absolute;top:50%;transform:translateY(-50%);'
+  const message = '**WRONG FORMULA FORMAT**'
 
   const update = async () => {
     if (!enabled(editor.value)) return
@@ -53,24 +54,25 @@ function useAnnotations(context: ExtensionContext) {
       const endPos = document.positionAt(match.index + match[0].length)
       contents.push([new Range(startPos, endPos), content, /[\n\r]/.test(content)])
     }
-    decorations.value = (await Promise.all(contents.map(async ([range, content, multiline]) => {
-      return transformer.svg2url(content, store.color.value).then((attr) => {
-        const inline = !attr.large && !multiline
-        const item: DecorationMatch = {
-          range, content: content, inline,
-          renderOptions: inline ? {
-            after: {
-              contentIconPath: Uri.parse(attr.url),
-              // a hack to inject custom style
-              border: 'none; position: absolute; top: 50%; transform: translateY(-50%);',
-              margin: `0 0 0 .25rem;${config.extension.preview}`
+    decorations.value = (await Promise.all(contents.map(
+      async ([range, content, multiline]) =>
+        transformer.svg2url(content, store.color.value)
+          .then((attr) => {
+            const inline = !attr.large && !multiline && !attr.error
+            const item: DecorationMatch = {
+              range, content, inline,
+              renderOptions: inline ? {
+                after: {
+                  contentIconPath: Uri.parse(attr.url),
+                  border: `none;${inject}`,
+                  margin: `0 0 0 .25rem;${config.extension.preview}`
+                }
+              } : undefined,
+              hoverMessage: attr.error ? message : `![](${attr.url})`,
             }
-          } : undefined,
-          hoverMessage: `![](${attr.url})`,
-        }
-        return item
-      })
-    }))).filter(Boolean)
+            return item
+          })
+    ))).filter(x => !!x)
   }
 
   let timeout: NodeJS.Timeout | number | undefined = undefined
