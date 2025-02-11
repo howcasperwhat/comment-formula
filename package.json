@@ -1,5 +1,6 @@
 {
   "name": "comment-formula",
+  "type": "module",
   "author": "Casper Huang",
   "publisher": "howcasperwhat",
   "displayName": "Comment Formula",
@@ -17,23 +18,18 @@
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.cjs",
   "contributes": {
     "commands": [],
     "configuration": {
       "title": "comment-formula",
       "properties": {
-        "comment-formula.inlineColor": {
+        "comment-formula.color": {
           "type": "string",
           "default": "auto",
-          "description": "Color of formula inline the editor."
-        },
-        "comment-formula.messageColor": {
-          "type": "string",
-          "default": "auto",
-          "description": "Color of formula in message."
+          "description": "Color of rendered formulas."
         },
         "comment-formula.inline": {
           "type": "string",
@@ -45,19 +41,7 @@
           "default": "partial",
           "description": "`partial` means only not-so-large formulas are rendered inline."
         },
-        "comment-formula.style": {
-          "type": "string",
-          "enum": [
-            "underline",
-            "bold",
-            "italic",
-            "line-through",
-            "none"
-          ],
-          "default": "bold",
-          "description": "Style of formula code inline the editor."
-        },
-        "comment-formula.enableLanguages": {
+        "comment-formula.languages": {
           "type": "array",
           "items": {
             "type": "string"
@@ -79,36 +63,57 @@
           ],
           "default": "\\$",
           "description": "Identifier symbol of formula code."
+        },
+        "comment-formula.interval": {
+          "type": "number",
+          "default": 200,
+          "minimum": 100,
+          "description": "Formula update interval(ms)."
+        },
+        "comment-formula.code": {
+          "type": "string",
+          "default": "font-weight: bold;",
+          "description": "Style of matched latex code."
+        },
+        "comment-formula.preview": {
+          "type": "string",
+          "default": "",
+          "description": "Style of the inline formula-preview."
+        },
+        "comment-formula.api.prefix": {
+          "type": "string",
+          "default": "",
+          "description": "API prefix"
+        },
+        "comment-formula.api.suffix": {
+          "type": "string",
+          "default": "",
+          "description": "API suffix"
         }
       }
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "vscode:prepublish": "npm run build",
+    "build": "tsup src/extension.ts --external vscode",
+    "dev": "npm run build --watch",
+    "lint": "eslint .",
+    "update": "vscode-ext-gen --output src/generated/meta.ts",
+    "pack": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.5",
-    "@types/markdown-it": "^13.0.6",
-    "@types/mocha": "^10.0.3",
+    "@antfu/eslint-config": "^4.2.0",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
-    "@vscode/test-electron": "^2.3.6",
-    "eslint": "^8.52.0",
-    "glob": "^10.3.10",
-    "mocha": "^10.2.0",
-    "typescript": "^5.2.2"
+    "@vscode/vsce": "^3.2.2",
+    "eslint": "^9.20.0",
+    "reactive-vscode": "^0.2.10",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vscode-ext-gen": "^1.0.0"
   },
   "dependencies": {
-    "jsdom": "^22.1.0",
-    "markdown-it": "^13.0.2",
-    "markdown-it-mathjax3": "^4.3.2",
-    "mathjax": "^3.2.2"
+    "mathjax-full": "^3.2.2"
   }
 }

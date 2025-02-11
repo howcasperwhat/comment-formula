@@ -1,47 +1,46 @@
-import { workspace } from "vscode";
-import { EXT_NAMESPACE } from "./meta";
+import type { TextEditor } from 'vscode'
+import { computed, defineConfigObject, useIsDarkTheme } from 'reactive-vscode'
+import * as Meta from './generated/meta'
 
-export const getColor = (type: 'message' | 'inline') => {
-  const typeConfigMap = {
-    'message': 'messageColor',
-    'inline': 'inlineColor',
-  };
-  const color: string = workspace.getConfiguration(EXT_NAMESPACE).get(typeConfigMap[type], 'auto');
-  const colorTheme = workspace.getConfiguration('workbench').get('colorTheme') as string;
-  if (color === "auto") {
-    if (colorTheme.includes('Dark') || colorTheme.includes('Black')) { return '#aaa'; }
-    else if (colorTheme.includes('Light')) { return '#555'; }
-    else { return '#888'; }
-  } else {
-    return color;
-  }
-};
+// @see: https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/config/fontInfo.ts#L14
+const GLODEB_LINE_HEIGHT_RATIO = process.platform === 'darwin' ? 1.5 : 1.35
+// use devtools to get the value of 1ex
+const MATHJAX_TEX_EX = 8.64
+const isDark = useIsDarkTheme()
 
-export const getInline = () => {
-  return workspace.getConfiguration(EXT_NAMESPACE).get('inline', 'partial');
-};
+export const config = {
+  extension: defineConfigObject<Meta.NestedScopedConfigs>(
+    Meta.scopedConfigs.scope,
+    Meta.scopedConfigs.defaults
+  ),
+  editor: defineConfigObject<{ fontSize: number }>(
+    'editor',
+    { fontSize: 14 }
+  ), 
+}
+export const store = {
+  isDark: useIsDarkTheme(),
+  height: computed(() => {
+    return Math.round(config.editor.fontSize * GLODEB_LINE_HEIGHT_RATIO)
+  }),
+  color: computed(() => {
+    const color = config.extension.color
+    if (color === "auto")
+      return isDark.value ? '#eee' : '#111'
+    return color
+  })
+}
 
-export const getFontSize = () => {
-  return parseFloat(workspace.getConfiguration('editor').get('fontSize')!);
-};
-
-const styleMapper: { [key: string]: string } = {
-  'underline': 'border-bottom: 1px dashed;',
-  'bold': 'font-weight: bold;',
-  'italic': 'font-style: italic;',
-  'line-through': 'text-decoration: line-through;',
-  'none': '',
-};
-
-export const getStyle = () => {
-  const style: string = workspace.getConfiguration(EXT_NAMESPACE).get('style')!;
-  return styleMapper[style];
-};
-
-export const getEnableLanguages = (): string[] => {
-  return workspace.getConfiguration(EXT_NAMESPACE).get('enableLanguages')!;
-};
-
-export const getSymbol = () => {
-  return workspace.getConfiguration(EXT_NAMESPACE).get('symbol')!;
-};
+export const isLarge = (height: number) => {
+  if (config.extension.inline === 'all')
+    return false
+  if (config.extension.inline === 'none')
+    return true
+  return (height * MATHJAX_TEX_EX >= store.height.value)
+}
+export const enabled = (editor?: TextEditor) => {
+  if (!editor) return false
+  if (!editor.document) return false
+  if (!editor.document.languageId) return false
+  return config.extension.languages.includes(editor.document.languageId)
+}

@@ -21,32 +21,24 @@ You are supposed to write formula between `$$` and `$$` by default.
 Fonts in the image are from <a href="https://github.com/githubnext/monaspace">monaspace</a>.
 </p>
 
-> - The formula will be rendered in the message box when it is too large in `partial` inline mode, exceeding the line-height of your editor, similar to the second formula shown above
-> - Note that multi-line formula won't be rendered in inline mode due to its height, you can simply hover it for a preview in the message box.
 
-## Configuration
-- `comment-formula.inlineColor`: The color of the rendered formula inline the editor. Default is `auto`.
-- `comment-formula.messageColor`: The color of the rendered formula in the message box. Default is `auto`.
-- `comment-formula.inline`: The inline mode of the rendered formula. Default is `partial`.  
-  - `all`: Render all formula in inline mode.
-  - `none`: You can just hover on the formula to preview it.
-  - `partial`: Render formula in inline mode if the formula isn't too large.
-- `comment-formula.symbol`: The symbol to wrap formula. Default is `\\$`.
-  - `\\$`: `$$x^2$$`  
-  - `@`: `@@x^2@@`
-  - `#`: `##x^2##`
-- `comment-formula.style`: Style of formula code inline the editor. Options are `underline`, `bold`, `italic`, `line-through` and `none`. Default is `bold`.
-- `comment-formula.enableLanguages`: Enable comment-formula in these languages. <a href="https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers" target="_blank">LanguageId Reference</a>. Default is `["c", "cpp", "python", "java"]`.  
+## Configurations
 
-For example:  
-```json
-{
-  "comment-formula.inlineColor": "#667466",
-  "comment-formula.messageColor": "auto",  
-  "comment-formula.inline": "partial",  
-}
-```
+<!-- configs -->
+
+| Key                          | Description                                                                                                                                     | Type     | Default                       |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------------------- |
+| `comment-formula.color`      | Color of rendered formulas.                                                                                                                     | `string` | `"auto"`                      |
+| `comment-formula.inline`     | `partial` means only not-so-large formulas are rendered inline.                                                                                 | `string` | `"partial"`                   |
+| `comment-formula.languages`  | Enable comment-formula in these languages. LanguageId: [ https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers ] | `array`  | `["c","cpp","python","java"]` |
+| `comment-formula.symbol`     | Identifier symbol of formula code.                                                                                                              | `string` | `"\\$"`                       |
+| `comment-formula.interval`   | Formula update interval(ms).                                                                                                                    | `number` | `200`                         |
+| `comment-formula.code`       | Style of matched latex code.                                                                                                                    | `string` | `"font-weight: bold;"`        |
+| `comment-formula.preview`    | Style of the inline formula-preview.                                                                                                            | `string` | `""`                          |
+| `comment-formula.api.prefix` | API prefix                                                                                                                                      | `string` | `""`                          |
+| `comment-formula.api.suffix` | API suffix                                                                                                                                      | `string` | `""`                          |
+
+<!-- configs -->
 
 ## Known Issues
-- When you install or enable this extension, you may find that [ms-python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)'s connection to server got closed. Just restart VSCode and it will be fine.
 - Install this extension in VSCode may takes a long time, please be patient or try install it again. Installing it using `.vsix` file also works.

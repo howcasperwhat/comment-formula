@@ -1,127 +1,109 @@
-/**
- * code is modified from vscode-iconify
- * https://github.com/antfu/vscode-iconify
- */
-import type { DecorationOptions, ExtensionContext, TextEditor } from 'vscode';
-import { Range, Uri, window, workspace } from 'vscode';
-import { htmlToDateURL, markdownToHTML } from './transformer';
-import { getFontSize, getStyle, getEnableLanguages, getSymbol } from './config';
+import type { DecorationOptions, ExtensionContext } from 'vscode'
+import { Range, Uri, window, workspace } from 'vscode'
+import {
+  useActiveTextEditor, useTextEditorSelections,
+  useDocumentText, shallowRef, watchEffect,
+  useActiveEditorDecorations, defineExtension,
+  computed
+} from 'reactive-vscode'
 
+import { transformer } from './transformer'
+import { store, config, enabled } from './config'
 interface DecorationMatch extends DecorationOptions {
-  key: string,
-  big: boolean,
+  content: string,
+  large: boolean,
 }
 
-function isEnableLanguage(editor: TextEditor | undefined) {
-  return editor && editor.document.languageId && getEnableLanguages().includes(editor.document.languageId);
-}
+function useAnnotations(context: ExtensionContext) {
+  // `none; `: a hack to inject custom style
+  const InlineIconDecoration = window.createTextEditorDecorationType({
+    textDecoration: `none; ${config.extension.code}`,
+  })
+  const HideTextDecoration = window.createTextEditorDecorationType({
+    textDecoration: 'none; display: none;',
+  })
 
-export function activate(context: ExtensionContext) {
-  let InlineIconDecoration = window.createTextEditorDecorationType({
-    textDecoration: `none; ${getStyle()}`,
-  });
-  let HideTextDecoration = window.createTextEditorDecorationType({
-    textDecoration: 'none; display: none;', // a hack to inject custom style
-  });
+  const editor = useActiveTextEditor()
+  const selections = useTextEditorSelections(editor)
+  const text = useDocumentText(() => editor.value?.document)
 
-  let editor = window.activeTextEditor;
-  let decorations: DecorationMatch[] = [];
+  const decorations = shallowRef<DecorationMatch[]>([])
 
-  async function updateDecorations() {
-    if (!editor) { return; }
-    const symbol = getSymbol();
-    const regEx = new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g');
-    const keys: [Range, string, boolean][] = [];
-    const text = editor.document.getText();
-    let match;
-    regEx.lastIndex = 0;
-    while ((match = regEx.exec(text))) {
-      const key = `$$${match[1].slice(2, -2)}$$`;
-      if (!key) { continue; }
-      const startPos = editor.document.positionAt(match.index);
-      const endPos = editor.document.positionAt(match.index + match[0].length);
-      keys.push([new Range(startPos, endPos), key, /[\n\r]/.test(key)]);
+  useActiveEditorDecorations(InlineIconDecoration, decorations)
+  useActiveEditorDecorations(HideTextDecoration, () => decorations.value.filter(
+    ({ range, large }) => !large && !selections.value.map(({ start }) => start.line
+      ).includes(range.start.line)).map(({ range }) => range))
+
+  const reg = computed(() => {
+    const symbol = config.extension.symbol
+    return new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
+  })
+
+  const update = async () => {
+    if (!enabled(editor.value)) return
+    if (!editor.value) return
+    const keys: [Range, string, boolean][] = []
+    const { document } = editor.value
+    let match
+    reg.value.lastIndex = 0
+    while ((match = reg.value.exec(text.value!))) {
+      const key = `${match[1].slice(2, -2)}`
+      if (!key) continue
+      const startPos = document.positionAt(match.index)
+      const endPos = document.positionAt(match.index + match[0].length)
+      keys.push([new Range(startPos, endPos), key, /[\n\r]/.test(key)])
     }
-    decorations = (await Promise.all(keys.map(async ([range, key, multiline]) => {
-      const { messageHTML, inlineHTML, textInline } = markdownToHTML(key);
-      const big = textInline || multiline;
-      const messageURL = htmlToDateURL(messageHTML);
-      const inlineURL = htmlToDateURL(inlineHTML);
-      const item: DecorationMatch = {
-        range, key, big,
-        renderOptions: big ? undefined : {
-          after: {
-            contentIconPath: Uri.parse(inlineURL),
-            margin: `-${getFontSize()}px 2px; transform: translate(-2px, 3px);`,
-            width: `${getFontSize() * 1.1}px`,
-          }
-        },
-        hoverMessage: `![](${messageURL})`,
-      };
-      return item;
-    }))).filter(decoration => decoration !== undefined);
-    refreshDecorations();
+    decorations.value = (await Promise.all(keys.map(async ([range, key, multiline]) => {
+      return transformer.svg2url(key, store.color.value).then((attr) => {
+        const large = attr.large || multiline
+        const item: DecorationMatch = {
+          range, content: key, large: large,
+          renderOptions: large ? undefined : {
+            after: {
+              contentIconPath: Uri.parse(attr.url),
+              // a hack to inject custom style
+              border: 'none; position: absolute; top: 50%; transform: translateY(-50%);',
+              margin: `0 0 0 .25rem;${config.extension.preview}`
+            }
+          },
+          hoverMessage: `![](${attr.url})`,
+        }
+        return item
+      })
+    }))).filter(Boolean)
   }
 
-  function refreshDecorations() {
-    if (!editor) { return; }
-    InlineIconDecoration.dispose();
-    InlineIconDecoration = window.createTextEditorDecorationType({
-      textDecoration: `none; ${getStyle()}`,
-    });
-    editor.setDecorations(InlineIconDecoration, decorations);
-    editor.setDecorations(
-      HideTextDecoration,
-      decorations
-        .filter(({ range, big }) => !big && (range.start.line !== editor!.selection.start.line))
-        .map(({ range }) => range)
-    );
-  }
-
-  function updateEditor(_editor?: TextEditor) {
-    if (!_editor || editor === _editor) { return; }
-    editor = _editor;
-    decorations = [];
-  }
-
-  let timeout: NodeJS.Timeout | number | undefined = undefined;
-  function triggerUpdateDecorations(_editor?: TextEditor) {
-    if (!isEnableLanguage(_editor)) { return; }
-    updateEditor(_editor);
+  let timeout: NodeJS.Timeout | number | undefined = undefined
+  const trigger = () => {
     if (timeout) {
-      clearTimeout(timeout);
-      timeout = undefined;
+      clearTimeout(timeout)
+      timeout = undefined
     }
-    timeout = setTimeout(() => {
-      updateDecorations();
-    }, 200);
+    timeout = setTimeout(update, config.extension.interval)
   }
 
-  if (editor) { triggerUpdateDecorations(editor); }
+  watchEffect(trigger)
 
-  window.onDidChangeActiveTextEditor((e) => {
-    triggerUpdateDecorations(e);
-  }, null, context.subscriptions);
+  window.onDidChangeActiveTextEditor(() => {
+    // If don't clear the decorations when switching files, two problems will occur:
+    // 1. Decorations are still visible after switching to a language that does not trigger the extension
+    // 2. Decorations will still exist for `interval` milliseconds after switching files
+    decorations.value = []
+    trigger()
+  }, null, context.subscriptions)
 
-  workspace.onDidChangeTextDocument((event) => {
-    if (window.activeTextEditor && event.document === window.activeTextEditor.document) { triggerUpdateDecorations(window.activeTextEditor); }
-  }, null, context.subscriptions);
-
-  workspace.onDidChangeConfiguration(() => {
-    triggerUpdateDecorations();
-  }, null, context.subscriptions);
-
-  window.onDidChangeVisibleTextEditors((editors) => {
-    triggerUpdateDecorations(editors[0]);
-  }, null, context.subscriptions);
-
-  window.onDidChangeTextEditorSelection((e) => {
-    if (isEnableLanguage(e.textEditor)) {
-      updateEditor(e.textEditor);
-      refreshDecorations();
-    }
-  }, null, context.subscriptions);
+  void ([
+    window.onDidChangeTextEditorSelection,
+    window.onDidChangeActiveColorTheme,
+    workspace.onDidChangeTextDocument,
+    workspace.onDidChangeConfiguration
+  ].forEach((callback) => {
+    callback(() => {
+      trigger()
+    }, null,
+    context.subscriptions)
+  }))
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() { }
+const { activate, deactivate } = defineExtension((context) => useAnnotations(context))
+export { activate, deactivate }
