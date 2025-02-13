@@ -18,7 +18,7 @@ You are supposed to write formula between `$$` and `$$` by default.
 <img src="res/feature.png" style="width: 80%" />
 </p>
 
-> [!TIP] 
+> [!IMPORTANT] 
 > Recommend Feature: `"comment-formula.inline": "all"`: Responsively render all formulas inline.  
 > 
 > ![responsive](res/responsive.gif)

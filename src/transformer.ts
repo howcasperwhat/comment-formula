@@ -7,6 +7,7 @@ import { AssistiveMmlHandler } from "mathjax-full/js/a11y/assistive-mml"
 import { LiteElement } from "mathjax-full/js/adaptors/lite/Element"
 import { config, isLarge } from './config'
 import { computed } from "reactive-vscode"
+import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages'
 
 interface URLAttributes {
   large: boolean
@@ -28,7 +29,9 @@ class Transformer {
     this.useAPI = computed(() => config.extension.api.prefix !== '')
     if (!this.useAPI.value) {
       this.options = {
-        InputJax: new TeX(),
+        InputJax: new TeX({
+          packages: AllPackages
+        }),
         OutputJax: new SVG()
       }
       this.adaptor = liteAdaptor()
@@ -56,6 +59,7 @@ class Transformer {
   }
   public async svg2url(content: string, color?: string): Promise<URLAttributes> {
     const svg = await this.tex2svg(content)
+    console.log(content, svg)
     const colored = color ? svg.code.replaceAll('currentColor', color) : svg.code
     return {
       large: isLarge(svg.height),
