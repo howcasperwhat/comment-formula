@@ -45,3 +45,6 @@ Now feel free to use `"comment-formula.inline": "all"` to render all formulas in
 ## 2025-02-13: v0.3.3
 ### Performance Optimization
 1. Optimize the performance of rendering when changing text-editor selection.
+
+### Feature
+1. Enhance TeX input configuration to include all tex packages.
