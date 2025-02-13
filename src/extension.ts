@@ -2,9 +2,9 @@ import type { DecorationOptions, ExtensionContext } from 'vscode'
 import { Range, Uri, window, workspace } from 'vscode'
 import {
   useActiveTextEditor, useTextEditorSelections,
-  useDocumentText, shallowRef, watchEffect,
-  useActiveEditorDecorations, defineExtension,
-  computed
+  useDocumentText, useActiveEditorDecorations,
+  computed, shallowRef, watchEffect,
+  defineExtension
 } from 'reactive-vscode'
 
 import { transformer } from './transformer'
@@ -95,7 +95,6 @@ function useAnnotations(context: ExtensionContext) {
   }, null, context.subscriptions)
 
   void ([
-    window.onDidChangeTextEditorSelection,
     window.onDidChangeActiveColorTheme,
     workspace.onDidChangeTextDocument,
     workspace.onDidChangeConfiguration

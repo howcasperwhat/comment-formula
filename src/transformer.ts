@@ -25,13 +25,15 @@ class Transformer {
   private adaptor
   private useAPI
   public constructor() {
-    this.options = {
-      InputJax: new TeX(),
-      OutputJax: new SVG()
-    }
-    this.adaptor = liteAdaptor()
-    AssistiveMmlHandler(RegisterHTMLHandler(this.adaptor))
     this.useAPI = computed(() => config.extension.api.prefix !== '')
+    if (!this.useAPI.value) {
+      this.options = {
+        InputJax: new TeX(),
+        OutputJax: new SVG()
+      }
+      this.adaptor = liteAdaptor()
+      AssistiveMmlHandler(RegisterHTMLHandler(this.adaptor))
+    }
   }
   public async tex2svg(content: string): Promise<SVGAtrributes> {
     let width: number, height: number, code: string
@@ -45,10 +47,10 @@ class Transformer {
       width = parseFloat(code.match(/width="(\d*\.?\d*)ex"/)![1])
       height = parseFloat(code.match(/height="(\d*\.?\d*)ex"/)![1])
     } else {
-      const elem: LiteElement = mathjax.document(content, this.options).convert(content).children[0]
+      const elem: LiteElement = mathjax.document(content, this.options!).convert(content).children[0]
       width = parseFloat(elem.attributes.width)
       height = parseFloat(elem.attributes.height)
-      code = this.adaptor.outerHTML(elem)
+      code = this.adaptor!.outerHTML(elem)
     }
     return { width, height, code }
   }

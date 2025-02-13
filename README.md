@@ -18,6 +18,13 @@ You are supposed to write formula between `$$` and `$$` by default.
 <img src="res/feature.png" style="width: 80%" />
 </p>
 
+> [!TIP] 
+> Recommend Feature: `"comment-formula.inline": "all"`: Responsively render all formulas inline.  
+> 
+> ![responsive](res/responsive.gif)
+> 
+> We set the default value to `partial` to avoid rendered large formula covering your code.
+
 ## Configurations
 
 <!-- configs -->
@@ -36,5 +43,5 @@ You are supposed to write formula between `$$` and `$$` by default.
 
 <!-- configs -->
 
-> [!TIP] ANY QUESTION
-> Feel free to new an issue if you encounter any problem or have any suggestion 👉 [New An Issue](https://github.com/howcasperwhat/comment-formula/issues/new).
+> [!TIP]
+> Feel free to [new an issue](https://github.com/howcasperwhat/comment-formula/issues/new) if you encounter any problem or have any suggestion.
