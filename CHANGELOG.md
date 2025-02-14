@@ -21,7 +21,7 @@
 ## 2025-02-11: v0.3.0
 Now feel free to use `"comment-formula.inline": "all"` to render all formulas inline, if you don't mind that the large formula might slightly cover your code.
 
-![responsive](res/responsive.gif)
+![responsive](https://github.com/howcasperwhat/comment-formula/blob/main/res/responsive.gif)
 
 ### :warning::warning::warning: Breaking Change
 1. `inlineColor` and `messageColor` are merged into `color` to avoid rendering twice. If you need this feature, new an [issue](https://github.com/howcasperwhat/comment-formula/issues/new).
