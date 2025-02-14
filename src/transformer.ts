@@ -3,7 +3,6 @@ import { TeX } from "mathjax-full/js/input/tex"
 import { SVG } from "mathjax-full/js/output/svg"
 import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor"
 import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html"
-import { AssistiveMmlHandler } from "mathjax-full/js/a11y/assistive-mml"
 import { LiteElement } from "mathjax-full/js/adaptors/lite/Element"
 import { config, isLarge } from './config'
 import { computed } from "reactive-vscode"
@@ -22,20 +21,18 @@ interface SVGAtrributes {
 }
 
 class Transformer {
-  private options
   private adaptor
+  private document
   private useAPI
   public constructor() {
     this.useAPI = computed(() => config.extension.api.prefix !== '')
     if (!this.useAPI.value) {
-      this.options = {
-        InputJax: new TeX({
-          packages: AllPackages
-        }),
-        OutputJax: new SVG()
-      }
       this.adaptor = liteAdaptor()
-      AssistiveMmlHandler(RegisterHTMLHandler(this.adaptor))
+      RegisterHTMLHandler(this.adaptor)
+      this.document = mathjax.document('', {
+        InputJax: new TeX({ packages: AllPackages }),
+        OutputJax: new SVG({ fontCache: 'local' })
+      })
     }
   }
   public async tex2svg(content: string): Promise<SVGAtrributes> {
@@ -50,16 +47,16 @@ class Transformer {
       width = parseFloat(code.match(/width="(\d*\.?\d*)ex"/)![1])
       height = parseFloat(code.match(/height="(\d*\.?\d*)ex"/)![1])
     } else {
-      const elem: LiteElement = mathjax.document(content, this.options!).convert(content).children[0]
-      width = parseFloat(elem.attributes.width)
-      height = parseFloat(elem.attributes.height)
-      code = this.adaptor!.outerHTML(elem)
+      const elem = this.document!.convert(content)
+      const svg: LiteElement = elem.children[0]
+      width = parseFloat(svg.attributes.width)
+      height = parseFloat(svg.attributes.height)
+      code = this.adaptor!.innerHTML(elem)
     }
     return { width, height, code }
   }
   public async svg2url(content: string, color?: string): Promise<URLAttributes> {
     const svg = await this.tex2svg(content)
-    console.log(content, svg)
     const colored = color ? svg.code.replaceAll('currentColor', color) : svg.code
     return {
       large: isLarge(svg.height),

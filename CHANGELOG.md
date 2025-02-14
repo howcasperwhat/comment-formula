@@ -48,3 +48,5 @@ Now feel free to use `"comment-formula.inline": "all"` to render all formulas in
 
 ### Feature
 1. Enhance TeX input configuration to include all tex packages.
+
+## 2025-02-13: v0.3.4
