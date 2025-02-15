@@ -16,10 +16,10 @@ interface DecorationMatch extends DecorationOptions {
 
 function useAnnotations(context: ExtensionContext) {
   const InlineIconDecoration = window.createTextEditorDecorationType({
-    textDecoration: `none; ${config.extension.code}`,
+    textDecoration: `none; vertical-align:top; ${config.extension.code}`,
   })
   const HideTextDecoration = window.createTextEditorDecorationType({
-    textDecoration: 'none; display: none;',
+    textDecoration: 'none; vertical-align:top; display: none;',
   })
 
   const editor = useActiveTextEditor()
@@ -37,7 +37,8 @@ function useAnnotations(context: ExtensionContext) {
     const symbol = config.extension.symbol
     return new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
   })
-  const inject = 'position:absolute;top:50%;transform:translateY(-50%);'
+  const inject = ['position:relative', 'display:inline-block', 'top:50%',
+    'transform:translateY(-50%)', 'vertical-align:top'].join(';')
   const message = '**WRONG FORMULA FORMAT**'
 
   const update = async () => {
@@ -75,7 +76,7 @@ function useAnnotations(context: ExtensionContext) {
     ))).filter(x => !!x)
   }
 
-  let timeout: NodeJS.Timeout | number | undefined = undefined
+  let timeout: Parameters<typeof clearTimeout>[0] = undefined
   const trigger = () => {
     if (timeout) {
       clearTimeout(timeout)
@@ -98,13 +99,11 @@ function useAnnotations(context: ExtensionContext) {
     window.onDidChangeActiveColorTheme,
     workspace.onDidChangeTextDocument,
     workspace.onDidChangeConfiguration
-  ].forEach((callback) => {
-    callback(() => {
-      trigger()
-    }, null,
+  ].forEach((callback) => 
+    callback(trigger, null,
     context.subscriptions)
-  }))
+  ))
 }
 
-const { activate, deactivate } = defineExtension((context) => useAnnotations(context))
+const { activate, deactivate } = defineExtension(useAnnotations)
 export { activate, deactivate }
