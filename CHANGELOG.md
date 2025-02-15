@@ -1,22 +1,26 @@
 # ChangeLog
 
-## 2023-11-18: v0.0.1
-### Initial Version
-
-## 2023-11-18: v0.0.2
-### Feature 
-1. You can set color in message and inline-editor respectively.
-
-## 2023-11-23: v0.1.0
+## 2025-02-15: v0.3.5
 ### Fix
-1. Height of formula will adapt to the font size of your editor now.
+1. Resolve element detachment from document flow causing scrollbar width miscalculation.
 
-## 2024-01-07: v0.2.0
+## 2025-02-13: v0.3.4
+### Performance Optimization
+1. Just create document once when initializing.
+
+## 2025-02-13: v0.3.3
+### Performance Optimization
+1. Optimize the performance of rendering when changing text-editor selection.
+
 ### Feature
-1. Use it in language that you want.
-2. Multi-line formula is supported.
-3. Style of formula code is supported.
-4. Set the symbol other than `$` to mark formula (just support '@' or '#' now).
+1. Enhance TeX input configuration to include all tex packages.
+
+## 2025-02-11: v0.3.2
+### Fix
+1. Detect wrong formula format and not render it.
+
+## 2025-02-11: v0.3.1
+1. Remove verbose log.
 
 ## 2025-02-11: v0.3.0
 Now feel free to use `"comment-formula.inline": "all"` to render all formulas inline, if you don't mind that the large formula might slightly cover your code.
@@ -35,20 +39,20 @@ Now feel free to use `"comment-formula.inline": "all"` to render all formulas in
 ### Experimental Feature
 1. Add `api.prefix` and `api.suffix` to support custom API. Note that the rendering engine must be [MathJax](https://www.mathjax.org/).
 
-## 2025-02-11: v0.3.1
-1. Remove verbose log.
-
-## 2025-02-11: v0.3.2
-### Fix
-1. Detect wrong formula format and not render it.
-
-## 2025-02-13: v0.3.3
-### Performance Optimization
-1. Optimize the performance of rendering when changing text-editor selection.
-
+## 2024-01-07: v0.2.0
 ### Feature
-1. Enhance TeX input configuration to include all tex packages.
+1. Use it in language that you want.
+2. Multi-line formula is supported.
+3. Style of formula code is supported.
+4. Set the symbol other than `$` to mark formula (just support '@' or '#' now).
 
-## 2025-02-13: v0.3.4
-### Performance Optimization
-1. Just create document once when initializing.
+## 2023-11-23: v0.1.0
+### Fix
+1. Height of formula will adapt to the font size of your editor now.
+
+## 2023-11-18: v0.0.2
+### Feature 
+1. You can set color in message and inline-editor respectively.
+
+## 2023-11-18: v0.0.1
+### Initial Version
