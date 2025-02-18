@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-02-20: v0.4.1
+### Miscellaneous
+1. Add some snippets: `ce`, `cancelto`.
+
 ## 2025-02-18: v0.4.0
 ### Feature
 1. Support intelligent completion within formula code wrapping symbol, you can disable it by setting `comment-formula.completion` to `false`.
