@@ -1,7 +1,7 @@
 <br>
 
 <p align="center">
-<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/logo.png" style="width:160px;" />
+<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/logo.png?raw=true" style="width:160px;" />
 </p>
 
 <h1 align="center">Comment Formula</h1>
@@ -24,13 +24,13 @@ A VSCode Extensions to preview LaTex formulas within the line of your editor.
 You are supposed to write formula between `$$` and `$$` by default.
 
 <p align="center">
-<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png" style="width: 80%" />
+<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" style="width: 80%" />
 </p>
 
 > [!IMPORTANT] 
 > Recommend Feature: `"comment-formula.inline": "all"`: Responsively render all formulas inline.  
 > 
-> ![responsive](https://github.com/howcasperwhat/comment-formula/blob/main/assets/responsive.gif)
+> ![responsive](https://github.com/howcasperwhat/comment-formula/blob/main/assets/responsive.gif?raw=true)
 > 
 > We set the default value to `partial` to avoid rendered large formula covering your code.
 
