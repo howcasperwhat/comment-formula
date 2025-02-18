@@ -1,5 +1,16 @@
 # ChangeLog
 
+## 2025-02-18: v0.4.0
+### Feature
+1. Support intelligent completion within formula code wrapping symbol, you can disable it by setting `comment-formula.completion` to `false`.
+2. Show `Reload Window` notification when changing `comment-formula.inline`.
+
+### Fix
+1. Remove `action` package in mathjax input configuration because it's a mathml extension.
+
+### Miscellaneous
+1. Now the default value of `comment-formula.symbol` is `$` rather than `\\$`, program will automatically add `\\` before special symbols for `RegExp`.
+
 ## 2025-02-15: v0.3.5
 ### Fix
 1. Resolve element detachment from document flow causing scrollbar width miscalculation.

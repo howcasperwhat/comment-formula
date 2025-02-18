@@ -1,5 +1,10 @@
 import type { TextEditor } from 'vscode'
-import { computed, defineConfigObject, useIsDarkTheme } from 'reactive-vscode'
+import type { DecorationMatch } from './types'
+import {
+  computed, defineConfigObject, useIsDarkTheme,
+  shallowRef, watch
+} from 'reactive-vscode'
+import { commands, window } from 'vscode'
 import * as Meta from './generated/meta'
 
 // @see: https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/config/fontInfo.ts#L14
@@ -28,7 +33,8 @@ export const store = {
     if (color === "auto")
       return isDark.value ? '#eee' : '#111'
     return color
-  })
+  }),
+  decorations: shallowRef<DecorationMatch[]>([])
 }
 
 export const isLarge = (height: number) => {
@@ -38,9 +44,18 @@ export const isLarge = (height: number) => {
     return true
   return (height * MATHJAX_TEX_EX >= store.height.value)
 }
-export const enabled = (editor?: TextEditor) => {
-  if (!editor) return false
+export const enabled = (editor: TextEditor) => {
   if (!editor.document) return false
   if (!editor.document.languageId) return false
   return config.extension.languages.includes(editor.document.languageId)
 }
+
+watch(
+  () => config.extension.code,
+  async () => {
+    if (await window.showInformationMessage(
+      'The code style has been updated, please reload the window to take effect',
+      'Reload Window') === 'Reload Window'
+    ) commands.executeCommand('workbench.action.reloadWindow')
+  }
+)

@@ -26,12 +26,19 @@ class Transformer {
   private useAPI
   public constructor() {
     this.useAPI = computed(() => config.extension.api.prefix !== '')
+    const mmlPackages = ['action']
     if (!this.useAPI.value) {
       this.adaptor = liteAdaptor()
       RegisterHTMLHandler(this.adaptor)
       this.document = mathjax.document('', {
-        InputJax: new TeX({ packages: AllPackages }),
-        OutputJax: new SVG({ fontCache: 'local' })
+        InputJax: new TeX({
+          packages: AllPackages.filter(
+            name => !mmlPackages.includes(name)
+          )
+        }),
+        OutputJax: new SVG({
+          fontCache: 'local'
+        })
       })
     }
   }

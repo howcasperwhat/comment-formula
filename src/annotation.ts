@@ -1,20 +1,16 @@
-import type { DecorationOptions, ExtensionContext } from 'vscode'
+import type { ExtensionContext } from 'vscode'
 import { Range, Uri, window, workspace } from 'vscode'
 import {
   useActiveTextEditor, useTextEditorSelections,
   useDocumentText, useActiveEditorDecorations,
-  computed, shallowRef, watchEffect,
-  defineExtension
+  computed
 } from 'reactive-vscode'
 
 import { transformer } from './transformer'
 import { store, config, enabled } from './config'
-interface DecorationMatch extends DecorationOptions {
-  content: string,
-  inline: boolean,
-}
+import { DecorationMatch } from './types'
 
-function useAnnotations(context: ExtensionContext) {
+export function useAnnotation(context: ExtensionContext) {
   const InlineIconDecoration = window.createTextEditorDecorationType({
     textDecoration: `none; vertical-align:top; ${config.extension.code}`,
   })
@@ -26,15 +22,15 @@ function useAnnotations(context: ExtensionContext) {
   const selections = useTextEditorSelections(editor)
   const text = useDocumentText(() => editor.value?.document)
 
-  const decorations = shallowRef<DecorationMatch[]>([])
-
-  useActiveEditorDecorations(InlineIconDecoration, decorations)
-  useActiveEditorDecorations(HideTextDecoration, () => decorations.value.filter(
+  useActiveEditorDecorations(InlineIconDecoration, store.decorations)
+  useActiveEditorDecorations(HideTextDecoration, () => store.decorations.value.filter(
     ({ range, inline }) => inline && !selections.value.map(({ start }) => start.line
       ).includes(range.start.line)).map(({ range }) => range))
 
   const reg = computed(() => {
-    const symbol = config.extension.symbol
+    const special = ['.', '^', '$', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']
+    const symbol = config.extension.symbol.split('').map((char) =>
+      special.includes(char) ? `\\${char}` : char).join('')
     return new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
   })
   const inject = ['position:relative', 'display:inline-block', 'top:50%',
@@ -42,8 +38,11 @@ function useAnnotations(context: ExtensionContext) {
   const message = '**WRONG FORMULA FORMAT**'
 
   const update = async () => {
-    if (!enabled(editor.value)) return
     if (!editor.value) return
+    if (!enabled(editor.value)) {
+      store.decorations.value = []
+      return
+    }
     const contents: [Range, string, boolean][] = []
     const { document } = editor.value
     let match
@@ -55,7 +54,7 @@ function useAnnotations(context: ExtensionContext) {
       const endPos = document.positionAt(match.index + match[0].length)
       contents.push([new Range(startPos, endPos), content, /[\n\r]/.test(content)])
     }
-    decorations.value = (await Promise.all(contents.map(
+    store.decorations.value = (await Promise.all(contents.map(
       async ([range, content, multiline]) =>
         transformer.svg2url(content, store.color.value)
           .then((attr) => {
@@ -73,7 +72,7 @@ function useAnnotations(context: ExtensionContext) {
             }
             return item
           })
-    ))).filter(x => !!x)
+    ))).filter(Boolean)
   }
 
   let timeout: Parameters<typeof clearTimeout>[0] = undefined
@@ -85,13 +84,11 @@ function useAnnotations(context: ExtensionContext) {
     timeout = setTimeout(update, config.extension.interval)
   }
 
-  watchEffect(trigger)
-
   window.onDidChangeActiveTextEditor(() => {
     // If don't clear the decorations when switching files, two problems will occur:
     // 1. Decorations are still visible after switching to a language that does not trigger the extension
     // 2. Decorations will still exist for `interval` milliseconds after switching files
-    decorations.value = []
+    store.decorations.value = []
     trigger()
   }, null, context.subscriptions)
 
@@ -104,6 +101,3 @@ function useAnnotations(context: ExtensionContext) {
     context.subscriptions)
   ))
 }
-
-const { activate, deactivate } = defineExtension(useAnnotations)
-export { activate, deactivate }

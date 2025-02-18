@@ -6,7 +6,7 @@
   "displayName": "Comment Formula",
   "description": "Preview LaTex formulas within the line of your editor!",
   "version": "0.3.5",
-  "icon": "res/logo.png",
+  "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -20,7 +20,7 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./dist/extension.cjs",
+  "main": "./dist/index.cjs",
   "contributes": {
     "commands": [],
     "configuration": {
@@ -49,19 +49,19 @@
           "default": [
             "c",
             "cpp",
-            "python",
-            "java"
+            "java",
+            "python"
           ],
           "description": "Enable comment-formula in these languages. LanguageId: [ https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers ]"
         },
         "comment-formula.symbol": {
           "type": "string",
           "enum": [
-            "\\$",
+            "$",
             "#",
             "@"
           ],
-          "default": "\\$",
+          "default": "$",
           "description": "Identifier symbol of formula code."
         },
         "comment-formula.interval": {
@@ -80,6 +80,11 @@
           "default": "",
           "description": "Style of the inline formula-preview."
         },
+        "comment-formula.completion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable intelligent completion."
+        },
         "comment-formula.api.prefix": {
           "type": "string",
           "default": "",
@@ -95,7 +100,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
-    "build": "tsup src/extension.ts --external vscode",
+    "build": "tsup src/index.ts --external vscode",
     "dev": "npm run build --watch",
     "prepare": "npm run update",
     "lint": "eslint .",
