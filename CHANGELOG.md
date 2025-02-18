@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-02-20: v0.4.2
+### Documentation
+1. Update images in README.md to show in raw format.
+
 ## 2025-02-20: v0.4.1
 ### Miscellaneous
 1. Add some snippets: `ce`, `cancelto`.
