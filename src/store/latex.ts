@@ -27,7 +27,9 @@
  * - Merge functions with the same number of arguments.
  * - Remove `'@ifstar', '@ifnextchar', '@firstoftwo', '@secondoftwo'` 
  *   in FUNC0.macros.
- * = Add bbox and encolse.
+ * - Add bbox and encolse.
+ * - Migrate cancel in `annotation` to `cancel` in `FUNC2` and add `cancelto`.
+ * - Add mhchem in `FUNC2`.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 **/
 
@@ -175,7 +177,7 @@ export const FUNC1 = {
   overlap: ['mathllap', 'mathrlap', 'mathclap', 'llap', 'rlap', 'clap', 'smash'],
   spacing: ['kern', 'mkern', 'mskip', 'hskip', 'hspace', 'hspace*', 'phantom', 'hphantom', 'vphantom'],
   classAssignment: ['mathbin', 'mathclose', 'mathinner', 'mathop', 'mathopen', 'mathord', 'mathpunct', 'mathrel'],
-  annotation: ['cancel', 'overbrace', 'bcancel', 'underbrace', 'xcancel', 'not =', 'sout', 'boxed', 'phase', 'tag', 'tag*'],
+  annotation: ['overbrace', 'underbrace', 'not =', 'sout', 'boxed', 'phase', 'tag', 'tag*'],
   accents: [
     'tilde', 'mathring', 'widetilde', 'overgroup', 'utilde', 'undergroup', 'acute', 'vec', 'Overrightarrow', 'bar',
     'overleftarrow', 'overrightarrow', 'breve', 'underleftarrow', 'underrightarrow', 'check', 'overleftharpoon',
@@ -191,7 +193,9 @@ export const FUNC1 = {
   font: [
     'mathrm', 'mathbf', 'mathit', 'mathnormal', 'textbf', 'textit', 'textrm', 'bold', 'Bbb', 'textnormal', 'boldsymbol',
     'mathbb', 'text', 'bm', 'frak', 'mathsf', 'mathtt', 'mathfrak', 'textsf', 'texttt', 'mathcal', 'mathscr', 'pmb'
-  ]
+  ],
+  cancel: ['cancel', 'bcancel', 'xcancel', 'cancelto'],
+  mhchem: ['ce']
 }
 export const FUNC2 = {
   color: ['color', 'textcolor', 'colorbox'],

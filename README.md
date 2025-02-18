@@ -24,7 +24,7 @@ A VSCode Extensions to preview LaTex formulas within the line of your editor.
 You are supposed to write formula between `$$` and `$$` by default.
 
 <p align="center">
-<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/logo.png" style="width: 80%" />
+<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png" style="width: 80%" />
 </p>
 
 > [!IMPORTANT] 
