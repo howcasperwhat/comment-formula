@@ -5,7 +5,7 @@
   "publisher": "howcasperwhat",
   "displayName": "Comment Formula",
   "description": "Preview LaTex formulas within the line of your editor!",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.84.0"
