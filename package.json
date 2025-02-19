@@ -15,7 +15,7 @@
     "url": "https://github.com/howcasperwhat/comment-formula.git"
   },
   "categories": [
-    "Other"
+    "Visualization", "Snippets"
   ],
   "activationEvents": [
     "onStartupFinished"
