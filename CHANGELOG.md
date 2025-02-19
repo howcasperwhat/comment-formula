@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-02-21: v0.4.3
+### Performance Optimization
+1. Significantly reduce bundle size to 3.8MB.
+
 ## 2025-02-20: v0.4.2
 ### Documentation
 1. Update images in README.md to show in raw format.
