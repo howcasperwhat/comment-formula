@@ -1,14 +1,18 @@
 # ChangeLog
 
-## 2025-02-21: v0.4.3
+## 2025-02-20: v0.4.4
+### Feature
+1. Support multline formula render inline.
+
+## 2025-02-19: v0.4.3
 ### Performance Optimization
 1. Significantly reduce bundle size to 3.8MB.
 
-## 2025-02-20: v0.4.2
+## 2025-02-18: v0.4.2
 ### Documentation
 1. Update images in README.md to show in raw format.
 
-## 2025-02-20: v0.4.1
+## 2025-02-18: v0.4.1
 ### Miscellaneous
 1. Add some snippets: `ce`, `cancelto`.
 

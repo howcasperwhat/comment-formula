@@ -1,4 +1,4 @@
-import type { ExtensionContext } from 'vscode'
+import type { DecorationOptions, ExtensionContext } from 'vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import {
   useActiveTextEditor, useTextEditorSelections,
@@ -41,7 +41,7 @@ export function useAnnotation(context: ExtensionContext) {
         const start = code.range.start.line
         const end = code.range.end.line
         const mid = (start + end) >> 1
-        const decorations = []
+        const decorations = new Array<DecorationOptions>()
         for (let i = start; i <= end; ++i) {
           const position = new Position(i, 0)
           decorations.push({
@@ -50,8 +50,8 @@ export function useAnnotation(context: ExtensionContext) {
             ),
             renderOptions: preview.inline ? {
               before: {
-                contentText: '',
-                width: `${preview.width}ex;`,
+                contentIconPath: '',
+                width: `${preview.width}ex`,
                 margin: `0 .25rem 0 0;${config.extension.preview}`
               }
             } : undefined,
@@ -65,6 +65,7 @@ export function useAnnotation(context: ExtensionContext) {
           renderOptions: preview.inline ? {
             before: {
               contentIconPath: Uri.parse(preview.url),
+              width: `${preview.width}ex`,
               border: `none;${injection}`,
               margin: `0 .25rem 0 0;${config.extension.preview}`
             }
