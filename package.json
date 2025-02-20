@@ -5,7 +5,7 @@
   "publisher": "howcasperwhat",
   "displayName": "Comment Formula",
   "description": "Preview LaTex formulas within the line of your editor!",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.84.0"
@@ -15,7 +15,8 @@
     "url": "https://github.com/howcasperwhat/comment-formula.git"
   },
   "categories": [
-    "Visualization", "Snippets"
+    "Visualization",
+    "Snippets"
   ],
   "activationEvents": [
     "onStartupFinished"
