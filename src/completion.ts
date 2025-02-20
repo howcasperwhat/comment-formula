@@ -44,8 +44,8 @@ export function useCompletion(context: ExtensionContext) {
         new Position(position.line, position.character)
       ))
       if (!line.endsWith(flag)) return
-      if (!store.decorations.value.find(
-        ({ range }) => range.contains(position)
+      if (!store.formulas.value.find(
+        ({ code }) => code.range.contains(position)
       )) return
 
       return [

@@ -1,6 +1,7 @@
-import type { DecorationOptions } from 'vscode'
+import { FormulaPreview } from './transformer'
+import { FormulaCode } from './annotation'
 
-export interface DecorationMatch extends DecorationOptions {
-  content: string,
-  inline: boolean,
+export interface Formula {
+  code: FormulaCode
+  preview: FormulaPreview
 }

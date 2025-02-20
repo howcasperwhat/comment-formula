@@ -1,5 +1,5 @@
 import type { TextEditor } from 'vscode'
-import type { DecorationMatch } from './types'
+import type { Formula } from './types'
 import {
   computed, defineConfigObject, useIsDarkTheme,
   shallowRef, watch
@@ -34,7 +34,8 @@ export const store = {
       return isDark.value ? '#eee' : '#111'
     return color
   }),
-  decorations: shallowRef<DecorationMatch[]>([])
+  formulas: shallowRef<Formula[]>([]),
+  message: '**WRONG FORMULA FORMAT**'
 }
 
 export const isLarge = (height: number) => {

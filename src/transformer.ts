@@ -8,16 +8,23 @@ import { config, isLarge } from './config'
 import { computed } from "reactive-vscode"
 import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages'
 
-interface URLAttributes {
-  large: boolean
-  error: boolean
-  url: string
-}
-
-interface SVGAtrributes {
-  width: number
-  height: number
-  code: string
+export class FormulaPreview {
+  public readonly width: number
+  public readonly height: number
+  public readonly code: string
+  public readonly error: boolean
+  public readonly large: boolean
+  public readonly inline: boolean
+  public readonly url: string
+  public constructor(width: number, height: number, code: string, color?: string) {
+    this.width = width
+    this.height = height
+    this.code = color ? code.replaceAll('currentColor', color) : code
+    this.error = code.includes('data-mjx-error')
+    this.large = isLarge(height)
+    this.inline = !this.large && !this.error
+    this.url = `data:image/svg+xml;base64,${Buffer.from(this.code).toString('base64')}`
+  }
 }
 
 class Transformer {
@@ -42,34 +49,25 @@ class Transformer {
       })
     }
   }
-  public async tex2svg(content: string): Promise<SVGAtrributes> {
+  public async from(tex: string, color?: string): Promise<FormulaPreview> {
     let width: number, height: number, code: string
     if (this.useAPI.value) {
       const data = await fetch([
         config.extension.api.prefix,
-        encodeURIComponent(content),
+        encodeURIComponent(tex),
         config.extension.api.suffix
       ].join(''))
       code = await data.text()
       width = parseFloat(code.match(/width="(\d*\.?\d*)ex"/)![1])
       height = parseFloat(code.match(/height="(\d*\.?\d*)ex"/)![1])
     } else {
-      const elem = this.document!.convert(content)
+      const elem = this.document!.convert(tex)
       const svg: LiteElement = elem.children[0]
       width = parseFloat(svg.attributes.width)
       height = parseFloat(svg.attributes.height)
       code = this.adaptor!.innerHTML(elem)
     }
-    return { width, height, code }
-  }
-  public async svg2url(content: string, color?: string): Promise<URLAttributes> {
-    const svg = await this.tex2svg(content)
-    const colored = color ? svg.code.replaceAll('currentColor', color) : svg.code
-    return {
-      large: isLarge(svg.height),
-      error: colored.includes('data-mjx-error'),
-      url: `data:image/svg+xml;base64,${Buffer.from(colored).toString('base64')}`
-    }
+    return new FormulaPreview(width, height, code, color)
   }
 }
 

@@ -1,5 +1,5 @@
 import type { ExtensionContext } from 'vscode'
-import { Range, Uri, window, workspace } from 'vscode'
+import { Position, Range, Uri, window, workspace } from 'vscode'
 import {
   useActiveTextEditor, useTextEditorSelections,
   useDocumentText, useActiveEditorDecorations,
@@ -8,13 +8,23 @@ import {
 
 import { transformer } from './transformer'
 import { store, config, enabled } from './config'
-import { DecorationMatch } from './types'
+
+export interface FormulaCode {
+  range: Range,
+  tex: string,
+}
 
 export function useAnnotation(context: ExtensionContext) {
-  const InlineIconDecoration = window.createTextEditorDecorationType({
+  const InlinePreviewDecoration = window.createTextEditorDecorationType({
+    textDecoration: `none; vertical-align:top;`,
+  })
+  const MultilPreviewDecoration = window.createTextEditorDecorationType({
+    textDecoration: `none; vertical-align:top;`,
+  })
+  const ShowCodeDecoration = window.createTextEditorDecorationType({
     textDecoration: `none; vertical-align:top; ${config.extension.code}`,
   })
-  const HideTextDecoration = window.createTextEditorDecorationType({
+  const HideCodeDecoration = window.createTextEditorDecorationType({
     textDecoration: 'none; vertical-align:top; display: none;',
   })
 
@@ -22,10 +32,78 @@ export function useAnnotation(context: ExtensionContext) {
   const selections = useTextEditorSelections(editor)
   const text = useDocumentText(() => editor.value?.document)
 
-  useActiveEditorDecorations(InlineIconDecoration, store.decorations)
-  useActiveEditorDecorations(HideTextDecoration, () => store.decorations.value.filter(
-    ({ range, inline }) => inline && !selections.value.map(({ start }) => start.line
-      ).includes(range.start.line)).map(({ range }) => range))
+  const injection = ['position:relative', 'display:inline-block', 'top:50%',
+    'transform:translateY(-50%)', 'vertical-align:top'].join(';')
+
+  useActiveEditorDecorations(MultilPreviewDecoration, () =>
+    store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
+      .map(({ code, preview }) => {
+        const start = code.range.start.line
+        const end = code.range.end.line
+        const mid = (start + end) >> 1
+        const decorations = []
+        for (let i = start; i <= end; ++i) {
+          const position = new Position(i, 0)
+          decorations.push({
+            range: new Range(
+              position, position.translate(0, Number.MAX_SAFE_INTEGER)
+            ),
+            renderOptions: preview.inline ? {
+              before: {
+                contentText: '',
+                width: `${preview.width}ex;`,
+                margin: `0 .25rem 0 0;${config.extension.preview}`
+              }
+            } : undefined,
+          })
+        }
+        const position = new Position(mid, 0)
+        decorations[mid - start] = {
+          range: new Range(
+            position, position.translate(0, Number.MAX_SAFE_INTEGER)
+          ),
+          renderOptions: preview.inline ? {
+            before: {
+              contentIconPath: Uri.parse(preview.url),
+              border: `none;${injection}`,
+              margin: `0 .25rem 0 0;${config.extension.preview}`
+            }
+          } : undefined,
+        }
+        return decorations
+      }).flat()
+  )
+  useActiveEditorDecorations(InlinePreviewDecoration, () =>
+    store.formulas.value.filter(({ code }) => code.range.isSingleLine)
+      .map(({ code, preview }) => {
+        return {
+          range: code.range,
+          renderOptions: preview.inline ? {
+            after: {
+              contentIconPath: Uri.parse(preview.url),
+              border: `none;${injection}`,
+              margin: `0 0 0 .25rem;${config.extension.preview}`
+            }
+          } : undefined,
+        }
+      })
+  )
+  useActiveEditorDecorations(ShowCodeDecoration, () =>
+    store.formulas.value
+      .map(({ code, preview }) => {
+        return {
+          range: code.range,
+          hoverMessage: preview.error ? store.message : `![](${preview.url})`
+        }
+      })
+  )
+  useActiveEditorDecorations(HideCodeDecoration, () =>
+    store.formulas.value
+      .filter(({ code, preview }) =>
+        preview.inline && selections.value.every(
+        (selection) => !selection.intersection(code.range)
+      )).map(({ code }) => ({ range: code.range }))
+  )
 
   const reg = computed(() => {
     const special = ['.', '^', '$', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']
@@ -33,45 +111,25 @@ export function useAnnotation(context: ExtensionContext) {
       special.includes(char) ? `\\${char}` : char).join('')
     return new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
   })
-  const inject = ['position:relative', 'display:inline-block', 'top:50%',
-    'transform:translateY(-50%)', 'vertical-align:top'].join(';')
-  const message = '**WRONG FORMULA FORMAT**'
 
   const update = async () => {
     if (!editor.value) return
-    if (!enabled(editor.value)) {
-      store.decorations.value = []
-      return
-    }
-    const contents: [Range, string, boolean][] = []
+    if (!enabled(editor.value)) return
+    const codes: FormulaCode[] = []
     const { document } = editor.value
     let match
     reg.value.lastIndex = 0
     while ((match = reg.value.exec(text.value!))) {
-      const content = `${match[1].slice(2, -2)}`
-      if (!content) continue
+      const tex = `${match[1].slice(2, -2)}`
+      if (!tex) continue
       const startPos = document.positionAt(match.index)
       const endPos = document.positionAt(match.index + match[0].length)
-      contents.push([new Range(startPos, endPos), content, /[\n\r]/.test(content)])
+      const range = new Range(startPos, endPos)
+      codes.push({ range, tex })
     }
-    store.decorations.value = (await Promise.all(contents.map(
-      async ([range, content, multiline]) =>
-        transformer.svg2url(content, store.color.value)
-          .then((attr) => {
-            const inline = !attr.large && !multiline && !attr.error
-            const item: DecorationMatch = {
-              range, content, inline,
-              renderOptions: inline ? {
-                after: {
-                  contentIconPath: Uri.parse(attr.url),
-                  border: `none;${inject}`,
-                  margin: `0 0 0 .25rem;${config.extension.preview}`
-                }
-              } : undefined,
-              hoverMessage: attr.error ? message : `![](${attr.url})`,
-            }
-            return item
-          })
+    store.formulas.value = (await Promise.all(codes.map(
+      async (code) => transformer.from(code.tex, store.color.value)
+          .then((preview) => ({ code, preview }))
     ))).filter(Boolean)
   }
 
@@ -88,7 +146,7 @@ export function useAnnotation(context: ExtensionContext) {
     // If don't clear the decorations when switching files, two problems will occur:
     // 1. Decorations are still visible after switching to a language that does not trigger the extension
     // 2. Decorations will still exist for `interval` milliseconds after switching files
-    store.decorations.value = []
+    store.formulas.value = []
     trigger()
   }, null, context.subscriptions)
 
