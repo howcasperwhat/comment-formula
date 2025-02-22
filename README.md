@@ -58,3 +58,9 @@ You are supposed to write formula between `$$` and `$$` by default.
 
 ## Reference
 [MathJax](https://www.mathjax.org/) | [KaTeX](https://katex.org/) | [VSCode Markdown](https://github.com/yzhang-gh/vscode-markdown) | [LaTex Workshop](https://github.com/James-Yu/LaTeX-Workshop) | [VSCode Iconify](https://github.com/howcasperwhat/comment-formula)
+
+## License
+
+code is licensed under the [MIT License](https://github.com/howcasperwhat/comment-formula/blob/main/LICENSE).  
+
+logo using [carbon:function](https://github.com/carbon-design-system/carbon) as an element is licensed under the [Apache License 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE).
