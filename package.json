@@ -5,7 +5,7 @@
   "publisher": "howcasperwhat",
   "displayName": "Comment Formula",
   "description": "Preview LaTex formulas within the line of your editor!",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.84.0"
@@ -33,19 +33,34 @@
         },
         "comment-formula.inline": {
           "type": "string",
-          "enum": ["partial", "all", "none"],
+          "enum": [
+            "partial",
+            "all",
+            "none"
+          ],
           "default": "partial",
           "description": "`partial` means only not-so-large formulas are rendered inline."
         },
         "comment-formula.languages": {
           "type": "array",
-          "items": { "type": "string" },
-          "default": ["c", "cpp", "java", "python"],
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "c",
+            "cpp",
+            "java",
+            "python"
+          ],
           "description": "Enable comment-formula in these languages. LanguageId: [ https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers ]"
         },
         "comment-formula.symbol": {
           "type": "string",
-          "enum": ["$", "#", "@"],
+          "enum": [
+            "$",
+            "#",
+            "@"
+          ],
           "default": "$",
           "description": "Identifier symbol of formula code."
         },
@@ -72,13 +87,21 @@
         },
         "comment-formula.multiple": {
           "type": "string",
-          "enum": ["before", "after", "none"],
+          "enum": [
+            "before",
+            "after",
+            "none"
+          ],
           "default": "before",
           "description": "Enable multiline formula or set preview position of it."
         },
         "comment-formula.single": {
           "type": "string",
-          "enum": ["before", "after", "none"],
+          "enum": [
+            "before",
+            "after",
+            "none"
+          ],
           "default": "after",
           "description": "Enable oneline formula or set preview position of it."
         },
