@@ -2,7 +2,7 @@
 
 ## 2025-02-22: v0.4.5
 ### Feature
-1. Support custom the relative position of rendered preview
+1. Support custom the relative position of rendered preview.
 2. Support disable codes' hidden behavior.
 ### Miscellaneous
 1. Use new logo.
