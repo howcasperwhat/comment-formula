@@ -48,6 +48,9 @@ You are supposed to write formula between `$$` and `$$` by default.
 | `comment-formula.code`       | Style of matched latex code.                                                                                                                    | `string`  | `"font-weight: bold;"`        |
 | `comment-formula.preview`    | Style of the inline formula-preview.                                                                                                            | `string`  | `""`                          |
 | `comment-formula.completion` | Enable intelligent completion.                                                                                                                  | `boolean` | `true`                        |
+| `comment-formula.multiple`   | Enable multiline formula or set preview position of it.                                                                                         | `string`  | `"before"`                    |
+| `comment-formula.single`     | Enable oneline formula or set preview position of it.                                                                                           | `string`  | `"after"`                     |
+| `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                            | `boolean` | `true`                        |
 | `comment-formula.api.prefix` | API prefix                                                                                                                                      | `string`  | `""`                          |
 | `comment-formula.api.suffix` | API suffix                                                                                                                                      | `string`  | `""`                          |
 

@@ -33,34 +33,19 @@
         },
         "comment-formula.inline": {
           "type": "string",
-          "enum": [
-            "partial",
-            "all",
-            "none"
-          ],
+          "enum": ["partial", "all", "none"],
           "default": "partial",
           "description": "`partial` means only not-so-large formulas are rendered inline."
         },
         "comment-formula.languages": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "c",
-            "cpp",
-            "java",
-            "python"
-          ],
+          "items": { "type": "string" },
+          "default": ["c", "cpp", "java", "python"],
           "description": "Enable comment-formula in these languages. LanguageId: [ https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers ]"
         },
         "comment-formula.symbol": {
           "type": "string",
-          "enum": [
-            "$",
-            "#",
-            "@"
-          ],
+          "enum": ["$", "#", "@"],
           "default": "$",
           "description": "Identifier symbol of formula code."
         },
@@ -84,6 +69,23 @@
           "type": "boolean",
           "default": true,
           "description": "Enable intelligent completion."
+        },
+        "comment-formula.multiple": {
+          "type": "string",
+          "enum": ["before", "after", "none"],
+          "default": "before",
+          "description": "Enable multiline formula or set preview position of it."
+        },
+        "comment-formula.single": {
+          "type": "string",
+          "enum": ["before", "after", "none"],
+          "default": "after",
+          "description": "Enable oneline formula or set preview position of it."
+        },
+        "comment-formula.hidden": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable hiding code when selections are out of range."
         },
         "comment-formula.api.prefix": {
           "type": "string",

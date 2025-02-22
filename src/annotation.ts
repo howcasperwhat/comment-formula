@@ -8,6 +8,7 @@ import {
 
 import { transformer } from './transformer'
 import { store, config, enabled } from './config'
+import { RelativePosition } from './types'
 
 export interface FormulaCode {
   range: Range,
@@ -15,10 +16,10 @@ export interface FormulaCode {
 }
 
 export function useAnnotation(context: ExtensionContext) {
-  const InlinePreviewDecoration = window.createTextEditorDecorationType({
+  const SinglePreviewDecoration = window.createTextEditorDecorationType({
     textDecoration: `none; vertical-align:top;`,
   })
-  const MultilPreviewDecoration = window.createTextEditorDecorationType({
+  const MultiplePreviewDecoration = window.createTextEditorDecorationType({
     textDecoration: `none; vertical-align:top;`,
   })
   const ShowCodeDecoration = window.createTextEditorDecorationType({
@@ -32,78 +33,67 @@ export function useAnnotation(context: ExtensionContext) {
   const selections = useTextEditorSelections(editor)
   const text = useDocumentText(() => editor.value?.document)
 
-  const injection = ['position:relative', 'display:inline-block', 'top:50%',
+  const INJECTION = ['position:relative', 'display:inline-block', 'top:50%',
     'transform:translateY(-50%)', 'vertical-align:top'].join(';')
+  
+  const decorate = (position: Range | Position,
+    relative: RelativePosition, inline: boolean,
+    contentIconPath: Uri | '', injection: string = '',
+  ): DecorationOptions => {
+    const range = position instanceof Range ? position : new Range(
+      position, position.translate(0, Number.MAX_SAFE_INTEGER))
+    const renderOptions = inline ? {
+      [relative]: {
+        contentIconPath,
+        border: `none;${injection};${config.extension.preview};`,
+        margin: relative === 'before' ? '0 0.25em 0 0' : '0 0 0 0.25em',
+      }
+    } : undefined
+    return { range, renderOptions }
+  }
 
-  useActiveEditorDecorations(MultilPreviewDecoration, () =>
-    store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
-      .map(({ code, preview }) => {
-        const start = code.range.start.line
-        const end = code.range.end.line
-        const mid = (start + end) >> 1
-        const decorations = new Array<DecorationOptions>()
-        for (let i = start; i <= end; ++i) {
-          const position = new Position(i, 0)
-          decorations.push({
-            range: new Range(
-              position, position.translate(0, Number.MAX_SAFE_INTEGER)
-            ),
-            renderOptions: preview.inline ? {
-              before: {
-                contentIconPath: '',
-                width: `${preview.width}ex`,
-                margin: `0 .25rem 0 0;${config.extension.preview}`
-              }
-            } : undefined,
-          })
-        }
-        const position = new Position(mid, 0)
-        decorations[mid - start] = {
-          range: new Range(
-            position, position.translate(0, Number.MAX_SAFE_INTEGER)
-          ),
-          renderOptions: preview.inline ? {
-            before: {
-              contentIconPath: Uri.parse(preview.url),
-              width: `${preview.width}ex`,
-              border: `none;${injection}`,
-              margin: `0 .25rem 0 0;${config.extension.preview}`
-            }
-          } : undefined,
-        }
-        return decorations
-      }).flat()
+  useActiveEditorDecorations(MultiplePreviewDecoration, () =>
+    config.extension.multiple === 'none' ? [] :
+      store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
+        .map(({ code, preview }) => {
+          const start = code.range.start.line
+          const end = code.range.end.line
+          const mid = (start + end) >> 1
+          return Array.from({ length: end - start + 1 }, (_, i) =>
+            decorate(new Position(start + i, 0),
+              config.extension.multiple, preview.inline,
+              i === mid - start ? Uri.parse(preview.url) : '',
+              `width:${preview.width}ex;` +
+              (i === mid - start ? `${INJECTION}` :
+                'display: inline-block;')
+            )
+          )
+        }).flat()
   )
-  useActiveEditorDecorations(InlinePreviewDecoration, () =>
-    store.formulas.value.filter(({ code }) => code.range.isSingleLine)
-      .map(({ code, preview }) => {
-        return {
-          range: code.range,
-          renderOptions: preview.inline ? {
-            after: {
-              contentIconPath: Uri.parse(preview.url),
-              border: `none;${injection}`,
-              margin: `0 0 0 .25rem;${config.extension.preview}`
-            }
-          } : undefined,
-        }
-      })
+  useActiveEditorDecorations(SinglePreviewDecoration, () =>
+    config.extension.single === 'none' ? [] :
+      store.formulas.value.filter(({ code }) => code.range.isSingleLine)
+        .map(({ code, preview }) => decorate(
+          code.range, config.extension.single, preview.inline,
+          Uri.parse(preview.url), INJECTION
+        ))
   )
   useActiveEditorDecorations(ShowCodeDecoration, () =>
     store.formulas.value
-      .map(({ code, preview }) => {
-        return {
+      .map(({ code, preview }) => ({
           range: code.range,
-          hoverMessage: preview.error ? store.message : `![](${preview.url})`
-        }
-      })
+          hoverMessage: preview.error ?
+            store.message : `![](${preview.url})`
+        })
+      )
   )
   useActiveEditorDecorations(HideCodeDecoration, () =>
-    store.formulas.value
-      .filter(({ code, preview }) =>
-        preview.inline && selections.value.every(
-        (selection) => !selection.intersection(code.range)
-      )).map(({ code }) => ({ range: code.range }))
+    !config.extension.hidden ? [] :
+      store.formulas.value
+        .filter(({ code, preview }) =>
+          preview.inline && selections.value.every(
+          (selection) => !selection.intersection(code.range)
+        )).map(({ code }) => ({ range: code.range }))
   )
 
   const reg = computed(() => {
