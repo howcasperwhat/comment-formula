@@ -64,6 +64,6 @@ You are supposed to write formula between `$$` and `$$` by default.
 
 ## License
 
-code is licensed under the [MIT License](https://github.com/howcasperwhat/comment-formula/blob/main/LICENSE).  
+Code is under the [MIT License](https://github.com/howcasperwhat/comment-formula/blob/main/LICENSE).  
 
-logo using [carbon:function](https://github.com/carbon-design-system/carbon) as an element is licensed under the [Apache License 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE).
+Logo using [carbon:function](https://github.com/carbon-design-system/carbon) as an element is under the [Apache License 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE).
