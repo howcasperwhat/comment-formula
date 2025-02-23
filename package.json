@@ -1,15 +1,11 @@
 {
-  "name": "comment-formula",
-  "type": "module",
-  "author": "Casper Huang",
   "publisher": "howcasperwhat",
+  "name": "comment-formula",
+
   "displayName": "Comment Formula",
-  "description": "Preview LaTex formulas within the line of your editor!",
   "version": "0.4.5",
-  "icon": "assets/logo.png",
-  "engines": {
-    "vscode": "^1.84.0"
-  },
+  "description": "Preview LaTeX formulas within the line of your editor.",
+  "author": "Casper Huang",
   "repository": {
     "type": "git",
     "url": "https://github.com/howcasperwhat/comment-formula.git"
@@ -18,10 +14,14 @@
     "Visualization",
     "Snippets"
   ],
+  "main": "./dist/index.js",
+  "icon": "assets/logo.png",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./dist/index.cjs",
   "contributes": {
     "configuration": {
       "title": "comment-formula",
@@ -73,12 +73,12 @@
         "comment-formula.code": {
           "type": "string",
           "default": "font-weight: bold;",
-          "description": "Style of matched latex code."
+          "description": "Style of matched LaTeX code."
         },
         "comment-formula.preview": {
           "type": "string",
           "default": "",
-          "description": "Style of the inline formula-preview."
+          "description": "Style of the inline formula preview."
         },
         "comment-formula.completion": {
           "type": "boolean",
@@ -93,7 +93,7 @@
             "none"
           ],
           "default": "before",
-          "description": "Enable multiline formula or set preview position of it."
+          "description": "Set preview position of multiple line LaTeX or disable it."
         },
         "comment-formula.single": {
           "type": "string",
@@ -103,7 +103,7 @@
             "none"
           ],
           "default": "after",
-          "description": "Enable oneline formula or set preview position of it."
+          "description": "Set preview position of single line LaTeX or disable it."
         },
         "comment-formula.hidden": {
           "type": "boolean",
@@ -113,12 +113,12 @@
         "comment-formula.api.prefix": {
           "type": "string",
           "default": "",
-          "description": "API prefix"
+          "description": "API prefix."
         },
         "comment-formula.api.suffix": {
           "type": "string",
           "default": "",
-          "description": "API suffix"
+          "description": "API suffix."
         }
       }
     }

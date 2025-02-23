@@ -1,8 +1,12 @@
 import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
+import process from 'node:process'
 import {
-  computed, defineConfigObject, useIsDarkTheme,
-  shallowRef, watch
+  computed,
+  defineConfigObject,
+  shallowRef,
+  useIsDarkTheme,
+  watch,
 } from 'reactive-vscode'
 import { commands, window } from 'vscode'
 import * as Meta from './generated/meta'
@@ -16,12 +20,12 @@ const isDark = useIsDarkTheme()
 export const config = {
   extension: defineConfigObject<Meta.NestedScopedConfigs>(
     Meta.scopedConfigs.scope,
-    Meta.scopedConfigs.defaults
+    Meta.scopedConfigs.defaults,
   ),
   editor: defineConfigObject<{ fontSize: number }>(
     'editor',
-    { fontSize: 14 }
-  ), 
+    { fontSize: 14 },
+  ),
 }
 export const store = {
   isDark: useIsDarkTheme(),
@@ -30,24 +34,26 @@ export const store = {
   }),
   color: computed(() => {
     const color = config.extension.color
-    if (color === "auto")
+    if (color === 'auto')
       return isDark.value ? '#eee' : '#111'
     return color
   }),
   formulas: shallowRef<Formula[]>([]),
-  message: '**WRONG FORMULA FORMAT**'
+  message: '**WRONG FORMULA FORMAT**',
 }
 
-export const isLarge = (height: number) => {
+export function isLarge(height: number) {
   if (config.extension.inline === 'all')
     return false
   if (config.extension.inline === 'none')
     return true
   return (height * MATHJAX_TEX_EX >= store.height.value)
 }
-export const enabled = (editor: TextEditor) => {
-  if (!editor.document) return false
-  if (!editor.document.languageId) return false
+export function enabled(editor: TextEditor) {
+  if (!editor.document)
+    return false
+  if (!editor.document.languageId)
+    return false
   return config.extension.languages.includes(editor.document.languageId)
 }
 
@@ -56,7 +62,10 @@ watch(
   async () => {
     if (await window.showInformationMessage(
       'The code style has been updated, please reload the window to take effect',
-      'Reload Window') === 'Reload Window'
-    ) commands.executeCommand('workbench.action.reloadWindow')
-  }
+      'Reload Window',
+    ) === 'Reload Window'
+    ) {
+      commands.executeCommand('workbench.action.reloadWindow')
+    }
+  },
 )

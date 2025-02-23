@@ -1,29 +1,35 @@
-import type { CompletionItemProvider, TextDocument, ExtensionContext } from 'vscode'
+import type { CompletionItemProvider, ExtensionContext, TextDocument } from 'vscode'
 import {
-  CompletionItem, CompletionItemKind, languages,
-  Position, Range, SnippetString
+  CompletionItem,
+  CompletionItemKind,
+  languages,
+  Position,
+  Range,
+  SnippetString,
 } from 'vscode'
 import { config, store } from './config'
-import { FUNC0, FUNC1, FUNC2, ENVS, SPECIAL } from './store/latex'
+import { ENVS, FUNC0, FUNC1, FUNC2, SPECIAL } from './store/latex'
 
 export function useCompletion(context: ExtensionContext) {
   const frame: CompletionItemProvider = {
     provideCompletionItems(document: TextDocument, position: Position) {
-      if (!config.extension.completion) return
+      if (!config.extension.completion)
+        return
 
       const line = document.getText(new Range(
         new Position(position.line, 0),
-        new Position(position.line, position.character)
+        new Position(position.line, position.character),
       ))
       const symbol = config.extension.symbol
-      if (!line.endsWith(symbol)) return
+      if (!line.endsWith(symbol))
+        return
 
       const item = new CompletionItem(
         `${symbol}${symbol}.|.${symbol}${symbol}`,
-        CompletionItemKind.Snippet
+        CompletionItemKind.Snippet,
       )
       item.insertText = new SnippetString(
-        `${symbol} $1 ${symbol}${symbol}`
+        `${symbol} $1 ${symbol}${symbol}`,
       )
       item.documentation = `Insert an inline formula`
 
@@ -31,63 +37,70 @@ export function useCompletion(context: ExtensionContext) {
     },
     resolveCompletionItem(item: CompletionItem) {
       return item
-    }
+    },
   }
 
   const flag = '\\'
   const unit: CompletionItemProvider = {
     provideCompletionItems(document: TextDocument, position: Position) {
-      if (!config.extension.completion) return
+      if (!config.extension.completion)
+        return
 
       const line = document.getText(new Range(
         new Position(position.line, 0),
-        new Position(position.line, position.character)
+        new Position(position.line, position.character),
       ))
-      if (!line.endsWith(flag)) return
+      if (!line.endsWith(flag))
+        return
       if (!store.formulas.value.find(
-        ({ code }) => code.range.contains(position)
-      )) return
+        ({ code }) => code.range.contains(position),
+      )) {
+        return
+      }
 
       return [
         ...Array.from(new Set(Object.values(FUNC0).flat())).map(
           (func: string) => Object.assign(new CompletionItem(
-            flag + func, CompletionItemKind.Function
+            flag + func,
+            CompletionItemKind.Function,
           ), {
-            insertText: new SnippetString(`${func}`)
-          })
+            insertText: new SnippetString(`${func}`),
+          }),
         ),
         ...Array.from(new Set(Object.values(FUNC1).flat())).map(
           (func: string) => Object.assign(new CompletionItem(
-            flag + func + '{}', CompletionItemKind.Function
+            `${flag + func}{}`,
+            CompletionItemKind.Function,
           ), {
-            insertText: new SnippetString(`${func}{$1}`)
-          })
+            insertText: new SnippetString(`${func}{$1}`),
+          }),
         ),
         ...Array.from(new Set(Object.values(FUNC2).flat())).map(
           (func: string) => Object.assign(new CompletionItem(
-            flag + func + '{}{}', CompletionItemKind.Function
+            `${flag + func}{}{}`,
+            CompletionItemKind.Function,
           ), {
-            insertText: new SnippetString(`${func}{$1}{$2}`)
-          })
+            insertText: new SnippetString(`${func}{$1}{$2}`),
+          }),
         ),
         Object.assign(new CompletionItem(
-          flag + 'begin', CompletionItemKind.Module
+          `${flag}begin`,
+          CompletionItemKind.Module,
         ), {
           insertText: new SnippetString(
-            'begin{${1|' + ENVS.join(',') + '|}}\n\t$2\n\\end{$1}'
-          )
+            `begin{\${1|${ENVS.join(',')}|}}\n\t$2\n\\end{$1}`,
+          ),
         }),
         ...SPECIAL.map(({ name, format, snippet }) => Object.assign(
           new CompletionItem(flag + name + format, CompletionItemKind.Function),
-          { insertText: new SnippetString(name + snippet) }
-        ))
-  ]
+          { insertText: new SnippetString(name + snippet) },
+        )),
+      ]
     },
     resolveCompletionItem(item: CompletionItem) {
       return item
-    }
+    },
   }
-
 
   context.subscriptions.push(
     languages.registerCompletionItemProvider(

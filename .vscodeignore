@@ -1,0 +1,7 @@
+src/
+.vscode/
+assets/logo.svg
+tsconfig.json
+eslint.config.ts
+package-lock.json
+.gitignore

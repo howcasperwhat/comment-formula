@@ -1,5 +1,5 @@
-import { FormulaPreview } from './transformer'
-import { FormulaCode } from './annotation'
+import type { FormulaCode } from './annotation'
+import type { FormulaPreview } from './transformer'
 
 export interface Formula {
   code: FormulaCode

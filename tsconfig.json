@@ -1,16 +1,16 @@
 {
-	"compilerOptions": {
-		"noEmit": true,
-		"target": "ESNext",
-		"lib": [
-			"ESNext"
-		],
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"strict": true,
-		"strictNullChecks": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-	}
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
 }

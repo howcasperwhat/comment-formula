@@ -16,22 +16,22 @@
 </p>
 
 ## Introduction
-A VSCode Extensions to preview LaTex formulas within the line of your editor.  
+A VSCode extensions to preview LaTeX formulas within the line of your editor.
 
 > Render Engine: [MathJax](https://www.mathjax.org/)
 
 ## Feature and Usage
-You are supposed to write formula between `$$` and `$$` by default.
+You are supposed to write formulas between `$$` and `$$` by default.
 
 <p align="center">
 <img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" style="width: 80%" />
 </p>
 
-> [!IMPORTANT] 
-> Recommend Feature: `"comment-formula.inline": "all"`: Responsively render all formulas inline.  
-> 
+> [!IMPORTANT]
+> Recommend Feature: `"comment-formula.inline": "all"`: Responsively render all formulas inline.
+>
 > ![responsive](https://github.com/howcasperwhat/comment-formula/blob/main/assets/responsive.gif?raw=true)
-> 
+>
 > We set the default value to `partial` to avoid rendered large formula covering your code.
 
 ## Configurations
@@ -64,6 +64,6 @@ You are supposed to write formula between `$$` and `$$` by default.
 
 ## License
 
-Code is under the [MIT License](https://github.com/howcasperwhat/comment-formula/blob/main/LICENSE).  
+Code is under the [MIT License](https://github.com/howcasperwhat/comment-formula/blob/main/LICENSE).
 
 Logo using [carbon:function](https://github.com/carbon-design-system/carbon) as an element is under the [Apache License 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE).

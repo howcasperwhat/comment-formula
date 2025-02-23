@@ -1,5 +1,10 @@
 # ChangeLog
 
+## 2025-02-23: v0.4.6
+### Miscellaneous
+1. Add `.vscodeignore` to exclude unnecessary files.
+2. Use ESLint to format code.
+
 ## 2025-02-22: v0.4.5
 ### Feature
 1. Support custom the relative position of rendered preview.
