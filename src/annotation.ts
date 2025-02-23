@@ -49,7 +49,7 @@ export function useAnnotation(context: ExtensionContext) {
           [relative]: {
             contentIconPath,
             border: `none;${injection};${config.extension.preview};`,
-            margin: relative === 'before' ? '0 0.25em 0 0' : '0 0 0 0.25em',
+            margin: relative === 'before' ? '0 0.25rem 0 0' : '0 0 0 0.25rem',
           },
         }
       : undefined

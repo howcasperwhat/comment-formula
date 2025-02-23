@@ -51,7 +51,7 @@
             "java",
             "python"
           ],
-          "description": "Enable comment-formula in these languages. LanguageId: [ https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers ]"
+          "description": "Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers"
         },
         "comment-formula.symbol": {
           "type": "string",
