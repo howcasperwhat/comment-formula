@@ -1,9 +1,8 @@
 {
   "publisher": "howcasperwhat",
   "name": "comment-formula",
-
   "displayName": "Comment Formula",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Preview LaTeX formulas within the line of your editor.",
   "author": "Casper Huang",
   "repository": {
