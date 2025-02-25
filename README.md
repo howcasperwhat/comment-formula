@@ -51,6 +51,7 @@ You are supposed to write formulas between `$$` and `$$` by default.
 | `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"before"`                    |
 | `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                     |
 | `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                        | `boolean` | `true`                        |
+| `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                           |
 | `comment-formula.api.prefix` | API prefix.                                                                                                                                 | `string`  | `""`                          |
 | `comment-formula.api.suffix` | API suffix.                                                                                                                                 | `string`  | `""`                          |
 

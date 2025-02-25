@@ -13,6 +13,8 @@ import * as Meta from './generated/meta'
 const GLODEB_LINE_HEIGHT_RATIO = process.platform === 'darwin' ? 1.5 : 1.35
 // use devtools to get the value of 1ex
 const MATHJAX_TEX_EX = 8.64
+const BASE_HEIGHT = 20
+
 const isDark = useIsDarkTheme()
 
 export const config = {
@@ -35,6 +37,11 @@ export const store = {
     if (color === 'auto')
       return isDark.value ? '#eee' : '#111'
     return color
+  }),
+  scale: computed(() => {
+    return config.extension.scale * Math.round(
+      config.editor.fontSize * GLODEB_LINE_HEIGHT_RATIO,
+    ) / BASE_HEIGHT
   }),
   formulas: shallowRef<Formula[]>([]),
   message: '**WRONG FORMULA FORMAT**',

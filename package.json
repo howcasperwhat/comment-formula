@@ -109,6 +109,11 @@
           "default": true,
           "description": "Enable hiding code when selections are out of range."
         },
+        "comment-formula.scale": {
+          "type": "number",
+          "default": 1,
+          "description": "Scale factor of the preview formula."
+        },
         "comment-formula.api.prefix": {
           "type": "string",
           "default": "",
