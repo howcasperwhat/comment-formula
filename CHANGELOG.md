@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-02-25: v0.4.9
+### Fix
+1. Without treeshake due to version of `tsup`.
+
 ## 2025-02-25: v0.4.8
 ### Feature
 1. Support scale the rendered formula manually or based on font size.
