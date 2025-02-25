@@ -37,7 +37,13 @@ export function useAnnotation(context: ExtensionContext) {
 
   const INJECTION = ['position:relative', 'display:inline-block', 'top:50%', 'transform:translateY(-50%)', 'vertical-align:top'].join(';')
 
-  const decorate = (position: Range | Position, relative: RelativePosition, inline: boolean, contentIconPath: Uri | '', injection: string = ''): DecorationOptions => {
+  const decorate = (
+    position: Range | Position,
+    relative: RelativePosition,
+    inline: boolean,
+    contentIconPath: Uri | '',
+    injection: string = '',
+  ): DecorationOptions => {
     const range = position instanceof Range
       ? position
       : new Range(
@@ -65,10 +71,16 @@ export function useAnnotation(context: ExtensionContext) {
             const end = code.range.end.line
             const mid = (start + end) >> 1
             return Array.from({ length: end - start + 1 }, (_, i) =>
-              decorate(new Position(start + i, 0), config.extension.multiple, preview.inline, i === mid - start ? Uri.parse(preview.url) : '', `width:${preview.width}ex;${
-                i === mid - start
-                  ? `${INJECTION}`
-                  : 'display: inline-block;'}`))
+              decorate(
+                new Position(start + i, 0),
+                config.extension.multiple,
+                preview.inline,
+                i === mid - start ? Uri.parse(preview.url) : '',
+                `width:${preview.width}ex;${
+                  i === mid - start
+                    ? `${INJECTION}`
+                    : 'display: inline-block;'}`,
+              ))
           })
           .flat())
   useActiveEditorDecorations(SinglePreviewOptions, () =>
@@ -89,8 +101,7 @@ export function useAnnotation(context: ExtensionContext) {
         hoverMessage: preview.error
           ? store.message
           : `![](${preview.url})`,
-      }),
-      ))
+      })))
   useActiveEditorDecorations(HideCodeOptions, () =>
     !config.extension.hidden
       ? []
