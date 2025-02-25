@@ -1,8 +1,7 @@
-import type { DecorationOptions, ExtensionContext, DecorationRenderOptions } from 'vscode'
+import type { DecorationOptions, DecorationRenderOptions, ExtensionContext } from 'vscode'
 import type { RelativePosition } from './types'
 import {
   computed,
-  ref,
   useActiveEditorDecorations,
   useActiveTextEditor,
   useDocumentText,
@@ -71,8 +70,7 @@ export function useAnnotation(context: ExtensionContext) {
                   ? `${INJECTION}`
                   : 'display: inline-block;'}`))
           })
-        .flat()
-  )
+          .flat())
   useActiveEditorDecorations(SinglePreviewOptions, () =>
     config.extension.single === 'none'
       ? []
@@ -83,8 +81,7 @@ export function useAnnotation(context: ExtensionContext) {
             preview.inline,
             Uri.parse(preview.url),
             INJECTION,
-          ))
-  )
+          )))
   useActiveEditorDecorations(ShowCodeOptions, () =>
     store.formulas.value
       .map(({ code, preview }) => ({
@@ -93,7 +90,7 @@ export function useAnnotation(context: ExtensionContext) {
           ? store.message
           : `![](${preview.url})`,
       }),
-  ))
+      ))
   useActiveEditorDecorations(HideCodeOptions, () =>
     !config.extension.hidden
       ? []
@@ -102,8 +99,8 @@ export function useAnnotation(context: ExtensionContext) {
             preview.inline && selections.value.every(
               selection => !selection.intersection(code.range),
             ))
-        .map(({ code }) => ({ range: code.range })
-  ))
+          .map(({ code }) => ({ range: code.range }),
+          ))
 
   const reg = computed(() => {
     const special = ['.', '^', '$', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']

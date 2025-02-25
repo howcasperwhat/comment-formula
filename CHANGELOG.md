@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-02-25: v0.4.7
+### Feature
+1. Support custom `code` style without reloading window.
+
 ## 2025-02-23: v0.4.6
 ### Miscellaneous
 1. Add `.vscodeignore` to exclude unnecessary files.
