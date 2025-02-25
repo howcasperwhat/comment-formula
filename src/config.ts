@@ -6,9 +6,7 @@ import {
   defineConfigObject,
   shallowRef,
   useIsDarkTheme,
-  watch,
 } from 'reactive-vscode'
-import { commands, window } from 'vscode'
 import * as Meta from './generated/meta'
 
 // @see: https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/config/fontInfo.ts#L14
@@ -56,16 +54,3 @@ export function enabled(editor: TextEditor) {
     return false
   return config.extension.languages.includes(editor.document.languageId)
 }
-
-watch(
-  () => config.extension.code,
-  async () => {
-    if (await window.showInformationMessage(
-      'The code style has been updated, please reload the window to take effect',
-      'Reload Window',
-    ) === 'Reload Window'
-    ) {
-      commands.executeCommand('workbench.action.reloadWindow')
-    }
-  },
-)

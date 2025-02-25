@@ -1,7 +1,8 @@
-import type { DecorationOptions, ExtensionContext } from 'vscode'
+import type { DecorationOptions, ExtensionContext, DecorationRenderOptions } from 'vscode'
 import type { RelativePosition } from './types'
 import {
   computed,
+  ref,
   useActiveEditorDecorations,
   useActiveTextEditor,
   useDocumentText,
@@ -18,18 +19,18 @@ export interface FormulaCode {
 }
 
 export function useAnnotation(context: ExtensionContext) {
-  const SinglePreviewDecoration = window.createTextEditorDecorationType({
+  const SinglePreviewOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
-  })
-  const MultiplePreviewDecoration = window.createTextEditorDecorationType({
+  }
+  const MultiplePreviewOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
-  })
-  const ShowCodeDecoration = window.createTextEditorDecorationType({
+  }
+  const ShowCodeOptions = computed<DecorationRenderOptions>(() => ({
     textDecoration: `none; vertical-align:top; ${config.extension.code}`,
-  })
-  const HideCodeDecoration = window.createTextEditorDecorationType({
+  }))
+  const HideCodeOptions: DecorationRenderOptions = {
     textDecoration: 'none; vertical-align:top; display: none;',
-  })
+  }
 
   const editor = useActiveTextEditor()
   const selections = useTextEditorSelections(editor)
@@ -56,7 +57,7 @@ export function useAnnotation(context: ExtensionContext) {
     return { range, renderOptions }
   }
 
-  useActiveEditorDecorations(MultiplePreviewDecoration, () =>
+  useActiveEditorDecorations(MultiplePreviewOptions, () =>
     config.extension.multiple === 'none'
       ? []
       : store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
@@ -70,8 +71,9 @@ export function useAnnotation(context: ExtensionContext) {
                   ? `${INJECTION}`
                   : 'display: inline-block;'}`))
           })
-          .flat())
-  useActiveEditorDecorations(SinglePreviewDecoration, () =>
+        .flat()
+  )
+  useActiveEditorDecorations(SinglePreviewOptions, () =>
     config.extension.single === 'none'
       ? []
       : store.formulas.value.filter(({ code }) => code.range.isSingleLine)
@@ -81,8 +83,9 @@ export function useAnnotation(context: ExtensionContext) {
             preview.inline,
             Uri.parse(preview.url),
             INJECTION,
-          )))
-  useActiveEditorDecorations(ShowCodeDecoration, () =>
+          ))
+  )
+  useActiveEditorDecorations(ShowCodeOptions, () =>
     store.formulas.value
       .map(({ code, preview }) => ({
         range: code.range,
@@ -90,8 +93,8 @@ export function useAnnotation(context: ExtensionContext) {
           ? store.message
           : `![](${preview.url})`,
       }),
-      ))
-  useActiveEditorDecorations(HideCodeDecoration, () =>
+  ))
+  useActiveEditorDecorations(HideCodeOptions, () =>
     !config.extension.hidden
       ? []
       : store.formulas.value
@@ -99,7 +102,8 @@ export function useAnnotation(context: ExtensionContext) {
             preview.inline && selections.value.every(
               selection => !selection.intersection(code.range),
             ))
-          .map(({ code }) => ({ range: code.range })))
+        .map(({ code }) => ({ range: code.range })
+  ))
 
   const reg = computed(() => {
     const special = ['.', '^', '$', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']
