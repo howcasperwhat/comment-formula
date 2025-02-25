@@ -145,7 +145,7 @@
     "eslint": "^9.20.0",
     "mathjax-full": "^3.2.2",
     "reactive-vscode": "^0.2.13",
-    "tsup": "^2.0.3",
+    "tsup": "^8.3.6",
     "typescript": "^5.7.3",
     "vscode-ext-gen": "^1.0.0"
   }
