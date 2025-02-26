@@ -13,7 +13,7 @@ import * as Meta from './generated/meta'
 const GLODEB_LINE_HEIGHT_RATIO = process.platform === 'darwin' ? 1.5 : 1.35
 // use devtools to get the value of 1ex
 const MATHJAX_TEX_EX = 8.64
-const BASE_HEIGHT = 20
+const BASE_HEIGHT = 24
 
 const isDark = useIsDarkTheme()
 
