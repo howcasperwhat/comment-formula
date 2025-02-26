@@ -79,7 +79,7 @@ export function useAnnotation(context: ExtensionContext) {
                 `width:${preview.width}px;${
                   i === mid - start
                     ? `${INJECTION}`
-                  : 'display: inline-block;'
+                    : 'display: inline-block;'
                 }`,
               ))
           })
