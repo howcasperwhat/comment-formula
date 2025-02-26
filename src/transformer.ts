@@ -7,7 +7,7 @@ import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages'
 import { mathjax } from 'mathjax-full/js/mathjax'
 import { SVG } from 'mathjax-full/js/output/svg'
 import { computed } from 'reactive-vscode'
-import { config, isLarge, store } from './config'
+import { config, exToPx, isLarge, store } from './config'
 
 export class FormulaPreview {
   public readonly width: number
@@ -77,10 +77,10 @@ class Transformer {
     else {
       const elem = this.document!.convert(tex)
       const svg: LiteElement = elem.children[0]
-      width = Number.parseFloat(svg.attributes.width) * store.scale.value
-      height = Number.parseFloat(svg.attributes.height) * store.scale.value
-      this.adaptor!.setAttribute(svg, 'width', `${width}ex`)
-      this.adaptor!.setAttribute(svg, 'height', `${height}ex`)
+      width = exToPx(Number.parseFloat(svg.attributes.width) * store.scale.value)
+      height = exToPx(Number.parseFloat(svg.attributes.height) * store.scale.value)
+      this.adaptor!.setAttribute(svg, 'width', `${width}px`)
+      this.adaptor!.setAttribute(svg, 'height', `${height}px`)
       code = this.adaptor!.innerHTML(elem)
     }
     return new FormulaPreview(width, height, code, color)

@@ -76,7 +76,7 @@ export function useAnnotation(context: ExtensionContext) {
                 config.extension.multiple,
                 preview.inline,
                 i === mid - start ? Uri.parse(preview.url) : '',
-                `width:${preview.width}ex;${
+                `width:${preview.width}px;${
                   i === mid - start
                     ? `${INJECTION}`
                     : 'display: inline-block;'}`,

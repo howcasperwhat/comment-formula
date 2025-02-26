@@ -52,7 +52,7 @@ export function isLarge(height: number) {
     return false
   if (config.extension.inline === 'none')
     return true
-  return (height * MATHJAX_TEX_EX >= store.height.value)
+  return (exToPx(height) >= store.height.value)
 }
 export function enabled(editor: TextEditor) {
   if (!editor.document)
@@ -60,4 +60,7 @@ export function enabled(editor: TextEditor) {
   if (!editor.document.languageId)
     return false
   return config.extension.languages.includes(editor.document.languageId)
+}
+export function exToPx(ex: number) {
+  return ex * MATHJAX_TEX_EX
 }
