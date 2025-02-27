@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2025-02-26: v0.4.11
+### Feature
+1. Automatically avoid covering codes for multiple line inline preview formulas.
+### Fix
+1. Adjust snippet insertion logic for inline formulas.
+
 ## 2025-02-25: v0.4.10
 ### Fix
 1. Different ex size in px unit from svg and document env.
