@@ -29,7 +29,7 @@ export function useCompletion(context: ExtensionContext) {
         CompletionItemKind.Snippet,
       )
       item.insertText = new SnippetString(
-        `${symbol} $1 ${symbol}${symbol}`,
+        `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol} $1 ${symbol}${symbol}`,
       )
       item.documentation = `Insert an inline formula`
 
