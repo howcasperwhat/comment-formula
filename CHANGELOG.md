@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-02-27: v0.4.12
+### Fix
+1. Correct the calculation of `maxLine`.
+
 ## 2025-02-27: v0.4.11
 ### Feature
 1. Automatically avoid covering codes for multiple line inline preview formulas.
