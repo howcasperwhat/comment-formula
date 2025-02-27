@@ -81,11 +81,10 @@ export function useAnnotation(context: ExtensionContext) {
       return midLine
     const midChars = editor.value.document.lineAt(midLine).text.length
     const previewHalfLines = Math.ceil((
-        preview.height * 0.5 +
-        +!((codeStartLine + codeEndLine) % 2) *
-        store.height.value * 0.5
-      ) / store.height.value
-    )
+      preview.height * 0.5
+      + +!((codeStartLine + codeEndLine) % 2)
+      * store.height.value * 0.5
+    ) / store.height.value)
     const previewStartLine = Math.max(codeStartLine, midLine - (previewHalfLines - 1))
     const previewEndLine = Math.min(codeEndLine, midLine + (previewHalfLines - 1))
     let [_maxChars, _maxLine] = [midChars, midLine]
