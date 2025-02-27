@@ -11,6 +11,7 @@ import { config, store } from './config'
 import { ENVS, FUNC0, FUNC1, FUNC2, SPECIAL } from './store/latex'
 
 export function useCompletion(context: ExtensionContext) {
+  const symbol = '$'
   const frame: CompletionItemProvider = {
     provideCompletionItems(document: TextDocument, position: Position) {
       if (!config.extension.completion)
@@ -20,7 +21,6 @@ export function useCompletion(context: ExtensionContext) {
         new Position(position.line, 0),
         new Position(position.line, position.character),
       ))
-      const symbol = config.extension.symbol
       if (!line.endsWith(symbol))
         return
 
@@ -106,7 +106,7 @@ export function useCompletion(context: ExtensionContext) {
     languages.registerCompletionItemProvider(
       config.extension.languages,
       frame,
-      config.extension.symbol,
+      symbol,
     ),
     languages.registerCompletionItemProvider(
       config.extension.languages,

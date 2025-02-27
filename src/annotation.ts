@@ -156,12 +156,7 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code }) => ({ range: code.range }),
           ))
 
-  const reg = computed(() => {
-    const special = ['.', '^', '$', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']
-    const symbol = config.extension.symbol.split('').map(char =>
-      special.includes(char) ? `\\${char}` : char).join('')
-    return new RegExp(`(${symbol}${symbol}[\\s\\S]*?${symbol}${symbol})`, 'g')
-  })
+  const reg = /\$\$([\s\S]*?)\$\$/g
 
   const update = async () => {
     if (!editor.value)
@@ -171,10 +166,10 @@ export function useAnnotation(context: ExtensionContext) {
     const codes: FormulaCode[] = []
     const { document } = editor.value
     let match
-    reg.value.lastIndex = 0
+    reg.lastIndex = 0
     // eslint-disable-next-line no-cond-assign
-    while ((match = reg.value.exec(text.value!))) {
-      const tex = `${match[1].slice(2, -2)}`
+    while ((match = reg.exec(text.value!))) {
+      const tex = match[1]
       if (!tex)
         continue
       const startPos = document.positionAt(match.index)

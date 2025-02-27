@@ -38,22 +38,22 @@ You are supposed to write formulas between `$$` and `$$` by default.
 
 <!-- configs -->
 
-| Key                          | Description                                                                                                                                 | Type      | Default                       |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------- |
-| `comment-formula.color`      | Color of rendered formulas.                                                                                                                 | `string`  | `"auto"`                      |
-| `comment-formula.inline`     | `partial` means only not-so-large formulas are rendered inline.                                                                             | `string`  | `"partial"`                   |
-| `comment-formula.languages`  | Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers | `array`   | `["c","cpp","java","python"]` |
-| `comment-formula.symbol`     | Identifier symbol of formula code.                                                                                                          | `string`  | `"$"`                         |
-| `comment-formula.interval`   | Formula update interval(ms).                                                                                                                | `number`  | `200`                         |
-| `comment-formula.code`       | Style of matched LaTeX code.                                                                                                                | `string`  | `"font-weight: bold;"`        |
-| `comment-formula.preview`    | Style of the inline formula preview.                                                                                                        | `string`  | `""`                          |
-| `comment-formula.completion` | Enable intelligent completion.                                                                                                              | `boolean` | `true`                        |
-| `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"before"`                    |
-| `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                     |
-| `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                        | `boolean` | `true`                        |
-| `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                           |
-| `comment-formula.api.prefix` | API prefix (Experimental).                                                                                                                  | `string`  | `""`                          |
-| `comment-formula.api.suffix` | API suffix (Experimental).                                                                                                                  | `string`  | `""`                          |
+| Key                          | Description                                                                                                                                 | Type      | Default                                                   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------- |
+| `comment-formula.color`      | Color of rendered formulas.                                                                                                                 | `string`  | `"auto"`                                                  |
+| `comment-formula.inline`     | `partial` means only not-so-large formulas are rendered inline.                                                                             | `string`  | `"partial"`                                               |
+| `comment-formula.languages`  | Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers | `array`   | `["c","cpp","java","python"]`                             |
+| `comment-formula.scopes`     | Enable highlight in these scopes.                                                                                                           | `array`   | `["source.c","source.cpp","source.java","source.python"]` |
+| `comment-formula.interval`   | Formula update interval(ms).                                                                                                                | `number`  | `200`                                                     |
+| `comment-formula.code`       | Style of matched LaTeX code.                                                                                                                | `string`  | `""`                                                      |
+| `comment-formula.preview`    | Style of the inline formula preview.                                                                                                        | `string`  | `""`                                                      |
+| `comment-formula.completion` | Enable intelligent completion.                                                                                                              | `boolean` | `true`                                                    |
+| `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"before"`                                                |
+| `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                                                 |
+| `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                        | `boolean` | `true`                                                    |
+| `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                                                       |
+| `comment-formula.api.prefix` | API prefix (Experimental).                                                                                                                  | `string`  | `""`                                                      |
+| `comment-formula.api.suffix` | API suffix (Experimental).                                                                                                                  | `string`  | `""`                                                      |
 
 <!-- configs -->
 
