@@ -1,4 +1,5 @@
 import type { DecorationOptions, DecorationRenderOptions, ExtensionContext } from 'vscode'
+import type { FormulaPreview } from './transformer'
 import type { RelativePosition } from './types'
 import {
   computed,
@@ -7,7 +8,6 @@ import {
   useDocumentText,
   useTextEditorSelections,
 } from 'reactive-vscode'
-
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { config, enabled, store } from './config'
 import { transformer } from './transformer'
@@ -35,31 +35,65 @@ export function useAnnotation(context: ExtensionContext) {
   const selections = useTextEditorSelections(editor)
   const text = useDocumentText(() => editor.value?.document)
 
-  const INJECTION = ['position:relative', 'display:inline-block', 'top:50%', 'transform:translateY(-50%)', 'vertical-align:top'].join(';')
+  const INJECTION = [
+    'position:relative',
+    'display:inline-block',
+    'top:50%',
+    'transform:translateY(-50%)',
+    'vertical-align:top',
+  ].join(';')
 
   const decorate = (
     position: Range | Position,
     relative: RelativePosition,
     inline: boolean,
-    contentIconPath: Uri | '',
     injection: string = '',
-  ): DecorationOptions => {
-    const range = position instanceof Range
+    contentIconPath: Uri | '' = '',
+    margin: string = '.25rem',
+  ): DecorationOptions => ({
+    range: position instanceof Range
       ? position
       : new Range(
         position,
         position.translate(0, Number.MAX_SAFE_INTEGER),
-      )
-    const renderOptions = inline
+      ),
+    renderOptions: inline
       ? {
           [relative]: {
             contentIconPath,
             border: `none;${injection};${config.extension.preview};`,
-            margin: relative === 'before' ? '0 0.25rem 0 0' : '0 0 0 0.25rem',
+            margin: relative === 'before'
+              ? `0 ${margin} 0 0`
+              : `0 0 0 ${margin}`,
           },
         }
-      : undefined
-    return { range, renderOptions }
+      : undefined,
+  })
+
+  const maxLine = (
+    code: FormulaCode,
+    preview: FormulaPreview,
+  ) => {
+    const midLine = (code.range.start.line + code.range.end.line) >> 1
+    if (!editor.value)
+      return midLine
+    const midChars = editor.value.document.lineAt(midLine).text.length
+    const nLines = Math.min(
+      (preview.height - store.height.value) / store.height.value,
+      code.range.end.line - code.range.start.line,
+    )
+    let [maxChars, maxLine] = [midChars, midLine]
+    for (let i = 1; i <= nLines; i++) {
+      const startLine = midLine - i
+      const endLine = midLine + i
+      const startChars = editor.value.document.lineAt(startLine).text.length
+      const endChars = editor.value.document.lineAt(endLine).text.length
+      if (startChars > maxChars)
+        [maxChars, maxLine] = [startChars, startLine]
+      if (endChars > maxChars)
+        [maxChars, maxLine] = [endChars, endLine]
+    }
+    return maxLine
   }
 
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
@@ -69,19 +103,27 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
-            const mid = (start + end) >> 1
-            return Array.from({ length: end - start + 1 }, (_, i) =>
-              decorate(
-                new Position(start + i, 0),
-                config.extension.multiple,
-                preview.inline,
-                i === mid - start ? Uri.parse(preview.url) : '',
-                `width:${preview.width}px;${
-                  i === mid - start
-                    ? `${INJECTION}`
-                    : 'display: inline-block;'
-                }`,
-              ))
+            const line = config.extension.multiple === 'before'
+              ? end
+              : maxLine(code, preview)
+            return [decorate(
+              new Position(line, 0),
+              config.extension.multiple,
+              preview.inline,
+              `width:${preview.width}px;${INJECTION};top:${
+                50 + ((start + end) / 2 - line) * 100
+              }%`,
+              Uri.parse(preview.url),
+            )].concat(config.extension.multiple === 'after'
+              ? []
+              : Array.from({ length: end - start }, (_, i) =>
+                  decorate(
+                    new Position(start + i, 0),
+                    config.extension.multiple,
+                    preview.inline,
+                    `width:${preview.width}px;${INJECTION}`,
+                  )),
+            )
           })
           .flat())
   useActiveEditorDecorations(SinglePreviewOptions, () =>
@@ -92,8 +134,8 @@ export function useAnnotation(context: ExtensionContext) {
             code.range,
             config.extension.single,
             preview.inline,
-            Uri.parse(preview.url),
             INJECTION,
+            Uri.parse(preview.url),
           )))
   useActiveEditorDecorations(ShowCodeOptions, () =>
     store.formulas.value
