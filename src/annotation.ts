@@ -74,26 +74,27 @@ export function useAnnotation(context: ExtensionContext) {
     code: FormulaCode,
     preview: FormulaPreview,
   ) => {
-    const midLine = (code.range.start.line + code.range.end.line) >> 1
+    const codeStartLine = code.range.start.line
+    const codeEndLine = code.range.end.line
+    const midLine = (codeStartLine + codeEndLine) >> 1
     if (!editor.value)
       return midLine
     const midChars = editor.value.document.lineAt(midLine).text.length
-    const nLines = Math.min(
-      (preview.height - store.height.value) / store.height.value,
-      code.range.end.line - code.range.start.line,
+    const previewHalfLines = Math.ceil((
+        preview.height * 0.5 +
+        +!((codeStartLine + codeEndLine) % 2) *
+        store.height.value * 0.5
+      ) / store.height.value
     )
-    let [maxChars, maxLine] = [midChars, midLine]
-    for (let i = 1; i <= nLines; i++) {
-      const startLine = midLine - i
-      const endLine = midLine + i
-      const startChars = editor.value.document.lineAt(startLine).text.length
-      const endChars = editor.value.document.lineAt(endLine).text.length
-      if (startChars > maxChars)
-        [maxChars, maxLine] = [startChars, startLine]
-      if (endChars > maxChars)
-        [maxChars, maxLine] = [endChars, endLine]
+    const previewStartLine = Math.max(codeStartLine, midLine - (previewHalfLines - 1))
+    const previewEndLine = Math.min(codeEndLine, midLine + (previewHalfLines - 1))
+    let [_maxChars, _maxLine] = [midChars, midLine]
+    for (let line = previewStartLine; line <= previewEndLine; ++line) {
+      const chars = editor.value.document.lineAt(line).text.length
+      if (chars > _maxChars)
+        [_maxChars, _maxLine] = [chars, line]
     }
-    return maxLine
+    return _maxLine
   }
 
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
