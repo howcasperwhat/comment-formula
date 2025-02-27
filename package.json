@@ -117,12 +117,12 @@
         "comment-formula.api.prefix": {
           "type": "string",
           "default": "",
-          "description": "API prefix."
+          "description": "API prefix (Experimental)."
         },
         "comment-formula.api.suffix": {
           "type": "string",
           "default": "",
-          "description": "API suffix."
+          "description": "API suffix (Experimental)."
         }
       }
     }
