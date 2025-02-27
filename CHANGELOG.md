@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 2025-02-25: v0.5.0
+## 2025-02-25: v0.4.10
 ### Fix
 1. Different ex size in px unit from svg and document env.
 2. Reduce the default base size because it's too large.
