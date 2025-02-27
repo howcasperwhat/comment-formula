@@ -1,0 +1,42 @@
+{
+  "_scopes": [
+    "source.c",
+    "source.cpp",
+    "source.java",
+    "source.js",
+    "source.python"
+  ],
+  "information_for_contributors": [
+    "This file are modified from https://github.com/microsoft/vscode/blob/main/extensions/markdown-math/syntaxes/md-math-inline.tmLanguage.json"
+  ],
+  "scopeName": "formula.injection",
+  "injectionSelector": "L:source.c,source.cpp,source.java,source.js,source.python -meta.embedded.litemath.markdown",
+  "patterns": [
+    {
+      "include": "#formula"
+    }
+  ],
+  "repository": {
+    "formula": {
+      "name": "markup.litemath.markdown",
+      "contentName": "meta.embedded.litemath.markdown",
+      "begin": "(?<=\\s|^)(\\${2})",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.litemath.begin.markdown"
+        }
+      },
+      "end": "(\\${2})(?=\\s|$)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.litemath.end.markdown"
+        }
+      },
+      "patterns": [
+        {
+          "include": "text.html.markdown.litemath#litemath"
+        }
+      ]
+    }
+  }
+}

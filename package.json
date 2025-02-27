@@ -53,15 +53,18 @@
           ],
           "description": "Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers"
         },
-        "comment-formula.symbol": {
-          "type": "string",
-          "enum": [
-            "$",
-            "#",
-            "@"
+        "comment-formula.scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "source.c",
+            "source.cpp",
+            "source.java",
+            "source.python"
           ],
-          "default": "$",
-          "description": "Identifier symbol of formula code."
+          "description": "Enable highlight in these scopes."
         },
         "comment-formula.interval": {
           "type": "number",
@@ -71,7 +74,7 @@
         },
         "comment-formula.code": {
           "type": "string",
-          "default": "font-weight: bold;",
+          "default": "",
           "description": "Style of matched LaTeX code."
         },
         "comment-formula.preview": {
@@ -125,7 +128,28 @@
           "description": "API suffix (Experimental)."
         }
       }
-    }
+    },
+    "languages": [
+      {
+        "id": "markdown-litemath",
+        "aliases": [],
+        "extensions": []
+      }
+    ],
+    "grammars": [
+      {
+        "language": "markdown-litemath",
+        "scopeName": "text.html.markdown.litemath",
+        "path": "./syntaxes/litemath.json"
+      },
+      {
+        "path": "./syntaxes/formula.json",
+        "scopeName": "formula.injection",
+        "injectTo": [
+          "source"
+        ]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
