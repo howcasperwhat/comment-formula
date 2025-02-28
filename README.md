@@ -97,7 +97,7 @@ Code is under the [MIT License](https://github.com/howcasperwhat/comment-formula
 
 Logo using [carbon:function](https://github.com/carbon-design-system/carbon) as an element is under the [Apache License 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE).
 
-Fonts using in feature image are `Dancing Script` (for `Before` and `After`) under the [Open Font License](https://openfontlicense.org/open-font-license-official-text/) and `Input` (for code) under the [Open Font License](https://input.djr.com/license/).
+Fonts using in feature image are `Dancing Script` (for `Before` and `After`) under the [Open Font License](https://openfontlicense.org/open-font-license-official-text/) and `Input` (for code) under the [Input Font License](https://input.djr.com/license/).
 
 ## Support
 If you find this project useful, please consider giving it a star on GitHub. Your support is greatly appreciated!
