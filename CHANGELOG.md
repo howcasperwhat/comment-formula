@@ -3,6 +3,7 @@
 ## 2025-02-28: v0.5.0
 ### Feature
 1. Support highlight the formula code, it's disabled by default, read the [doc](https://github.com/howcasperwhat/comment-formula?tab=readme-ov-file#usage) to enable it.
+![highlight](https:///github.com/howcasperwhat/comment-formula/blob/main/res/highlight.gif)
 
 ### :warning::warning::warning: Breaking Change
 1. Remove `symbol` option due to the low usage rate, if you need this feature, new an [issue](https://github.com/howcasperwhat/comment-formula/issues/new) and let me know your needs, I will consider make it more flexible and set it back.
@@ -101,7 +102,7 @@
 ## 2025-02-11: v0.3.0
 Now feel free to use `"comment-formula.inline": "all"` to render all formulas inline, if you don't mind that the large formula might slightly cover your code.
 
-![responsive](https://github.com/howcasperwhat/comment-formula/blob/main/res/responsive.gif)
+<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" style="width: 80%" />
 
 ### :warning::warning::warning: Breaking Change
 1. `inlineColor` and `messageColor` are merged into `color` to avoid rendering twice. If you need this feature, new an [issue](https://github.com/howcasperwhat/comment-formula/issues/new).
