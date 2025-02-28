@@ -1,16 +1,10 @@
 {
-  "_scopes": [
-    "source.c",
-    "source.cpp",
-    "source.java",
-    "source.js",
-    "source.python"
-  ],
+  "_scopes": [],
   "information_for_contributors": [
     "This file are modified from https://github.com/microsoft/vscode/blob/main/extensions/markdown-math/syntaxes/md-math-inline.tmLanguage.json"
   ],
   "scopeName": "formula.injection",
-  "injectionSelector": "L:source.c,source.cpp,source.java,source.js,source.python -meta.embedded.litemath.markdown",
+  "injectionSelector": "",
   "patterns": [
     {
       "include": "#formula"

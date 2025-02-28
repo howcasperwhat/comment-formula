@@ -37,8 +37,8 @@
             "all",
             "none"
           ],
-          "default": "partial",
-          "description": "`partial` means only not-so-large formulas are rendered inline."
+          "default": "all",
+          "description": "Which case will the inline formula preview be displayed."
         },
         "comment-formula.languages": {
           "type": "array",
@@ -58,12 +58,7 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            "source.c",
-            "source.cpp",
-            "source.java",
-            "source.python"
-          ],
+          "default": [],
           "description": "Enable highlight in these scopes."
         },
         "comment-formula.interval": {
@@ -74,7 +69,7 @@
         },
         "comment-formula.code": {
           "type": "string",
-          "default": "",
+          "default": "font-weight: bold;",
           "description": "Style of matched LaTeX code."
         },
         "comment-formula.preview": {
@@ -94,7 +89,7 @@
             "after",
             "none"
           ],
-          "default": "before",
+          "default": "after",
           "description": "Set preview position of multiple line LaTeX or disable it."
         },
         "comment-formula.single": {
