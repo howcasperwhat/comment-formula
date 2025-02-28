@@ -1,5 +1,15 @@
 # ChangeLog
 
+## 2025-02-28: v0.5.0
+### Feature
+1. Support highlight the formula code, it's disabled by default, read the [doc](https://github.com/howcasperwhat/comment-formula?tab=readme-ov-file#usage) to enable it.
+
+### :warning::warning::warning: Breaking Change
+1. Remove `symbol` option due to the low usage rate, if you need this feature, new an [issue](https://github.com/howcasperwhat/comment-formula/issues/new) and let me know your needs, I will consider make it more flexible and set it back.
+2. Default Value Changed:
+   a. `comment-formula.inline` from `partial` to `all`.
+   b. `comment-formula.multiple` from `before` to `after`, to align with the default value of `comment-formula.single`.
+
 ## 2025-02-27: v0.4.12
 ### Fix
 1. Correct the calculation of `maxLine`.

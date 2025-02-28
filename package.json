@@ -38,7 +38,7 @@
             "none"
           ],
           "default": "all",
-          "description": "Which case will the inline formula preview be displayed."
+          "description": "When will the inline formula preview be displayed."
         },
         "comment-formula.languages": {
           "type": "array",

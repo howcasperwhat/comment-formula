@@ -20,48 +20,76 @@ A VSCode extensions to preview LaTeX formulas within the line of your editor.
 
 > Render Engine: [MathJax](https://www.mathjax.org/)
 
-## Feature and Usage
-You are supposed to write formulas between `$$` and `$$` by default.
+## Feature
 
 <p align="center">
 <img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" style="width: 80%" />
 </p>
 
+## Usage
+You are supposed to write formulas between `$$` and `$$`.
+
+**Enable Highlight**
 > [!IMPORTANT]
-> Recommend Feature: `"comment-formula.inline": "all"`: Responsively render all formulas inline.
+> Use cammand `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
 >
-> ![responsive](https://github.com/howcasperwhat/comment-formula/blob/main/assets/responsive.gif?raw=true)
+> For example:
+> ``` js
+> 'source.c'
+> 'source.cpp'
+> 'source.java'
+> 'source.python'
+> ```
 >
-> We set the default value to `partial` to avoid rendered large formula covering your code.
+> Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different language, you will get a message to reload the editor which is needed to take effect.
+>
+> Note that the suffix of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
+>
+> The syntax highlight in vscode can't be modified until the next opening of the editor. So every time you change the configuration, you need to reload the editor following the message.
+>
+> Next, if you don't want to bold the code, set `comment-formula.code` to `""`.
+>
+> So the best practice is shown below:
+> ``` json
+> // user settings (JSON)
+> {
+>   "comment-formula.scopes": [
+>     "source.c",
+>     "source.cpp",
+>     "source.java",
+>     "source.python"
+>   ],
+>   "comment-formula.code": ""
+> }
+> ```
 
 ## Configurations
 
 <!-- configs -->
 
-| Key                          | Description                                                                                                                                 | Type      | Default                                                   |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------------------------- |
-| `comment-formula.color`      | Color of rendered formulas.                                                                                                                 | `string`  | `"auto"`                                                  |
-| `comment-formula.inline`     | `partial` means only not-so-large formulas are rendered inline.                                                                             | `string`  | `"partial"`                                               |
-| `comment-formula.languages`  | Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers | `array`   | `["c","cpp","java","python"]`                             |
-| `comment-formula.scopes`     | Enable highlight in these scopes.                                                                                                           | `array`   | `["source.c","source.cpp","source.java","source.python"]` |
-| `comment-formula.interval`   | Formula update interval(ms).                                                                                                                | `number`  | `200`                                                     |
-| `comment-formula.code`       | Style of matched LaTeX code.                                                                                                                | `string`  | `""`                                                      |
-| `comment-formula.preview`    | Style of the inline formula preview.                                                                                                        | `string`  | `""`                                                      |
-| `comment-formula.completion` | Enable intelligent completion.                                                                                                              | `boolean` | `true`                                                    |
-| `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"before"`                                                |
-| `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                                                 |
-| `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                        | `boolean` | `true`                                                    |
-| `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                                                       |
-| `comment-formula.api.prefix` | API prefix (Experimental).                                                                                                                  | `string`  | `""`                                                      |
-| `comment-formula.api.suffix` | API suffix (Experimental).                                                                                                                  | `string`  | `""`                                                      |
+| Key                          | Description                                                                                                                                 | Type      | Default                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------- |
+| `comment-formula.color`      | Color of rendered formulas.                                                                                                                 | `string`  | `"auto"`                      |
+| `comment-formula.inline`     | When will the inline formula preview be displayed.                                                                                          | `string`  | `"all"`                       |
+| `comment-formula.languages`  | Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers | `array`   | `["c","cpp","java","python"]` |
+| `comment-formula.scopes`     | Enable highlight in these scopes.                                                                                                           | `array`   | `[]`                          |
+| `comment-formula.interval`   | Formula update interval(ms).                                                                                                                | `number`  | `200`                         |
+| `comment-formula.code`       | Style of matched LaTeX code.                                                                                                                | `string`  | `"font-weight: bold;"`        |
+| `comment-formula.preview`    | Style of the inline formula preview.                                                                                                        | `string`  | `""`                          |
+| `comment-formula.completion` | Enable intelligent completion.                                                                                                              | `boolean` | `true`                        |
+| `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"after"`                     |
+| `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                     |
+| `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                        | `boolean` | `true`                        |
+| `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                           |
+| `comment-formula.api.prefix` | API prefix (Experimental).                                                                                                                  | `string`  | `""`                          |
+| `comment-formula.api.suffix` | API suffix (Experimental).                                                                                                                  | `string`  | `""`                          |
 
 <!-- configs -->
 
-> [!TIP]
 > Feel free to [new an issue](https://github.com/howcasperwhat/comment-formula/issues/new) if you encounter any problem or have any suggestion.
 
 ## Reference
-[MathJax](https://www.mathjax.org/) | [KaTeX](https://katex.org/) | [VSCode Markdown](https://github.com/yzhang-gh/vscode-markdown) | [LaTeX Workshop](https://github.com/James-Yu/LaTeX-Workshop) | [VSCode Iconify](https://github.com/howcasperwhat/comment-formula)
+[MathJax](https://www.mathjax.org/) | [KaTeX](https://katex.org/) | [VSCode Markdown](https://github.com/yzhang-gh/vscode-markdown) | [LaTeX Workshop](https://github.com/James-Yu/LaTeX-Workshop) | [VSCode Iconify](https://github.com/howcasperwhat/comment-formula) | [VSCode Markdown Math](https://github.com/microsoft/vscode/tree/main/extensions/markdown-math)
 
 ## License
 
