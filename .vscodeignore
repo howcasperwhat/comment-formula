@@ -1,6 +1,7 @@
 src/
 .vscode/
 assets/logo.svg
+assets/feature.png
 tsconfig.json
 eslint.config.ts
 package-lock.json
