@@ -1,7 +1,7 @@
 <br>
 
 <p align="center">
-<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/logo.png?raw=true" style="width:160px;" />
+<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/logo.png?raw=true" width="120" alt="logo" />
 </p>
 
 <h1 align="center">Comment Formula</h1>
@@ -23,7 +23,7 @@ A VSCode extensions to preview LaTeX formulas within the line of your editor.
 ## Feature
 
 <p align="center">
-<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" style="width: 80%" />
+<img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" alt="feature" />
 </p>
 
 ## Usage
