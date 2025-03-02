@@ -41,8 +41,6 @@ You are supposed to write formulas between `$$` and `$$`.
 > 'source.python'
 > ```
 >
-> Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different language, you will get a message to reload the editor which is needed to take effect.
->
 > Note that the suffix of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
 >
 > The syntax highlight in vscode can't be modified until the next opening of the editor. So every time you change the configuration, you need to reload the editor following the message.
@@ -62,6 +60,8 @@ You are supposed to write formulas between `$$` and `$$`.
 >   "comment-formula.code": ""
 > }
 > ```
+>
+> Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different language, you will get a message to reload the editor which is needed to take effect.
 
 ## Configurations
 
