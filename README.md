@@ -47,9 +47,9 @@ You are supposed to write formulas between `$$` and `$$`.
 >
 > Next, if you don't want to bold the code, set `comment-formula.code` to `""`.
 >
-> So the best practice is shown below:
+> So the best practice for default `languages` is shown below:
 > ``` json
-> // user settings (JSON)
+> // Preferences: Open User Settings (JSON):
 > {
 >   "comment-formula.scopes": [
 >     "source.c",
