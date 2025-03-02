@@ -31,7 +31,7 @@ You are supposed to write formulas between `$$` and `$$`.
 
 **Enable Highlight**
 > [!IMPORTANT]
-> Use cammand `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
+> Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
 >
 > For example:
 > ``` js
@@ -41,9 +41,9 @@ You are supposed to write formulas between `$$` and `$$`.
 > 'source.python'
 > ```
 >
-> Note that the suffix of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
+> Note that suffixes of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
 >
-> The syntax highlight in vscode can't be modified until the next opening of the editor. So every time you change the configuration, you need to reload the editor following the message.
+> The syntax highlight in VSCode can't be modified until the next opening of the editor. So every time changing the configuration, you need to reload the editor as prompted by the message shown in the corner.
 >
 > Next, if you don't want to bold the code, set `comment-formula.code` to `""`.
 >
@@ -61,7 +61,7 @@ You are supposed to write formulas between `$$` and `$$`.
 > }
 > ```
 >
-> Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different language, you will get a message to reload the editor which is needed to take effect.
+> Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different languages, you will get a message to reload the editor for the changes to take effect.
 
 ## Configurations
 
@@ -97,7 +97,7 @@ Code is under the [MIT License](https://github.com/howcasperwhat/comment-formula
 
 Logo using [carbon:function](https://github.com/carbon-design-system/carbon) as an element is under the [Apache License 2.0](https://github.com/carbon-design-system/carbon/blob/main/LICENSE).
 
-Fonts using in feature image are `Dancing Script` (for `Before` and `After`) under the [Open Font License](https://openfontlicense.org/open-font-license-official-text/) and `Input` (for code) under the [Input Font License](https://input.djr.com/license/).
+Fonts used in feature image are `Dancing Script` (for `Before` and `After`) under the [Open Font License](https://openfontlicense.org/open-font-license-official-text/) and `Input` (for code) under the [Input Font License](https://input.djr.com/license/).
 
 ## Support
-If you find this project useful, please consider giving it a star on GitHub. Your support is greatly appreciated!
+If you find this project useful, please consider giving it a star on GitHub. Your support is greatly appreciated! <a href="https://github.com/howcasperwhat/comment-formula" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/badge/Github-🌟-688D78?logo=github" align="center"></a>
