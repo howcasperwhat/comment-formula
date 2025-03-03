@@ -204,10 +204,14 @@ export const FUNC2 = {
   binomialCoefficients: ['binom', 'dbinom', 'tbinom', 'brace', 'brack']
 }
 export const ENVS = [
-  'matrix', 'array', 'pmatrix', 'bmatrix', 'vmatrix', 'Vmatrix', 'Bmatrix', 'cases', 'rcases',
-  'smallmatrix', 'subarray', 'equation', 'split', 'align', 'gather', 'alignat', 'CD', 'darray',
-  'dcases', 'drcases', 'matrix*', 'pmatrix*', 'bmatrix*', 'Bmatrix*', 'vmatrix*', 'Vmatrix*',
-  'equation*', 'gather*', 'align*', 'alignat*', 'gathered', 'aligned', 'alignedat'
+  'equation*', 'eqnarray*', 'align', 'align*', 'multline', 'multline*', 'split', 'gather', 'gather*',
+  'alignat', 'alignat*', 'alignedat', 'aligned', 'gathered', 'xalignat', 'xalignat*', 'xxalignat', 'flalign',
+  'flalign*', 'subarray', 'smallmatrix', 'matrix', 'pmatrix', 'bmatrix', 'Bmatrix', 'vmatrix', 'Vmatrix',
+  'cases', 'CD', 'array', 'equation', 'eqnarray', 'prooftree', 'numcases', 'subnumcases', 'empheq',
+  'dcases', 'rcases', 'drcases', 'dcases*', 'rcases*', 'drcases*', 'cases*', 'matrix*', 'pmatrix*',
+  'bmatrix*', 'Bmatrix*', 'vmatrix*', 'Vmatrix*', 'smallmatrix*', 'psmallmatrix', 'lgathered', 'rgathered',
+  'psmallmatrix*', 'bsmallmatrix', 'bsmallmatrix*', 'Bsmallmatrix', 'Bsmallmatrix*', 'vsmallmatrix',
+  'vsmallmatrix*', 'Vsmallmatrix', 'Vsmallmatrix*', 'crampedsubarray', 'multlined', 'spreadlines'
 ]
 export const SPECIAL = [
   { name: 'bbox', format: '[]{}', snippet: '[$1]{$2}' },
