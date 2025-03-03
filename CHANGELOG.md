@@ -1,5 +1,17 @@
 # ChangeLog
 
+## 2025-03-03: v0.5.2
+### Feature
+1. Support inline snippet and block snippet.
+### Fix
+1. Disable completion suggestion for two backslashes.
+### Miscellaneous
+1. Update env. for `BeginEnd` functions.
+
+## 2025-03-01: v0.5.1
+### Miscellaneous
+1. Update docs.
+
 ## 2025-02-28: v0.5.0
 ### Feature
 1. Support highlight the formula code, it's disabled by default, read the [doc](https://github.com/howcasperwhat/comment-formula?tab=readme-ov-file#usage) to enable it.
