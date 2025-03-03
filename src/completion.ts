@@ -24,16 +24,25 @@ export function useCompletion(context: ExtensionContext) {
       if (!line.endsWith(symbol))
         return
 
-      const item = new CompletionItem(
-        `${symbol}${symbol}.|.${symbol}${symbol}`,
+      const inline = new CompletionItem(
+        `${symbol}${symbol}.inline.${symbol}${symbol}`,
         CompletionItemKind.Snippet,
       )
-      item.insertText = new SnippetString(
+      inline.insertText = new SnippetString(
         `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol} $1 ${symbol}${symbol}`,
       )
-      item.documentation = `Insert an inline formula`
+      inline.documentation = 'Insert an inline formula'
 
-      return [item]
+      const block = new CompletionItem(
+        `${symbol}${symbol}.block.${symbol}${symbol}`,
+        CompletionItemKind.Snippet,
+      )
+      block.insertText = new SnippetString(
+        `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol}\n\t$1\n${symbol}${symbol}`,
+      )
+      block.documentation = 'Insert a block formula'
+
+      return [inline, block]
     },
     resolveCompletionItem(item: CompletionItem) {
       return item
@@ -50,7 +59,9 @@ export function useCompletion(context: ExtensionContext) {
         new Position(position.line, 0),
         new Position(position.line, position.character),
       ))
-      if (!line.endsWith(flag))
+      if (!line.endsWith(`${flag}`))
+        return
+      if (line.endsWith(`${flag}${flag}`))
         return
       if (!store.formulas.value.find(
         ({ code }) => code.range.contains(position),
