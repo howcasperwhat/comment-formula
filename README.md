@@ -30,39 +30,51 @@ A VSCode extensions to preview LaTeX formulas within the line of your editor.
 ## Usage
 You are supposed to write formulas between `$$` and `$$`.
 
-**Enable Highlight**
+### <font color="#688D78">Enable Highlight</font>
+
 > [!IMPORTANT]
-> Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
->
-> For example:
-> ``` js
-> 'source.c'
-> 'source.cpp'
-> 'source.java'
-> 'source.python'
-> ```
->
-> Note that suffixes of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
->
-> The syntax highlight in VSCode can't be modified until the next opening of the editor. So every time changing the configuration, you need to reload the editor as prompted by the message shown in the corner.
->
-> Next, if you don't want to bold the code, set `comment-formula.code` to `""`.
->
-> So the best practice for default `languages` is shown below:
-> ``` json
-> // Preferences: Open User Settings (JSON):
-> {
->   "comment-formula.scopes": [
->     "source.c",
->     "source.cpp",
->     "source.java",
->     "source.python"
->   ],
->   "comment-formula.code": ""
-> }
-> ```
->
-> Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different languages, you will get a message to reload the editor for the changes to take effect.
+> **TL;DR:** Two ways to enable highlight:
+> 1. Config `scopes` in User Settings;
+> 2. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight).
+
+#### <font color="#18F">Config `scopes` in User Settings</font>
+
+Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
+
+For example:
+``` js
+'source.c'
+'source.cpp'
+'source.java'
+'source.python'
+```
+
+Note that suffixes of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
+
+The syntax highlight in VSCode can't be modified until the next opening of the editor. So every time changing the configuration, you need to reload the editor as prompted by the message shown in the corner.
+
+Next, if you don't want to bold the code, set `comment-formula.code` to `""`.
+
+So the best practice for default `languages` is shown below:
+``` json
+// Preferences: Open User Settings (JSON):
+{
+  "comment-formula.scopes": [
+    "source.c",
+    "source.cpp",
+    "source.java",
+    "source.python"
+  ],
+  "comment-formula.code": ""
+}
+```
+
+Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different languages, you will get a message to reload the editor for the changes to take effect.
+
+#### <font color="#C66">Use MathJax Highlight</font>
+Every time updating the extension, a message will be shown in the corner to reload the editor for the changes to take effect.
+
+Therefore, you can alternatively use  [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) with same highlight feature and lower update frequency. It enables highlight in `source.c`, `source.cpp`, `source.java`, `source.python` in default.
 
 ## Configurations
 
