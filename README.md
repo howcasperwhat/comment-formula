@@ -30,14 +30,14 @@ A VSCode extensions to preview LaTeX formulas within the line of your editor.
 ## Usage
 You are supposed to write formulas between `$$` and `$$`.
 
-### <font style="color: #688D78;">Enable Highlight</font>
+### Enable Highlight
 
 > [!IMPORTANT]
 > **TL;DR:** Two ways to enable highlight:
 > 1. Config `scopes` in User Settings;
 > 2. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight).
 
-#### <font style="color: #18F;">Config `scopes` in User Settings</font>
+#### Config `scopes` in User Settings
 
 Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
 
@@ -71,7 +71,7 @@ So the best practice for default `languages` is shown below:
 
 Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different languages, you will get a message to reload the editor for the changes to take effect.
 
-#### <font style="color: #C66;">Use MathJax Highlight</font>
+#### Use MathJax Highlight
 Every time updating the extension, a message will be shown in the corner to reload the editor for the changes to take effect.
 
 Therefore, you can alternatively use  [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) with same highlight feature and lower update frequency. It enables highlight in `source.c`, `source.cpp`, `source.java`, `source.python` in default.
