@@ -35,7 +35,7 @@ You are supposed to write formulas between `$$` and `$$`.
 > [!IMPORTANT]
 > **TL;DR:** Two ways to enable highlight:
 > 1. Config `scopes` in User Settings;
-> 2. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight).
+> 2. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight). (**Recommended**)
 
 #### Config `scopes` in User Settings
 
