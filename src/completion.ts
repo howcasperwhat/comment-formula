@@ -8,7 +8,12 @@ import {
   SnippetString,
 } from 'vscode'
 import { config, store } from './config'
-import { ENVS, FUNC0, FUNC1, FUNC2, SPECIAL } from './store/latex'
+import {
+  CHARACTERS,
+  COMMANDS,
+  DELIMITERS,
+  ENVIRONMENTS,
+} from './store/mathjax'
 
 export function useCompletion(context: ExtensionContext) {
   const symbol = '$'
@@ -70,28 +75,28 @@ export function useCompletion(context: ExtensionContext) {
       }
 
       return [
-        ...Array.from(new Set(Object.values(FUNC0).flat())).map(
-          (func: string) => Object.assign(new CompletionItem(
+        ...Array.from(new Set(CHARACTERS)).map(
+          func => Object.assign(new CompletionItem(
             flag + func,
             CompletionItemKind.Function,
           ), {
             insertText: new SnippetString(`${func}`),
           }),
         ),
-        ...Array.from(new Set(Object.values(FUNC1).flat())).map(
-          (func: string) => Object.assign(new CompletionItem(
-            `${flag + func}{}`,
+        ...Array.from(new Set(COMMANDS)).map(
+          func => Object.assign(new CompletionItem(
+            flag + func.name + (func.format ?? ''),
             CompletionItemKind.Function,
           ), {
-            insertText: new SnippetString(`${func}{$1}`),
+            insertText: new SnippetString(`${func.name}${func.snippet ?? ''}`),
           }),
         ),
-        ...Array.from(new Set(Object.values(FUNC2).flat())).map(
-          (func: string) => Object.assign(new CompletionItem(
-            `${flag + func}{}{}`,
+        ...Array.from(new Set(DELIMITERS)).map(
+          func => Object.assign(new CompletionItem(
+            flag + func,
             CompletionItemKind.Function,
           ), {
-            insertText: new SnippetString(`${func}{$1}{$2}`),
+            insertText: new SnippetString(`${func}`),
           }),
         ),
         Object.assign(new CompletionItem(
@@ -99,13 +104,9 @@ export function useCompletion(context: ExtensionContext) {
           CompletionItemKind.Module,
         ), {
           insertText: new SnippetString(
-            `begin{\${1|${ENVS.join(',')}|}}\n$2\n\\end{$1}`,
+            `begin{\${1|${ENVIRONMENTS.join(',')}|}}\n$2\n\\end{$1}`,
           ),
         }),
-        ...SPECIAL.map(({ name, format, snippet }) => Object.assign(
-          new CompletionItem(flag + name + format, CompletionItemKind.Function),
-          { insertText: new SnippetString(name + snippet) },
-        )),
       ]
     },
     resolveCompletionItem(item: CompletionItem) {
