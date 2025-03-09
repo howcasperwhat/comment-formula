@@ -126,20 +126,20 @@
     },
     "languages": [
       {
-        "id": "markdown-litemath",
+        "id": "litemath",
         "aliases": [],
         "extensions": []
       }
     ],
     "grammars": [
       {
-        "language": "markdown-litemath",
+        "language": "litemath",
         "scopeName": "text.html.markdown.litemath",
         "path": "./syntaxes/litemath.json"
       },
       {
         "path": "./syntaxes/formula.json",
-        "scopeName": "formula.injection",
+        "scopeName": "comment-formula.injection",
         "injectTo": [
           "source"
         ]

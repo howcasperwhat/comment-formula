@@ -3,7 +3,7 @@
   "information_for_contributors": [
     "This file are modified from https://github.com/microsoft/vscode/blob/main/extensions/markdown-math/syntaxes/md-math-inline.tmLanguage.json"
   ],
-  "scopeName": "formula.injection",
+  "scopeName": "comment-formula.injection",
   "injectionSelector": "",
   "patterns": [
     {
