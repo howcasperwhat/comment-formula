@@ -1,6 +1,6 @@
 /**
  * Names are generated from 
- * [MathJax](https://github.com/mathjax/MathJax-src/blob/main/ts/input/tex/)
+ * [MathJax](https://github.com/mathjax/MathJax-src/blob/master/ts/input/tex/)
  * < Apache-2.0 License >
  * 
  * Formats and snippets is collected and sorted by 
