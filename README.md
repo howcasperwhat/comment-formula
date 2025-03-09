@@ -34,10 +34,18 @@ You are supposed to write formulas between `$$` and `$$`.
 
 > [!IMPORTANT]
 > **TL;DR:** Two ways to enable highlight:
-> 1. Config `scopes` in User Settings;
-> 2. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight). (**Recommended**)
+> 1. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight). (**Recommended**)
+> 2. Config `scopes` in User Settings;
+
+#### Use MathJax Highlight
+Every time updating the extension, a message will be shown in the corner to reload the editor for the changes to take effect.
+
+Therefore, you can alternatively use  [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) with same highlight feature and lower update frequency. It enables highlight in `source.c`, `source.cpp`, `source.java`, `source.python` in default.
 
 #### Config `scopes` in User Settings
+
+> [!WARNING]
+> May be remove in the future.
 
 Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
 
@@ -70,11 +78,6 @@ So the best practice for default `languages` is shown below:
 ```
 
 Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different languages, you will get a message to reload the editor for the changes to take effect.
-
-#### Use MathJax Highlight
-Every time updating the extension, a message will be shown in the corner to reload the editor for the changes to take effect.
-
-Therefore, you can alternatively use  [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) with same highlight feature and lower update frequency. It enables highlight in `source.c`, `source.cpp`, `source.java`, `source.python` in default.
 
 ## Configurations
 

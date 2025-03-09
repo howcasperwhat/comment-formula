@@ -1,5 +1,13 @@
 # ChangeLog
 
+## 2025-03-10: v0.5.3
+### Feature
+1. Migrate completion functionality from KaTeX to MathJax.
+2. Add `physics` package for `mathjax`.
+## Fix
+1. Conflict with [mathjax-highlight](https://github.com/howcasperwhat/mathjax-highlight)
+2. Remove tab `\t` for formula block completion.
+
 ## 2025-03-03: v0.5.2
 ### Feature
 1. Support inline snippet and block snippet.
