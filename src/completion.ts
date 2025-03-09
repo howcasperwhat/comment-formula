@@ -99,7 +99,7 @@ export function useCompletion(context: ExtensionContext) {
           CompletionItemKind.Module,
         ), {
           insertText: new SnippetString(
-            `begin{\${1|${ENVS.join(',')}|}}\n\t$2\n\\end{$1}`,
+            `begin{\${1|${ENVS.join(',')}|}}\n$2\n\\end{$1}`,
           ),
         }),
         ...SPECIAL.map(({ name, format, snippet }) => Object.assign(
