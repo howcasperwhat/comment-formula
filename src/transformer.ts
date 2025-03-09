@@ -40,7 +40,7 @@ class Transformer {
       RegisterHTMLHandler(this.adaptor)
       this.document = mathjax.document('', {
         InputJax: new TeX({
-          packages: [AllPackages.filter(
+          packages: [...AllPackages.filter(
             name => !mmlPackages.includes(name),
           ), 'physics'],
         }),
