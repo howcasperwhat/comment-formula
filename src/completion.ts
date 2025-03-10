@@ -28,13 +28,19 @@ export function useCompletion(context: ExtensionContext) {
       ))
       if (!line.endsWith(symbol))
         return
+      const prefix = line.endsWith(`${symbol}${symbol}`) ? '' : symbol
+      if (store.formulas.value.find(
+        ({ code }) => code.range.contains(position),
+      )) {
+        return
+      }
 
       const inline = new CompletionItem(
         `${symbol}${symbol}.inline.${symbol}${symbol}`,
         CompletionItemKind.Snippet,
       )
       inline.insertText = new SnippetString(
-        `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol} $1 ${symbol}${symbol}`,
+        `${prefix} $1 ${symbol}${symbol}`,
       )
       inline.documentation = 'Insert an inline formula'
 
@@ -43,7 +49,7 @@ export function useCompletion(context: ExtensionContext) {
         CompletionItemKind.Snippet,
       )
       block.insertText = new SnippetString(
-        `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol}\n$1\n${symbol}${symbol}`,
+        `${prefix}\n$1\n${symbol}${symbol}`,
       )
       block.documentation = 'Insert a block formula'
 
