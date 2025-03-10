@@ -3,7 +3,7 @@
  * [MathJax](https://github.com/mathjax/MathJax-src/blob/master/ts/input/tex/)
  * < Apache-2.0 License >
  * 
- * Formats and snippets is collected and sorted by 
+ * Formats and snippets are collected and sorted by 
  * [Casper Huang](https://github.com/howcasperwhat)
  * < MIT License >
  */
