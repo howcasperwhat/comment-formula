@@ -3607,6 +3607,11 @@ export const MACROS: Completion[] = [
     "snippet": "$1$1$1"
   },
   {
+    "name": "$",
+    "format": "${}$",
+    "snippet": "{$1}$"
+  },
+  {
     "name": "_",
     "format": "{}",
     "snippet": "{$1}"
