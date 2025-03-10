@@ -141,8 +141,15 @@
         "path": "./syntaxes/formula.json",
         "scopeName": "comment-formula.injection",
         "injectTo": [
-          "source"
-        ]
+          "source.c",
+          "source.cpp",
+          "source.java",
+          "source.js",
+          "source.python"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.litemath.markdown": "latex"
+        }
       }
     ]
   },
