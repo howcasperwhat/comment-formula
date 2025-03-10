@@ -43,7 +43,7 @@ export function useCompletion(context: ExtensionContext) {
         CompletionItemKind.Snippet,
       )
       block.insertText = new SnippetString(
-        `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol}\n\t$1\n${symbol}${symbol}`,
+        `${line.endsWith(`${symbol}${symbol}`) ? '' : symbol}\n$1\n${symbol}${symbol}`,
       )
       block.documentation = 'Insert a block formula'
 
@@ -104,7 +104,7 @@ export function useCompletion(context: ExtensionContext) {
           CompletionItemKind.Module,
         ), {
           insertText: new SnippetString(
-            `begin{\${1|${ENVIRONMENTS.join(',')}|}}\n$2\n\\end{$1}`,
+            `begin{\${1|${ENVIRONMENTS.join(',')}|}}\n\t$2\n\\end{$1}`,
           ),
         }),
       ]
