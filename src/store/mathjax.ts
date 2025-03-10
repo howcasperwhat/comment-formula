@@ -1203,11 +1203,6 @@ export const COMMANDS: Completion[] = [
     "name": "choose"
   },
   {
-    "name": "frac",
-    "format": "{}{}",
-    "snippet": "{$1}{$2}"
-  },
-  {
     "name": "sqrt",
     "format": "{}",
     "snippet": "{$1}"
@@ -1220,7 +1215,7 @@ export const COMMANDS: Completion[] = [
   {
     "name": "root",
     "format": "{}of{}",
-    "snippet": "{$1}\\of{$2}"
+    "snippet": "root{$1}\\of{$2}"
   },
   {
     "name": "uproot",
@@ -1449,11 +1444,6 @@ export const COMMANDS: Completion[] = [
   },
   {
     "name": "fbox",
-    "format": "{}",
-    "snippet": "{$1}"
-  },
-  {
-    "name": "boxed",
     "format": "{}",
     "snippet": "{$1}"
   },
@@ -1969,11 +1959,6 @@ export const COMMANDS: Completion[] = [
     "snippet": "{$1}"
   },
   {
-    "name": "color",
-    "format": "{}",
-    "snippet": "{$1}"
-  },
-  {
     "name": "empheqlbrace"
   },
   {
@@ -2135,16 +2120,6 @@ export const COMMANDS: Completion[] = [
     "name": "cssId",
     "format": "{}{}",
     "snippet": "{$1}{$2}"
-  },
-  {
-    "name": "shoveleft",
-    "format": "{}",
-    "snippet": "{$1}"
-  },
-  {
-    "name": "shoveright",
-    "format": "{}",
-    "snippet": "{$1}"
   },
   {
     "name": "xleftrightarrow",
@@ -2646,43 +2621,13 @@ export const COMMANDS: Completion[] = [
     "name": "laplacian"
   },
   {
-    "name": "sin"
-  },
-  {
-    "name": "sinh"
-  },
-  {
-    "name": "arcsin"
-  },
-  {
     "name": "asin"
-  },
-  {
-    "name": "cos"
-  },
-  {
-    "name": "cosh"
-  },
-  {
-    "name": "arccos"
   },
   {
     "name": "acos"
   },
   {
-    "name": "tan"
-  },
-  {
-    "name": "tanh"
-  },
-  {
-    "name": "arctan"
-  },
-  {
     "name": "atan"
-  },
-  {
-    "name": "csc"
   },
   {
     "name": "csch"
@@ -2694,9 +2639,6 @@ export const COMMANDS: Completion[] = [
     "name": "acsc"
   },
   {
-    "name": "sec"
-  },
-  {
     "name": "sech"
   },
   {
@@ -2706,31 +2648,10 @@ export const COMMANDS: Completion[] = [
     "name": "asec"
   },
   {
-    "name": "cot"
-  },
-  {
-    "name": "coth"
-  },
-  {
     "name": "arccot"
   },
   {
     "name": "acot"
-  },
-  {
-    "name": "exp"
-  },
-  {
-    "name": "log"
-  },
-  {
-    "name": "ln"
-  },
-  {
-    "name": "det"
-  },
-  {
-    "name": "Pr"
   },
   {
     "name": "tr"
@@ -2989,16 +2910,6 @@ export const COMMANDS: Completion[] = [
     "name": "fdv",
     "format": "{}{}",
     "snippet": "{$1}{$2}"
-  },
-  {
-    "name": "bra",
-    "format": "{}",
-    "snippet": "{$1}"
-  },
-  {
-    "name": "ket",
-    "format": "{}",
-    "snippet": "{$1}"
   },
   {
     "name": "innerproduct",
