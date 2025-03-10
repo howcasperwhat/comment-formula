@@ -77,6 +77,11 @@
           "default": "",
           "description": "Style of the inline formula preview."
         },
+        "comment-formula.annotation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable render formula annotation or not."
+        },
         "comment-formula.completion": {
           "type": "boolean",
           "default": true,

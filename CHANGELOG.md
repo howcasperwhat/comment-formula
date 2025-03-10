@@ -5,6 +5,7 @@
 1. Migrate completion functionality from KaTeX to MathJax.
 2. Add `physics` package for `mathjax`.
 3. Add support for commenting in formula blocks using LaTeX syntax.
+4. Supoort disable rendering formula.
 ## Fix
 1. Conflict with [mathjax-highlight](https://github.com/howcasperwhat/mathjax-highlight)
 2. Remove tab `\t` for formula block completion.

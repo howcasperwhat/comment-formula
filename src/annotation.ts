@@ -159,12 +159,10 @@ export function useAnnotation(context: ExtensionContext) {
   const reg = /\$\$([\s\S]*?)\$\$/g
 
   const update = async () => {
-    if (!editor.value)
-      return
     if (!enabled(editor.value))
       return
     const codes: FormulaCode[] = []
-    const { document } = editor.value
+    const { document } = editor.value!
     let match
     reg.lastIndex = 0
     // eslint-disable-next-line no-cond-assign
