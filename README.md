@@ -17,7 +17,7 @@
 </p>
 
 ## Introduction
-A VSCode extensions to preview LaTeX formulas within the line of your editor.
+A VSCode extensions to preview LaTeX formulas within the lines of your editor.
 
 > Render Engine: [MathJax](https://www.mathjax.org/)
 
@@ -89,7 +89,7 @@ Set this configuration in **user settings** rather than workspace settings, or e
 | `comment-formula.interval`   | Formula update interval(ms).                                                                                                                | `number`  | `200`                         |
 | `comment-formula.code`       | Style of matched LaTeX code.                                                                                                                | `string`  | `"font-weight: bold;"`        |
 | `comment-formula.preview`    | Style of the inline formula preview.                                                                                                        | `string`  | `""`                          |
-| `comment-formula.annotation` | Enable render formula annotation or not.                                                                                                    | `boolean` | `true`                        |
+| `comment-formula.annotation` | Enable render formula for preview or not.                                                                                                   | `boolean` | `true`                        |
 | `comment-formula.completion` | Enable intelligent completion.                                                                                                              | `boolean` | `true`                        |
 | `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"after"`                     |
 | `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                     |

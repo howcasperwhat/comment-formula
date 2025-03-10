@@ -3,11 +3,11 @@
 ## 2025-03-10: v0.5.3
 ### Feature
 1. Migrate completion functionality from KaTeX to MathJax.
-2. Add `physics` package for `mathjax`.
+2. Add `physics` package for `MathJax`.
 3. Add support for commenting in formula blocks using LaTeX syntax.
-4. Supoort disable rendering formula.
+4. Support disabling rendering formula.
 ## Fix
-1. Conflict with [mathjax-highlight](https://github.com/howcasperwhat/mathjax-highlight)
+1. Conflict with [mathjax-highlight](https://github.com/howcasperwhat/mathjax-highlight).
 2. Remove tab `\t` for formula block completion.
 
 ## 2025-03-03: v0.5.2
@@ -24,11 +24,11 @@
 
 ## 2025-02-28: v0.5.0
 ### Feature
-1. Support highlight the formula code, it's disabled by default, read the [doc](https://github.com/howcasperwhat/comment-formula?tab=readme-ov-file#usage) to enable it.
+1. Support highlighting the formula code, it's disabled by default, read the [doc](https://github.com/howcasperwhat/comment-formula?tab=readme-ov-file#usage) to enable it.
 ![highlight](https:///github.com/howcasperwhat/comment-formula/blob/main/res/highlight.gif)
 
 ### :warning::warning::warning: Breaking Change
-1. Remove `symbol` option due to the low usage rate, if you need this feature, new an [issue](https://github.com/howcasperwhat/comment-formula/issues/new) and let me know your needs, I will consider make it more flexible and set it back.
+1. Remove `symbol` option due to the low usage rate, if you need this feature, new an [issue](https://github.com/howcasperwhat/comment-formula/issues/new) and let me know your needs, I will consider make it more flexible and reintroduce it.
 2. Default Value Changed:
    a. `comment-formula.inline` from `partial` to `all`.
    b. `comment-formula.multiple` from `before` to `after`, to align with the default value of `comment-formula.single`.
@@ -54,11 +54,11 @@
 
 ## 2025-02-25: v0.4.8
 ### Feature
-1. Support scale the rendered formula manually or based on font size.
+1. Support scaling the rendered formula manually or based on font size.
 
 ## 2025-02-25: v0.4.7
 ### Feature
-1. Support custom `code` style without reloading window.
+1. Support customizing `code` style without reloading window.
 
 ## 2025-02-23: v0.4.6
 ### Miscellaneous
@@ -67,14 +67,14 @@
 
 ## 2025-02-22: v0.4.5
 ### Feature
-1. Support custom the relative position of rendered preview.
-2. Support disable codes' hidden behavior.
+1. Support customizing the relative position of rendered preview.
+2. Support disabling codes' hidden behavior.
 ### Miscellaneous
 1. Use new logo.
 
 ## 2025-02-20: v0.4.4
 ### Feature
-1. Support multline formula render inline.
+1. Support multiline formula render inline.
 
 ## 2025-02-19: v0.4.3
 ### Performance Optimization
@@ -94,7 +94,7 @@
 2. Show `Reload Window` notification when changing `comment-formula.inline`.
 
 ### Fix
-1. Remove `action` package in mathjax input configuration because it's a mathml extension.
+1. Remove `action` package in MathJax input configuration because it's a MathML extension.
 
 ### Miscellaneous
 1. Now the default value of `comment-formula.symbol` is `$` rather than `\\$`, program will automatically add `\\` before special symbols for `RegExp`.
@@ -112,7 +112,7 @@
 1. Optimize the performance of rendering when changing text-editor selection.
 
 ### Feature
-1. Enhance TeX input configuration to include all tex packages.
+1. Enhance TeX input configuration to include all TeX packages.
 
 ## 2025-02-11: v0.3.2
 ### Fix
@@ -136,7 +136,7 @@ Now feel free to use `"comment-formula.inline": "all"` to render all formulas in
 2. Add `preview` to customize the style of inline formula-preview.
 
 ### Experimental Feature
-1. Add `api.prefix` and `api.suffix` to support custom API. Note that the rendering engine must be [MathJax](https://www.mathjax.org/).
+1. Add `api.prefix` and `api.suffix` to support customizing API. Note that the rendering engine must be [MathJax](https://www.mathjax.org/).
 
 ## 2024-01-07: v0.2.0
 ### Feature
