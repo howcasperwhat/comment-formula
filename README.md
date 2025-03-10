@@ -44,9 +44,6 @@ Therefore, you can alternatively use  [MathJax Highlight](https://marketplace.vi
 
 #### Config `scopes` in User Settings
 
-> [!WARNING]
-> May be remove in the future.
-
 Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
 
 For example:
