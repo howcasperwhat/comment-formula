@@ -54,7 +54,7 @@ For example:
 'source.python'
 ```
 
-Note that suffixes of scopes aren't always the same as the languageId (e.g. `javascript` -> `source.js`).
+Note that suffixes of scopes aren't always the same as the `languageId` (e.g. `javascript` -> `source.js`).
 
 The syntax highlight in VSCode can't be modified until the next opening of the editor. So every time changing the configuration, you need to reload the editor as prompted by the message shown in the corner.
 
