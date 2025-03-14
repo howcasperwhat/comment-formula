@@ -33,48 +33,9 @@ You are supposed to write formulas between `$$` and `$$`.
 ### Enable Highlight
 
 > [!IMPORTANT]
-> **TL;DR:** Two ways to enable highlight:
+> Two ways to enable highlight:
 > 1. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight). (**Recommended**)
-> 2. Config `scopes` in User Settings;
-
-#### Use MathJax Highlight
-Every time updating the extension, a message will be shown in the corner to reload the editor for the changes to take effect.
-
-Therefore, you can alternatively use  [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) with same highlight feature and lower update frequency. It enables highlight in `source.c`, `source.cpp`, `source.java`, `source.python` in default.
-
-#### Config `scopes` in User Settings
-
-Use the command `Developer: Inspect Editor Tokens and Scopes` to get the global scope of the language current file is using.
-
-For example:
-``` js
-'source.c'
-'source.cpp'
-'source.java'
-'source.python'
-```
-
-Note that suffixes of scopes aren't always the same as the `languageId` (e.g. `javascript` -> `source.js`).
-
-The syntax highlight in VSCode can't be modified until the next opening of the editor. So every time changing the configuration, you need to reload the editor as prompted by the message shown in the corner.
-
-Next, if you don't want to bold the code, set `comment-formula.code` to `""`.
-
-So the best practice for default `languages` is shown below:
-``` json
-// Preferences: Open User Settings (JSON):
-{
-  "comment-formula.scopes": [
-    "source.c",
-    "source.cpp",
-    "source.java",
-    "source.python"
-  ],
-  "comment-formula.code": ""
-}
-```
-
-Set this configuration in **user settings** rather than workspace settings, or every time you open a workspace with different languages, you will get a message to reload the editor for the changes to take effect.
+> 2. Config `scopes` in User Settings, also see [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) for `scopes` configuration guide.
 
 ## Configurations
 
@@ -100,7 +61,7 @@ Set this configuration in **user settings** rather than workspace settings, or e
 
 <!-- configs -->
 
-> Feel free to [new an issue](https://github.com/howcasperwhat/comment-formula/issues/new) if you encounter any problem or have any suggestion.
+> Feel free to [open an issue](https://github.com/howcasperwhat/comment-formula/issues/new) if you encounter any problem or have any suggestion.
 
 ## Reference
 [VSCode Iconify](https://github.com/howcasperwhat/comment-formula) | [MathJax](https://www.mathjax.org/) | [KaTeX](https://katex.org/) | [VSCode Markdown](https://github.com/yzhang-gh/vscode-markdown) | [LaTeX Workshop](https://github.com/James-Yu/LaTeX-Workshop) | [VSCode Markdown Math](https://github.com/microsoft/vscode/tree/main/extensions/markdown-math)
