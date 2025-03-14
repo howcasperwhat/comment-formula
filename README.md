@@ -30,12 +30,10 @@ A VSCode extensions to preview LaTeX formulas within the lines of your editor.
 ## Usage
 You are supposed to write formulas between `$$` and `$$`.
 
-### Enable Highlight
-
 > [!IMPORTANT]
 > Two ways to enable highlight:
 > 1. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight). (**Recommended**)
-> 2. Config `scopes` in User Settings, also see [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) for `scopes` configuration guide.
+> 2. Config `scopes` in User Settings, see [MathJax Highlight Configurations](https://github.com/howcasperwhat/mathjax-highlight?tab=readme-ov-file#configurations) for `scopes` configuration guide.
 
 ## Configurations
 
