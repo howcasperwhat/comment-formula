@@ -41,6 +41,7 @@ export function useAnnotation(context: ExtensionContext) {
     'top:50%',
     'transform:translateY(-50%)',
     'vertical-align:top',
+    'line-height:0',
   ].join(';')
 
   const decorate = (
