@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-03-29: v0.5.4
+### Fix
+1. Remove empty line for svg pseudo-element, now vertical alignment can perfectly be centered.
+
 ## 2025-03-10: v0.5.3
 ### Feature
 1. Migrate completion functionality from KaTeX to MathJax.
