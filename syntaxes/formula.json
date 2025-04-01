@@ -4,7 +4,7 @@
     "This file are modified from https://github.com/microsoft/vscode/blob/main/extensions/markdown-math/syntaxes/md-math-inline.tmLanguage.json"
   ],
   "scopeName": "comment-formula.injection",
-  "injectionSelector": "",
+  "injectionSelector": "L: -meta.embedded.litemath.markdown",
   "patterns": [
     {
       "include": "#formula"
@@ -14,15 +14,15 @@
     "formula": {
       "name": "markup.litemath.markdown",
       "contentName": "meta.embedded.litemath.markdown",
-      "begin": "(?<=\\s|^)(\\${2})",
+      "begin": "\\${2}",
       "beginCaptures": {
-        "1": {
+        "0": {
           "name": "punctuation.definition.litemath.begin.markdown"
         }
       },
-      "end": "(\\${2})(?=\\s|$)",
+      "end": "\\${2}",
       "endCaptures": {
-        "1": {
+        "0": {
           "name": "punctuation.definition.litemath.end.markdown"
         }
       },
