@@ -2,7 +2,7 @@
 
 ## 2025-04-01: v0.5.5
 ### Fix
-1. highlight bleeding fixes howcasperwhat/comment-formula#11
+1. Highlight bleeding fixes howcasperwhat/comment-formula#11
 
 ## 2025-03-29: v0.5.4
 ### Fix
