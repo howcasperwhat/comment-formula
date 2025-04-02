@@ -1,0 +1,21 @@
+{
+  "comment-formula.annotation": true,
+  "comment-formula.completion": true,
+  "comment-formula.hidden": true,
+  "comment-formula.color": "auto",
+  "comment-formula.inline": "all",
+  "comment-formula.interval": 200,
+  "comment-formula.single": "after",
+  "comment-formula.multiple": "after",
+  "comment-formula.code": "", // default to "font-weight: bold;"
+  "comment-formula.preview": "",
+  "comment-formula.scale": 0.8, // default to 1.0
+  "comment-formula.scopes": [], // recommended to use MathJax Highlight
+  "comment-formula.languages": [
+    "c",
+    "cpp",
+    "java",
+    "python",
+    "javascript"
+  ]
+}
