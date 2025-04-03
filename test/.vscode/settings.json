@@ -1,4 +1,7 @@
 {
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
+  "editor.formatOnPaste": false,
   "comment-formula.annotation": true,
   "comment-formula.completion": true,
   "comment-formula.hidden": true,
@@ -11,11 +14,5 @@
   "comment-formula.preview": "",
   "comment-formula.scale": 0.8, // default to 1.0
   "comment-formula.scopes": [], // recommended to use MathJax Highlight
-  "comment-formula.languages": [
-    "c",
-    "cpp",
-    "java",
-    "python",
-    "javascript"
-  ]
+  "comment-formula.languages": ["c", "cpp", "java", "python", "javascript"] // default to ["c", "cpp", "java", "python"]
 }
