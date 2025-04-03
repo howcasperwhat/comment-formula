@@ -14,6 +14,14 @@ npm i
 
 Press `F5` to start the extension in a new VSCode window. Open `./test/` folder to test the extension.
 
+## Update
+
+Every time you add or update a config in `package.json`, run
+
+```bash
+npm run update
+```
+
 ## Code Style
 
 We use [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://github.com/antfu/eslint-config) for code style.
