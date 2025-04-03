@@ -17,6 +17,7 @@
 </p>
 
 ## Introduction
+
 A VSCode extensions to preview LaTeX formulas within the lines of your editor.
 
 > Render Engine: [MathJax](https://www.mathjax.org/)
@@ -28,6 +29,7 @@ A VSCode extensions to preview LaTeX formulas within the lines of your editor.
 </p>
 
 ## Usage
+
 You are supposed to write formulas between `$$` and `$$`.
 
 > [!IMPORTANT]
@@ -62,6 +64,7 @@ You are supposed to write formulas between `$$` and `$$`.
 > Feel free to [open an issue](https://github.com/howcasperwhat/comment-formula/issues/new) if you encounter any problem or have any suggestion.
 
 ## Reference
+
 [VSCode Iconify](https://github.com/howcasperwhat/comment-formula) | [MathJax](https://www.mathjax.org/) | [KaTeX](https://katex.org/) | [VSCode Markdown](https://github.com/yzhang-gh/vscode-markdown) | [LaTeX Workshop](https://github.com/James-Yu/LaTeX-Workshop) | [VSCode Markdown Math](https://github.com/microsoft/vscode/tree/main/extensions/markdown-math)
 
 ## License
@@ -73,4 +76,5 @@ Logo using [carbon:function](https://github.com/carbon-design-system/carbon) as 
 Fonts used in feature image are `Dancing Script` (for `Before` and `After`) under the [Open Font License](https://openfontlicense.org/open-font-license-official-text/) and `Input` (for code) under the [Input Font License](https://input.djr.com/license/).
 
 ## Support
+
 If you find this project useful, please consider giving it a star on GitHub. Your support is greatly appreciated! <a href="https://github.com/howcasperwhat/comment-formula" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/badge/Github-🌟-688D78?logo=github" align="center"></a>
