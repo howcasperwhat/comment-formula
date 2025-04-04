@@ -112,6 +112,11 @@
           "default": true,
           "description": "Enable hiding code when selections are out of range."
         },
+        "comment-formula.autotab": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto tabbing rendered formulas."
+        },
         "comment-formula.scale": {
           "type": "number",
           "default": 1,

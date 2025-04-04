@@ -30,6 +30,9 @@ export function useAnnotation(context: ExtensionContext) {
   const HideCodeOptions: DecorationRenderOptions = {
     textDecoration: 'none; vertical-align:top; display: none;',
   }
+  const AutoTabOptions: DecorationRenderOptions = {
+    textDecoration: `none; vertical-align:top;`,
+  }
 
   const editor = useActiveTextEditor()
   const selections = useTextEditorSelections(editor)
@@ -63,15 +66,13 @@ export function useAnnotation(context: ExtensionContext) {
           [relative]: {
             contentIconPath,
             border: `none;${injection};${config.extension.preview};`,
-            margin: relative === 'before'
-              ? `0 ${margin} 0 0`
-              : `0 0 0 ${margin}`,
+            margin: `0 ${margin} 0 ${margin};`,
           },
         }
       : undefined,
   })
 
-  const maxLine = (
+  const longestLine = (
     code: FormulaCode,
     preview: FormulaPreview,
   ) => {
@@ -97,6 +98,29 @@ export function useAnnotation(context: ExtensionContext) {
     return _maxLine
   }
 
+  const firstNonWhiteSpaceIndex = (
+    line: number,
+  ) => {
+    if (!editor.value)
+      return 0
+    const text = editor.value.document.lineAt(line).text
+    const result = text.search(/\S/)
+    return result === -1 ? text.length : result
+  }
+
+  const getLeadingWhitespaceWidth = (
+    line: number
+  ) => {
+    if (!editor.value)
+      return 0
+    const content = editor.value.document.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
+    const width = editor.value
+      ? (content!.match(/\t/g)?.length ?? 0) * (parseInt(`${editor.value.options.tabSize}`) || 0)
+      + (content!.match(/ /g)?.length ?? 0) * 1
+      : 0
+    return width
+  }
+
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
     config.extension.multiple === 'none'
       ? []
@@ -105,10 +129,11 @@ export function useAnnotation(context: ExtensionContext) {
             const start = code.range.start.line
             const end = code.range.end.line
             const line = config.extension.multiple === 'before'
-              ? end
-              : maxLine(code, preview)
+              ? start
+              : longestLine(code, preview)
+            const col = firstNonWhiteSpaceIndex(start)
             return [decorate(
-              new Position(line, 0),
+              new Position(line, col),
               config.extension.multiple,
               preview.inline,
               `width:${preview.width}px;${INJECTION};top:${
@@ -119,7 +144,7 @@ export function useAnnotation(context: ExtensionContext) {
               ? []
               : Array.from({ length: end - start }, (_, i) =>
                   decorate(
-                    new Position(start + i, 0),
+                    new Position(start + i + 1, col),
                     config.extension.multiple,
                     preview.inline,
                     `width:${preview.width}px;${INJECTION}`,
@@ -155,6 +180,26 @@ export function useAnnotation(context: ExtensionContext) {
               selection => !selection.intersection(code.range),
             ))
           .map(({ code }) => ({ range: code.range }),
+          ))
+
+  useActiveEditorDecorations(AutoTabOptions, () =>
+    (!config.extension.hidden
+    || !config.extension.autotab
+    || config.extension.multiple === 'before')
+      ? []
+      : store.formulas.value
+          .filter(({ code, preview }) =>
+            preview.inline && !code.range.isSingleLine && selections.value.every(
+              selection => !selection.intersection(code.range),
+            ))
+          .map(({ code, preview }) => decorate(
+              new Position(longestLine(code, preview), 0),
+              'before',
+              preview.inline,
+              `width:${getLeadingWhitespaceWidth(code.range.start.line)}ch;${INJECTION};`,
+              '',
+              '0'
+            )
           ))
 
   const reg = /\$\$([\s\S]*?)\$\$/g
