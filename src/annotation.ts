@@ -257,6 +257,8 @@ export function useAnnotation(context: ExtensionContext) {
     timeout = setTimeout(update, config.extension.interval)
   }
 
+  trigger()
+
   window.onDidChangeActiveTextEditor(() => {
     // If don't clear the decorations when switching files, two problems will occur:
     // 1. Decorations are still visible after switching to a language that does not trigger the extension
