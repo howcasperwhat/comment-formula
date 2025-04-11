@@ -70,9 +70,13 @@ export function useAnnotation(context: ExtensionContext) {
       : undefined,
   })
 
-  const isHidden = (
+  const needHiding = (
     range: Range,
   ): boolean => {
+    if (range.isSingleLine && config.extension.single === 'none')
+      return false
+    if (!range.isSingleLine && config.extension.multiple === 'none')
+      return false
     if (config.extension.hidden === 'scope') {
       return selections.value.every(
         selection => !selection.intersection(range),
@@ -194,7 +198,9 @@ export function useAnnotation(context: ExtensionContext) {
       ? []
       : store.formulas.value
           .filter(({ code, preview }) =>
-            preview.inline && isHidden(code.range))
+            preview.inline
+            && needHiding(code.range),
+          )
           .map(({ code }) => ({ range: code.range }),
           ))
 
@@ -207,7 +213,7 @@ export function useAnnotation(context: ExtensionContext) {
           .filter(({ code, preview }) =>
             preview.inline
             && !code.range.isSingleLine
-            && isHidden(code.range),
+            && needHiding(code.range),
           )
           .map(({ code, preview }) => decorate(
             new Position(longestLine(code, preview), 0),
