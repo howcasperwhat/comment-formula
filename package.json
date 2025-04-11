@@ -119,7 +119,7 @@
         },
         "comment-formula.autotab": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Enable auto tabbing rendered formulas."
         },
         "comment-formula.scale": {
