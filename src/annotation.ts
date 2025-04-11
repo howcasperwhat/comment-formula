@@ -53,7 +53,6 @@ export function useAnnotation(context: ExtensionContext) {
     inline: boolean,
     injection: string = '',
     contentIconPath: Uri | '' = '',
-    margin: string = '.25rem',
   ): DecorationOptions => ({
     range: position instanceof Range
       ? position
@@ -66,7 +65,6 @@ export function useAnnotation(context: ExtensionContext) {
           [relative]: {
             contentIconPath,
             border: `none;${injection};${config.extension.preview};`,
-            margin: `0 ${margin} 0 ${margin};`,
           },
         }
       : undefined,
@@ -109,13 +107,13 @@ export function useAnnotation(context: ExtensionContext) {
   }
 
   const getLeadingWhitespaceWidth = (
-    line: number
+    line: number,
   ) => {
     if (!editor.value)
       return 0
     const content = editor.value.document.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
     const width = editor.value
-      ? (content!.match(/\t/g)?.length ?? 0) * (parseInt(`${editor.value.options.tabSize}`) || 0)
+      ? (content!.match(/\t/g)?.length ?? 0) * (Number.parseInt(`${editor.value.options.tabSize}`) || 0)
       + (content!.match(/ /g)?.length ?? 0) * 1
       : 0
     return width
@@ -184,8 +182,8 @@ export function useAnnotation(context: ExtensionContext) {
 
   useActiveEditorDecorations(AutoTabOptions, () =>
     (!config.extension.hidden
-    || !config.extension.autotab
-    || config.extension.multiple === 'before')
+      || !config.extension.autotab
+      || config.extension.multiple === 'before')
       ? []
       : store.formulas.value
           .filter(({ code, preview }) =>
@@ -193,13 +191,11 @@ export function useAnnotation(context: ExtensionContext) {
               selection => !selection.intersection(code.range),
             ))
           .map(({ code, preview }) => decorate(
-              new Position(longestLine(code, preview), 0),
-              'before',
-              preview.inline,
-              `width:${getLeadingWhitespaceWidth(code.range.start.line)}ch;${INJECTION};`,
-              '',
-              '0'
-            )
+            new Position(longestLine(code, preview), 0),
+            'before',
+            preview.inline,
+            `width:${getLeadingWhitespaceWidth(code.range.start.line)}ch;${INJECTION};`,
+          ),
           ))
 
   const reg = /\$\$([\s\S]*?)\$\$/g
