@@ -4,7 +4,7 @@
   "editor.formatOnPaste": false,
   "comment-formula.annotation": true,
   "comment-formula.completion": true,
-  "comment-formula.hidden": true,
+  "comment-formula.hidden": "scope",
   "comment-formula.autotab": true, // default to false
   "comment-formula.color": "auto",
   "comment-formula.inline": "all",

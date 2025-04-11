@@ -70,6 +70,26 @@ export function useAnnotation(context: ExtensionContext) {
       : undefined,
   })
 
+  const isHidden = (
+    range: Range,
+  ): boolean => {
+    if (config.extension.hidden === 'scope') {
+      return selections.value.every(
+        selection => !selection.intersection(range),
+      )
+    }
+    else if (config.extension.hidden === 'line') {
+      return !new Set(Array.from({
+        length: range.end.line - range.start.line + 1,
+      }, (_, i) => i + range.start.line)).intersection(
+        new Set(Array.from({
+          length: selections.value[0].end.line - selections.value[0].start.line + 1,
+        }, (_, i) => i + selections.value[0].start.line)),
+      ).size
+    }
+    return false
+  }
+
   const longestLine = (
     code: FormulaCode,
     preview: FormulaPreview,
@@ -174,9 +194,7 @@ export function useAnnotation(context: ExtensionContext) {
       ? []
       : store.formulas.value
           .filter(({ code, preview }) =>
-            preview.inline && selections.value.every(
-              selection => !selection.intersection(code.range),
-            ))
+            preview.inline && isHidden(code.range))
           .map(({ code }) => ({ range: code.range }),
           ))
 
@@ -187,9 +205,10 @@ export function useAnnotation(context: ExtensionContext) {
       ? []
       : store.formulas.value
           .filter(({ code, preview }) =>
-            preview.inline && !code.range.isSingleLine && selections.value.every(
-              selection => !selection.intersection(code.range),
-            ))
+            preview.inline
+            && !code.range.isSingleLine
+            && isHidden(code.range),
+          )
           .map(({ code, preview }) => decorate(
             new Position(longestLine(code, preview), 0),
             'before',

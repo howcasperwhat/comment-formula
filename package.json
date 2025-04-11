@@ -108,8 +108,13 @@
           "description": "Set preview position of single line LaTeX or disable it."
         },
         "comment-formula.hidden": {
-          "type": "boolean",
-          "default": true,
+          "type": "string",
+          "enum": [
+            "scope",
+            "line",
+            "none"
+          ],
+          "default": "scope",
           "description": "Enable hiding code when selections are out of range."
         },
         "comment-formula.autotab": {
