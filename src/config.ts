@@ -52,7 +52,7 @@ export function isLarge(height: number) {
     return false
   if (config.extension.inline === 'none')
     return true
-  return (exToPx(height) >= store.height.value)
+  return (height >= store.height.value)
 }
 export function enabled(editor?: TextEditor) {
   if (!config.extension.annotation)
