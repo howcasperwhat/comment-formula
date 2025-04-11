@@ -1,5 +1,16 @@
 # ChangeLog
 
+## 2025-04-11: v0.5.7
+### Feature
+1. Supports line granularity hiding code, which is scope granularity in the past.
+### Fix
+1. Fix `comment-formula.inline: partial` not working.
+2. Code will display now when `comment-formula.single: none` or `comment-formula.multiple: none`.
+3. Annotation isn't activated when startup the extension.
+### :warning::warning::warning: Breaking Change
+1. The `autotab` feature is now enabled by default.
+2. Remove default margin for inline preview, which can be set in `comment-formula.preview`, e.g. `"comment-formula.preview": "margin: 0 .5ch 0 .5ch;"` for margin (left and right) half of a character.
+
 ## 2025-04-04: v0.5.6
 ### Feature
 1. Support auto tab for multiple line formulas mentioned in [#14](https://github.com/howcasperwhat/comment-formula/issues/14).
