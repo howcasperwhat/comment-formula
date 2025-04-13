@@ -226,7 +226,7 @@ export function useAnnotation(context: ExtensionContext) {
   const reg = /\$\$([\s\S]*?)\$\$/g
 
   const update = async () => {
-    if (!enabled(editor.value))
+    if (!enabled(editor.value) || !config.extension.annotation)
       return
     const codes: FormulaCode[] = []
     const { document } = editor.value!

@@ -55,8 +55,6 @@ export function isLarge(height: number) {
   return (height >= store.height.value)
 }
 export function enabled(editor?: TextEditor) {
-  if (!config.extension.annotation)
-    return false
   if (!editor || !editor.document || !editor.document.languageId)
     return false
   return config.extension.languages.includes(editor.document.languageId)
