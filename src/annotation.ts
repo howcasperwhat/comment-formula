@@ -7,6 +7,7 @@ import {
   useActiveTextEditor,
   useDocumentText,
   useTextEditorSelections,
+  watchEffect,
 } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { config, enabled, store } from './config'
@@ -258,6 +259,13 @@ export function useAnnotation(context: ExtensionContext) {
   }
 
   trigger()
+
+  const preloadWatcher = computed(() => store.preload.value)
+  watchEffect(() => {
+    if (preloadWatcher.value !== undefined) {
+      trigger()
+    }
+  })
 
   window.onDidChangeActiveTextEditor(() => {
     // If don't clear the decorations when switching files, two problems will occur:

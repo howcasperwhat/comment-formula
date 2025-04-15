@@ -136,6 +136,11 @@
           "type": "string",
           "default": "",
           "description": "API suffix (Experimental)."
+        },
+        "comment-formula.preload": {
+          "type": "string",
+          "default": "",
+          "description": "Path to a file containing LaTeX preamble to preload."
         }
       }
     },

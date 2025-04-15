@@ -6,7 +6,7 @@ import { TeX } from 'mathjax-full/js/input/tex'
 import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages'
 import { mathjax } from 'mathjax-full/js/mathjax'
 import { SVG } from 'mathjax-full/js/output/svg'
-import { computed } from 'reactive-vscode'
+import { computed, watchEffect } from 'reactive-vscode'
 import { config, exToPx, isLarge, store } from './config'
 
 export class FormulaPreview {
@@ -30,24 +30,39 @@ export class FormulaPreview {
 
 class Transformer {
   private adaptor
-  private document
+  private document: any
   private useAPI
+  private mmlPackages = ['action']
+
   public constructor() {
     this.useAPI = computed(() => config.extension.api.prefix !== '')
-    const mmlPackages = ['action']
     if (!this.useAPI.value) {
       this.adaptor = liteAdaptor()
       RegisterHTMLHandler(this.adaptor)
-      this.document = mathjax.document('', {
-        InputJax: new TeX({
-          packages: [...AllPackages.filter(
-            name => !mmlPackages.includes(name),
-          ), 'physics'],
-        }),
-        OutputJax: new SVG({
-          fontCache: 'local',
-        }),
+      this.initMathJaxContext()
+
+      watchEffect(() => {
+        if (store.preload.value !== undefined) {
+          this.initMathJaxContext()
+        }
       })
+    }
+  }
+
+  private initMathJaxContext() {
+    this.document = mathjax.document('', {
+      InputJax: new TeX({
+        packages: [...AllPackages.filter(
+          name => !this.mmlPackages.includes(name),
+        ), 'physics'],
+      }),
+      OutputJax: new SVG({
+        fontCache: 'local',
+      }),
+    })
+
+    if (store.preload.value) {
+      this.document.convert(store.preload.value)
     }
   }
 
