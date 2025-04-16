@@ -59,7 +59,7 @@ You are supposed to write formulas between `$$` and `$$`.
 | `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                           |
 | `comment-formula.api.prefix` | API prefix (Experimental).                                                                                                                  | `string`  | `""`                          |
 | `comment-formula.api.suffix` | API suffix (Experimental).                                                                                                                  | `string`  | `""`                          |
-| `comment-formula.preload`    | Path to a file containing LaTeX preamble to preload.                                                                                        | `string`  | `""`                          |
+| `comment-formula.preload`    | Paths to files containing LaTeX preamble to preload.                                                                                        | `array`   | `[]`                          |
 
 <!-- configs -->
 

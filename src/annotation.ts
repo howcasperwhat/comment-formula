@@ -262,7 +262,7 @@ export function useAnnotation(context: ExtensionContext) {
 
   setupWatcher()
   watch(store.preload, (content) => {
-    transformer.reset(content)
+    transformer.reset(content.join('\n'))
     trigger()
   })
 

@@ -31,6 +31,7 @@ export class FormulaPreview {
 class Transformer {
   private adaptor: ReturnType<typeof liteAdaptor> | undefined = undefined
   private document: ReturnType<typeof mathjax.document> | undefined = undefined
+  private context: string | undefined = undefined
   private useAPI
   private mmlPackages = ['action']
 
@@ -44,6 +45,9 @@ class Transformer {
   }
 
   public reset(context: string) {
+    if (context === this.context)
+      return
+    this.context = context
     if (this.useAPI.value)
       return
     this.document = mathjax.document('', {

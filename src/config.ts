@@ -2,13 +2,14 @@ import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
 import { isAbsolute } from 'node:path'
 import process from 'node:process'
+import * as fg from 'fast-glob'
 import {
   computed,
   defineConfigObject,
   shallowRef,
   useFsWatcher,
   useIsDarkTheme,
-  watchEffect,
+  watch,
 } from 'reactive-vscode'
 import { Uri, workspace } from 'vscode'
 import * as Meta from './generated/meta'
@@ -49,35 +50,44 @@ export const store = {
   }),
   formulas: shallowRef<Formula[]>([]),
   message: '**WRONG FORMULA FORMAT**',
-  preload: shallowRef(''),
+  preload: shallowRef<string[]>([]),
 }
 
-export function resolve(path: string): Uri {
+function _resolve(path: string): Uri[] {
   const folders = workspace.workspaceFolders
   if (isAbsolute(path))
-    return Uri.file(path)
+    return fg.sync(path).map(p => Uri.file(p))
   if (!folders || !folders.length)
-    return Uri.file('')
-  return Uri.joinPath(
+    return []
+  return fg.sync(Uri.joinPath(
     // TODO: support multiple workspace
     folders[0].uri,
     path,
+  ).fsPath).map(p => Uri.file(p))
+}
+
+function resolve() {
+  return Array.from(new Set(
+    config.extension.preload,
+  )).map(p => _resolve(p)).flat()
+}
+
+async function preload() {
+  store.preload.value = await Promise.all(
+    resolve().map(async uri =>
+      (await workspace.fs.readFile(uri)).toString(),
+    ),
   )
 }
 
-export function preload() {
-  return workspace.fs.readFile(resolve(config.extension.preload)).then(
-    data => store.preload.value = data.toString(),
-    () => store.preload.value = '',
+export async function setupWatcher() {
+  const watcher = useFsWatcher(() =>
+    resolve().map(uri => uri.fsPath),
   )
-}
-
-export function setupWatcher() {
-  const watcher = useFsWatcher(() => resolve(config.extension.preload).fsPath)
   watcher.onDidChange(preload)
   watcher.onDidCreate(preload)
   watcher.onDidDelete(preload)
-  watchEffect(preload)
+  watch(() => config.extension.preload, preload, { immediate: true })
 }
 
 export function isLarge(height: number) {
