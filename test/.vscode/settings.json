@@ -14,7 +14,7 @@
   "comment-formula.code": "", // default to "font-weight: bold;"
   "comment-formula.preview": "",
   "comment-formula.scale": 0.9, // default to 1.0
-  "comment-formula.preload": "main.cls", // default to ""
+  "comment-formula.preload": "1st.cls", // default to ""
   "comment-formula.scopes": [], // recommended to use MathJax Highlight
   "comment-formula.languages": ["c", "cpp", "java", "python", "javascript"] // default to ["c", "cpp", "java", "python"]
 }
