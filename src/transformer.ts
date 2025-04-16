@@ -6,7 +6,7 @@ import { TeX } from 'mathjax-full/js/input/tex'
 import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages'
 import { mathjax } from 'mathjax-full/js/mathjax'
 import { SVG } from 'mathjax-full/js/output/svg'
-import { computed, watchEffect } from 'reactive-vscode'
+import { computed } from 'reactive-vscode'
 import { config, exToPx, isLarge, store } from './config'
 
 export class FormulaPreview {
@@ -29,8 +29,8 @@ export class FormulaPreview {
 }
 
 class Transformer {
-  private adaptor
-  private document: any
+  private adaptor: ReturnType<typeof liteAdaptor> | undefined = undefined
+  private document: ReturnType<typeof mathjax.document> | undefined = undefined
   private useAPI
   private mmlPackages = ['action']
 
@@ -39,17 +39,13 @@ class Transformer {
     if (!this.useAPI.value) {
       this.adaptor = liteAdaptor()
       RegisterHTMLHandler(this.adaptor)
-      this.initMathJaxContext()
-
-      watchEffect(() => {
-        if (store.preload.value !== undefined) {
-          this.initMathJaxContext()
-        }
-      })
+      this.reset('')
     }
   }
 
-  private initMathJaxContext() {
+  public reset(context: string) {
+    if (this.useAPI.value)
+      return
     this.document = mathjax.document('', {
       InputJax: new TeX({
         packages: [...AllPackages.filter(
@@ -60,10 +56,7 @@ class Transformer {
         fontCache: 'local',
       }),
     })
-
-    if (store.preload.value) {
-      this.document.convert(store.preload.value)
-    }
+    this.document.convert(context)
   }
 
   public async from(tex: string, color?: string): Promise<FormulaPreview> {

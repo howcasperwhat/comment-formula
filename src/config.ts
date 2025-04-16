@@ -1,16 +1,16 @@
-import type { FileSystemWatcher, TextEditor } from 'vscode'
+import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
-import fs from 'node:fs'
-import path from 'node:path'
+import { isAbsolute } from 'node:path'
 import process from 'node:process'
 import {
   computed,
   defineConfigObject,
   shallowRef,
+  useFsWatcher,
   useIsDarkTheme,
   watchEffect,
 } from 'reactive-vscode'
-import { window, workspace } from 'vscode'
+import { Uri, workspace } from 'vscode'
 import * as Meta from './generated/meta'
 
 // @see: https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/config/fontInfo.ts#L14
@@ -50,101 +50,35 @@ export const store = {
   formulas: shallowRef<Formula[]>([]),
   message: '**WRONG FORMULA FORMAT**',
   preload: shallowRef(''),
-  preloadFileWatcher: null as FileSystemWatcher | null,
 }
 
-export function resolvePreloadPath(preloadPath: string): string | null {
-  if (!preloadPath) {
-    return null
-  }
-
-  if (path.isAbsolute(preloadPath)) {
-    return preloadPath
-  }
-
-  if (workspace.workspaceFolders && workspace.workspaceFolders.length > 0) {
-    return path.join(workspace.workspaceFolders[0].uri.fsPath, preloadPath)
-  }
-
-  return null
+export function resolve(path: string): Uri {
+  const folders = workspace.workspaceFolders
+  if (isAbsolute(path))
+    return Uri.file(path)
+  if (!folders || !folders.length)
+    return Uri.file('')
+  return Uri.joinPath(
+    // TODO: support multiple workspace
+    folders[0].uri,
+    path,
+  )
 }
 
-export async function loadPreload() {
-  const preloadPath = config.extension.preload
-  if (!preloadPath) {
-    store.preload.value = ''
-    return
-  }
-
-  try {
-    const filePath = resolvePreloadPath(preloadPath)
-
-    if (filePath && fs.existsSync(filePath)) {
-      const content = await fs.promises.readFile(filePath, 'utf-8')
-      store.preload.value = content
-    }
-    else {
-      store.preload.value = ''
-      window.showWarningMessage(`Preload file not found: ${preloadPath}`)
-    }
-  }
-  catch (error) {
-    store.preload.value = ''
-    window.showErrorMessage(`Error loading preload file: ${error}`)
-  }
+export function preload() {
+  return workspace.fs.readFile(resolve(config.extension.preload)).then(
+    data => store.preload.value = data.toString(),
+    () => store.preload.value = '',
+  )
 }
 
-export function setupPreloadFileWatcher() {
-  if (store.preloadFileWatcher) {
-    store.preloadFileWatcher.dispose()
-    store.preloadFileWatcher = null
-  }
-
-  const preloadPath = config.extension.preload
-  if (!preloadPath) {
-    return
-  }
-
-  const filePath = resolvePreloadPath(preloadPath)
-  if (!filePath) {
-    return
-  }
-
-  try {
-    const filePattern = filePath.replace(/\\/g, '/')
-    store.preloadFileWatcher = workspace.createFileSystemWatcher(filePattern)
-
-    store.preloadFileWatcher.onDidChange(() => {
-      loadPreload()
-    })
-
-    store.preloadFileWatcher.onDidCreate(() => {
-      loadPreload()
-    })
-
-    store.preloadFileWatcher.onDidDelete(() => {
-      store.preload.value = ''
-    })
-  }
-  catch (error) {
-    window.showErrorMessage(`Error setting up preload file watcher: ${error}`)
-  }
+export function setupWatcher() {
+  const watcher = useFsWatcher(() => resolve(config.extension.preload).fsPath)
+  watcher.onDidChange(preload)
+  watcher.onDidCreate(preload)
+  watcher.onDidDelete(preload)
+  watchEffect(preload)
 }
-
-watchEffect(() => {
-  const preloadPath = config.extension.preload
-  if (preloadPath) {
-    loadPreload()
-    setupPreloadFileWatcher()
-  }
-  else {
-    store.preload.value = ''
-    if (store.preloadFileWatcher) {
-      store.preloadFileWatcher.dispose()
-      store.preloadFileWatcher = null
-    }
-  }
-})
 
 export function isLarge(height: number) {
   if (config.extension.inline === 'all')

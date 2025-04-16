@@ -7,10 +7,10 @@ import {
   useActiveTextEditor,
   useDocumentText,
   useTextEditorSelections,
-  watchEffect,
+  watch,
 } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
-import { config, enabled, store } from './config'
+import { config, enabled, setupWatcher, store } from './config'
 import { transformer } from './transformer'
 
 export interface FormulaCode {
@@ -260,11 +260,10 @@ export function useAnnotation(context: ExtensionContext) {
 
   trigger()
 
-  const preloadWatcher = computed(() => store.preload.value)
-  watchEffect(() => {
-    if (preloadWatcher.value !== undefined) {
-      trigger()
-    }
+  setupWatcher()
+  watch(store.preload, (content) => {
+    transformer.reset(content)
+    trigger()
   })
 
   window.onDidChangeActiveTextEditor(() => {
