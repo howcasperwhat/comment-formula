@@ -53,17 +53,17 @@ export const store = {
   preload: shallowRef<string[]>([]),
 }
 
-function _resolve(path: string): string[] {
+function _resolve(path: string): Uri[] {
   const folders = workspace.workspaceFolders
   if (isAbsolute(path))
-    return glob(path)
+    return glob(path).map(p => Uri.file(p))
   if (!folders || !folders.length)
     return []
   return glob(join(
     // TODO: support multiple workspace
     folders[0].uri.fsPath,
     path,
-  ))
+  )).map(p => Uri.file(p))
 }
 
 function resolve() {
@@ -75,13 +75,13 @@ function resolve() {
 async function preload() {
   store.preload.value = await Promise.all(
     resolve().map(async uri =>
-      (await workspace.fs.readFile(Uri.file(uri))).toString(),
+      (await workspace.fs.readFile(uri)).toString(),
     ),
   )
 }
 
 export async function setupWatcher() {
-  const watcher = useFsWatcher(resolve)
+  const watcher = useFsWatcher(() => resolve().map(uri => uri.fsPath))
   watcher.onDidChange(preload)
   watcher.onDidCreate(preload)
   watcher.onDidDelete(preload)
