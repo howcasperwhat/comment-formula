@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-04-17: v0.5.8
+### Feature
+1. Support `comment-formula.preload` to preload the LaTeX preamble when the editor is opened (thanks to [@hchoi405](https://github.com/hchoi405) via [#17](https://github.com/howcasperwhat/comment-formula/pull/17)).
+
 ## 2025-04-11: v0.5.7
 ### Feature
 1. Supports line granularity hiding code, which is scope granularity in the past.
