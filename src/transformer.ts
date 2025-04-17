@@ -29,26 +29,37 @@ export class FormulaPreview {
 }
 
 class Transformer {
-  private adaptor
-  private document
+  private adaptor: ReturnType<typeof liteAdaptor> | undefined = undefined
+  private document: ReturnType<typeof mathjax.document> | undefined = undefined
+  private context: string | undefined = undefined
   private useAPI
+  private mmlPackages = ['action']
+
   public constructor() {
     this.useAPI = computed(() => config.extension.api.prefix !== '')
-    const mmlPackages = ['action']
     if (!this.useAPI.value) {
       this.adaptor = liteAdaptor()
       RegisterHTMLHandler(this.adaptor)
-      this.document = mathjax.document('', {
-        InputJax: new TeX({
-          packages: [...AllPackages.filter(
-            name => !mmlPackages.includes(name),
-          ), 'physics'],
-        }),
-        OutputJax: new SVG({
-          fontCache: 'local',
-        }),
-      })
     }
+  }
+
+  public reset(context: string) {
+    if (context === this.context)
+      return
+    this.context = context
+    if (this.useAPI.value)
+      return
+    this.document = mathjax.document('', {
+      InputJax: new TeX({
+        packages: [...AllPackages.filter(
+          name => !this.mmlPackages.includes(name),
+        ), 'physics'],
+      }),
+      OutputJax: new SVG({
+        fontCache: 'local',
+      }),
+    })
+    this.document.convert(context)
   }
 
   public async from(tex: string, color?: string): Promise<FormulaPreview> {

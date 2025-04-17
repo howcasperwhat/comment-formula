@@ -7,9 +7,10 @@ import {
   useActiveTextEditor,
   useDocumentText,
   useTextEditorSelections,
+  watch,
 } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
-import { config, enabled, store } from './config'
+import { config, enabled, setupWatcher, store } from './config'
 import { transformer } from './transformer'
 
 export interface FormulaCode {
@@ -257,7 +258,14 @@ export function useAnnotation(context: ExtensionContext) {
     timeout = setTimeout(update, config.extension.interval)
   }
 
-  trigger()
+  watch(store.preload, (content) => {
+    transformer.reset(content.join('\n'))
+    trigger()
+  })
+  // Transformer haven't been set after constructed (before `reset` is called).
+  // However, `setupWatcher` will setup `useFsWatcher` and `preload` watcher (immediate),
+  // so `transformer` will be `reset` before `trigger` immediately by above `WatchCallback`.
+  setupWatcher()
 
   window.onDidChangeActiveTextEditor(() => {
     // If don't clear the decorations when switching files, two problems will occur:
