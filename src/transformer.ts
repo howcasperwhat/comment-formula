@@ -40,7 +40,6 @@ class Transformer {
     if (!this.useAPI.value) {
       this.adaptor = liteAdaptor()
       RegisterHTMLHandler(this.adaptor)
-      this.reset('')
     }
   }
 
