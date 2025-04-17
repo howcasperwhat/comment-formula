@@ -2,7 +2,7 @@ import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
 import { isAbsolute } from 'node:path'
 import process from 'node:process'
-import * as fg from 'fast-glob'
+import { sync as glob, convertPathToPattern as norm } from 'fast-glob'
 import {
   computed,
   defineConfigObject,
@@ -56,14 +56,14 @@ export const store = {
 function _resolve(path: string): Uri[] {
   const folders = workspace.workspaceFolders
   if (isAbsolute(path))
-    return fg.sync(path).map(p => Uri.file(p))
+    return glob(norm(path)).map(p => Uri.file(p))
   if (!folders || !folders.length)
     return []
-  return fg.sync(Uri.joinPath(
+  return glob(norm(Uri.joinPath(
     // TODO: support multiple workspace
     folders[0].uri,
     path,
-  ).fsPath).map(p => Uri.file(p))
+  ).fsPath)).map(p => Uri.file(p))
 }
 
 function resolve() {
