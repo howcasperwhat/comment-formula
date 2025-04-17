@@ -1,8 +1,8 @@
 import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
-import { isAbsolute } from 'node:path'
 import process from 'node:process'
 import { sync as glob } from 'fast-glob'
+import { isAbsolute, join } from 'pathe'
 import {
   computed,
   defineConfigObject,
@@ -53,17 +53,17 @@ export const store = {
   preload: shallowRef<string[]>([]),
 }
 
-function _resolve(path: string): Uri[] {
+function _resolve(path: string): string[] {
   const folders = workspace.workspaceFolders
   if (isAbsolute(path))
-    return glob(path).map(p => Uri.file(p))
+    return glob(path)
   if (!folders || !folders.length)
     return []
-  return glob(Uri.joinPath(
+  return glob(join(
     // TODO: support multiple workspace
-    folders[0].uri,
+    folders[0].uri.fsPath,
     path,
-  ).path).map(p => Uri.file(p))
+  ))
 }
 
 function resolve() {
@@ -75,15 +75,13 @@ function resolve() {
 async function preload() {
   store.preload.value = await Promise.all(
     resolve().map(async uri =>
-      (await workspace.fs.readFile(uri)).toString(),
+      (await workspace.fs.readFile(Uri.file(uri))).toString(),
     ),
   )
 }
 
 export async function setupWatcher() {
-  const watcher = useFsWatcher(() =>
-    resolve().map(uri => uri.path),
-  )
+  const watcher = useFsWatcher(resolve)
   watcher.onDidChange(preload)
   watcher.onDidCreate(preload)
   watcher.onDidDelete(preload)
