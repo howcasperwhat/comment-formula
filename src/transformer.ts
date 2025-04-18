@@ -29,9 +29,9 @@ export class FormulaPreview {
 }
 
 class Transformer {
-  private adaptor: ReturnType<typeof liteAdaptor> | undefined
-  private document: ReturnType<typeof mathjax.document> | undefined
-  private context: string | undefined
+  private adaptor?: ReturnType<typeof liteAdaptor>
+  private document?: ReturnType<typeof mathjax.document>
+  private context?: string
   private useAPI
   private mmlPackages = ['action']
 
