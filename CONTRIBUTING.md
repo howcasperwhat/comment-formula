@@ -4,7 +4,7 @@ Thank you for being interested in this project! We are excited to have you here.
 
 ## Setup (locally)
 
-To set up the project locally, you need to have [Node.js](https://nodejs.org/en/) and [pnpm](https://pnpm.io/) installed.
+To set up the project locally, you need to have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed.
 
 ```bash
 npm i
