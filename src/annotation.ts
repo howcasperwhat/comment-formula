@@ -31,6 +31,9 @@ export function useAnnotation(context: ExtensionContext) {
   const HideCodeOptions: DecorationRenderOptions = {
     textDecoration: 'none; vertical-align:top; display: none;',
   }
+  const MockHeightOptions: DecorationRenderOptions = {
+    textDecoration: `none; vertical-align:top;;`,
+  }
   const AutoTabOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
   }
@@ -121,16 +124,6 @@ export function useAnnotation(context: ExtensionContext) {
     return _maxLine
   }
 
-  const firstNonWhiteSpaceIndex = (
-    line: number,
-  ) => {
-    if (!editor.value)
-      return 0
-    const text = editor.value.document.lineAt(line).text
-    const result = text.search(/\S/)
-    return result === -1 ? text.length : result
-  }
-
   const getLeadingWhitespaceWidth = (
     line: number,
   ) => {
@@ -144,6 +137,29 @@ export function useAnnotation(context: ExtensionContext) {
     return width
   }
 
+  useActiveEditorDecorations(AutoTabOptions, () =>
+    (!config.extension.hidden || !config.extension.autotab)
+      ? []
+      : store.formulas.value
+          .filter(({ code, preview }) =>
+            preview.inline
+            && !code.range.isSingleLine
+            && needHiding(code.range),
+          )
+          .map(({ code, preview }) => {
+            const start = code.range.start.line
+            const end = code.range.end.line
+            const leading = getLeadingWhitespaceWidth(start)
+            return Array.from({ length: end - start }).map((_, i) =>
+              decorate(
+                new Position(start + i + 1, 0),
+                'before',
+                preview.inline,
+                `width:${leading}ch;${INJECTION};`,
+              ),
+            )
+          })
+          .flat())
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
     config.extension.multiple === 'none'
       ? []
@@ -152,29 +168,35 @@ export function useAnnotation(context: ExtensionContext) {
             const start = code.range.start.line
             const end = code.range.end.line
             const line = config.extension.multiple === 'before'
-              ? start
+              ? end
               : longestLine(code, preview)
-            const col = firstNonWhiteSpaceIndex(start)
-            return [decorate(
-              new Position(line, col),
+            return decorate(
+              new Position(line, 0),
               config.extension.multiple,
               preview.inline,
-              `width:${preview.width}px;${INJECTION};top:${
+              `width:0;${INJECTION};top:${
                 50 + ((start + end) / 2 - line) * 100
               }%`,
               Uri.parse(preview.url),
-            )].concat(config.extension.multiple === 'after'
-              ? []
-              : Array.from({ length: end - start }, (_, i) =>
-                  decorate(
-                    new Position(start + i + 1, col),
-                    config.extension.multiple,
-                    preview.inline,
-                    `width:${preview.width}px;${INJECTION}`,
-                  )),
             )
-          })
-          .flat())
+          }))
+  useActiveEditorDecorations(MockHeightOptions, () =>
+    config.extension.multiple !== 'before'
+      ? []
+      : store.formulas.value.filter(({ code }) =>
+          !code.range.isSingleLine
+          && !needHiding(code.range),
+        ).map(({ code, preview }) => {
+          const start = code.range.start.line
+          const end = code.range.end.line
+          return Array.from({ length: end - start + 1 }, (_, i) =>
+            decorate(
+              new Position(start + i, 0),
+              config.extension.multiple,
+              preview.inline,
+              `width:${preview.width}px;${INJECTION}`,
+            ))
+        }).flat())
   useActiveEditorDecorations(SinglePreviewOptions, () =>
     config.extension.single === 'none'
       ? []
@@ -203,25 +225,6 @@ export function useAnnotation(context: ExtensionContext) {
             && needHiding(code.range),
           )
           .map(({ code }) => ({ range: code.range }),
-          ))
-
-  useActiveEditorDecorations(AutoTabOptions, () =>
-    (!config.extension.hidden
-      || !config.extension.autotab
-      || config.extension.multiple === 'before')
-      ? []
-      : store.formulas.value
-          .filter(({ code, preview }) =>
-            preview.inline
-            && !code.range.isSingleLine
-            && needHiding(code.range),
-          )
-          .map(({ code, preview }) => decorate(
-            new Position(longestLine(code, preview), 0),
-            'before',
-            preview.inline,
-            `width:${getLeadingWhitespaceWidth(code.range.start.line)}ch;${INJECTION};`,
-          ),
           ))
 
   const reg = /\$\$([\s\S]*?)\$\$/g
