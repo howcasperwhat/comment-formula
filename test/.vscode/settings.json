@@ -5,7 +5,7 @@
   "comment-formula.annotation": true,
   "comment-formula.completion": true,
   "comment-formula.hidden": "scope",
-  "comment-formula.autotab": true, // default to false
+  "comment-formula.autotab": true,
   "comment-formula.color": "auto",
   "comment-formula.inline": "all",
   "comment-formula.interval": 200,
