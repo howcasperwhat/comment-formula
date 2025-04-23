@@ -149,13 +149,12 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
-            const leading = getLeadingWhitespaceWidth(start)
             return Array.from({ length: end - start }).map((_, i) =>
               decorate(
                 new Position(start + i + 1, 0),
                 'before',
                 preview.inline,
-                `width:${leading}ch;${INJECTION};`,
+                `width:${getLeadingWhitespaceWidth(start)}ch;${INJECTION};`,
               ),
             )
           })
@@ -167,17 +166,14 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
-            const line = config.extension.multiple === 'before'
-              ? end
-              : !needHiding(code.range) ? longestLine(code, preview) : end
-            const col = config.extension.multiple === 'before'
-              ? !needHiding(code.range) ? getLeadingWhitespaceWidth(start) : 0
-              : 0
-            const pos = config.extension.multiple === 'before'
-              ? new Position(line, col)
-              : !needHiding(code.range) ? new Position(line, col) : code.range
-            // eslint-disable-next-line no-console
-            console.log(line)
+
+            const hide = needHiding(code.range)
+            const before = config.extension.multiple === 'before'
+
+            const line = (!before && !hide) ? longestLine(code, preview) : end
+            const col = (before && !hide) ? getLeadingWhitespaceWidth(start) : 0
+            const pos = (!before && hide) ? code.range : new Position(line, col)
+
             return decorate(
               pos,
               config.extension.multiple,
@@ -238,8 +234,6 @@ export function useAnnotation(context: ExtensionContext) {
   const reg = /\$\$([\s\S]*?)\$\$/g
 
   const update = async () => {
-    // eslint-disable-next-line no-console
-    console.log('update')
     if (!enabled(editor.value) || !config.extension.annotation)
       return
     const codes: FormulaCode[] = []
