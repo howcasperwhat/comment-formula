@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2025-04-23: v0.5.9
+### Fix
+1. Bug in multiple line equations with compact form, regarding [#18](https://github.com/howcasperwhat/comment-formula/issues/18)
+### Miscellaneous
+1. Improve UX of multiple line preview. 
+
 ## 2025-04-17: v0.5.8
 ### Feature
 1. Support `comment-formula.preload` to preload the LaTeX preamble when the editor is opened (thanks to [@hchoi405](https://github.com/hchoi405) via [#17](https://github.com/howcasperwhat/comment-formula/pull/17)).
