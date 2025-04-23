@@ -12,8 +12,7 @@ import {
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { config, enabled, setupWatcher, store } from './config'
 import { transformer } from './transformer'
-
-type Optional<T> = T | undefined
+import { debounce } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -256,11 +255,7 @@ export function useAnnotation(context: ExtensionContext) {
         .then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
-  let timeout: Optional<ReturnType<typeof setTimeout>>
-  const trigger = () => {
-    clearTimeout(timeout)
-    timeout = setTimeout(update, config.extension.interval)
-  }
+  const trigger = debounce(update, config.extension.interval)
 
   watch(store.preload, (content) => {
     transformer.reset(content.join('\n'))
