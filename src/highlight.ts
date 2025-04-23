@@ -25,9 +25,9 @@ export function useHighlight(context: ExtensionContext) {
     const configScopes = config.extension.scopes.toSorted()
     const packageScopes = await packageJSON.contributes.grammars.at(-1).injectTo.toSorted()
     const formulaScopes = await formulaJSON._scopes.toSorted()
-    const isChnaged = ref(false)
+    const isChanged = ref(false)
     if (configScopes.toString() !== packageScopes.toString()) {
-      isChnaged.value = true
+      isChanged.value = true
       packageJSON.contributes.grammars[
         packageJSON.contributes.grammars.length - 1
       ].injectTo = configScopes
@@ -39,7 +39,7 @@ export function useHighlight(context: ExtensionContext) {
       )
     }
     if (configScopes.toString() !== formulaScopes.toString()) {
-      isChnaged.value = true
+      isChanged.value = true
       formulaJSON._scopes = configScopes
       formulaJSON.injectionSelector = [
         `L:${configScopes.join(',')}`,
@@ -52,7 +52,7 @@ export function useHighlight(context: ExtensionContext) {
         )),
       )
     }
-    (isChnaged.value && (await window.showInformationMessage(
+    (isChanged.value && (await window.showInformationMessage(
       'You have updated the scopes should be highlighted, please reload the window to take effect.',
       'Reload Window',
     )) === 'Reload Window')
