@@ -169,9 +169,17 @@ export function useAnnotation(context: ExtensionContext) {
             const end = code.range.end.line
             const line = config.extension.multiple === 'before'
               ? end
-              : longestLine(code, preview)
+              : !needHiding(code.range) ? longestLine(code, preview) : end
+            const col = config.extension.multiple === 'before'
+              ? !needHiding(code.range) ? getLeadingWhitespaceWidth(start) : 0
+              : 0
+            const pos = config.extension.multiple === 'before'
+              ? new Position(line, col)
+              : !needHiding(code.range) ? new Position(line, col) : code.range
+            // eslint-disable-next-line no-console
+            console.log(line)
             return decorate(
-              new Position(line, 0),
+              pos,
               config.extension.multiple,
               preview.inline,
               `width:0;${INJECTION};top:${
@@ -191,7 +199,7 @@ export function useAnnotation(context: ExtensionContext) {
           const end = code.range.end.line
           return Array.from({ length: end - start + 1 }, (_, i) =>
             decorate(
-              new Position(start + i, 0),
+              new Position(start + i, getLeadingWhitespaceWidth(start)),
               config.extension.multiple,
               preview.inline,
               `width:${preview.width}px;${INJECTION}`,
@@ -230,6 +238,8 @@ export function useAnnotation(context: ExtensionContext) {
   const reg = /\$\$([\s\S]*?)\$\$/g
 
   const update = async () => {
+    // eslint-disable-next-line no-console
+    console.log('update')
     if (!enabled(editor.value) || !config.extension.annotation)
       return
     const codes: FormulaCode[] = []
