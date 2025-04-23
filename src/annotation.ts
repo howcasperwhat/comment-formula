@@ -3,6 +3,7 @@ import type { FormulaPreview } from './transformer'
 import type { RelativePosition } from './types'
 import {
   computed,
+  shallowRef,
   useActiveEditorDecorations,
   useActiveTextEditor,
   useDocumentText,
@@ -12,6 +13,9 @@ import {
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { config, enabled, setupWatcher, store } from './config'
 import { transformer } from './transformer'
+import { debounce } from './utils'
+
+type Optional<T> = T | undefined
 
 export interface FormulaCode {
   range: Range
@@ -159,11 +163,13 @@ export function useAnnotation(context: ExtensionContext) {
             )
           })
           .flat())
-  useActiveEditorDecorations(MultiplePreviewOptions, () =>
+  const MultiplePreviewUpdate = () =>
     config.extension.multiple === 'none'
       ? []
       : store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
           .map(({ code, preview }) => {
+            // eslint-disable-next-line no-console
+            console.log('MultiplePreviewUpdate')
             const start = code.range.start.line
             const end = code.range.end.line
 
@@ -178,12 +184,19 @@ export function useAnnotation(context: ExtensionContext) {
               pos,
               config.extension.multiple,
               preview.inline,
-              `width:0;${INJECTION};top:${
-                50 + ((start + end) / 2 - line) * 100
+              `width:0;${INJECTION};top:${50 + ((start + end) / 2 - line) * 100
               }%`,
               Uri.parse(preview.url),
             )
-          }))
+          })
+  const MultiplePreviewDecorations = shallowRef<DecorationOptions[]>([])
+  watch(
+    [store.formulas, editor, selections],
+    debounce(() => {
+      MultiplePreviewDecorations.value = MultiplePreviewUpdate()
+    }, config.extension.interval),
+  )
+  useActiveEditorDecorations(MultiplePreviewOptions, MultiplePreviewDecorations)
   useActiveEditorDecorations(MockHeightOptions, () =>
     config.extension.multiple !== 'before'
       ? []
@@ -255,13 +268,9 @@ export function useAnnotation(context: ExtensionContext) {
         .then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
-
-  let timeout: Parameters<typeof clearTimeout>[0]
+  let timeout: Optional<ReturnType<typeof setTimeout>>
   const trigger = () => {
-    if (timeout) {
-      clearTimeout(timeout)
-      timeout = undefined
-    }
+    clearTimeout(timeout)
     timeout = setTimeout(update, config.extension.interval)
   }
 
