@@ -3,9 +3,9 @@ import type { FormulaPreview } from './transformer'
 import type { RelativePosition } from './types'
 import {
   computed,
-  useActiveEditorDecorations,
   useActiveTextEditor,
   useDocumentText,
+  useEditorDecorations,
   useTextEditorSelections,
   watch,
 } from 'reactive-vscode'
@@ -42,6 +42,18 @@ export function useAnnotation(context: ExtensionContext) {
   const editor = useActiveTextEditor()
   const selections = useTextEditorSelections(editor)
   const text = useDocumentText(() => editor.value?.document)
+
+  function useActiveEditorDecorations(
+    decorationTypeOrOptions: Parameters<typeof useEditorDecorations>[1],
+    rangesOrOptions: Parameters<typeof useEditorDecorations>[2],
+  ) {
+    useEditorDecorations(
+      editor,
+      decorationTypeOrOptions,
+      rangesOrOptions,
+      { updateOn: ['effect'] },
+    )
+  }
 
   const INJECTION = [
     'position:relative',
@@ -131,11 +143,11 @@ export function useAnnotation(context: ExtensionContext) {
     if (!editor.value)
       return 0
     const content = editor.value.document.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
-    const width = editor.value
-      ? (content!.match(/\t/g)?.length ?? 0) * (Number.parseInt(`${editor.value.options.tabSize}`) || 0)
-      + (content!.match(/ /g)?.length ?? 0) * 1
-      : 0
-    return width
+    const tabSize = Number.parseInt(`${editor.value.options.tabSize}`) || 0
+    const spaceSize = 1
+    const tabCount = content.match(/\t/g)?.length ?? 0
+    const spaceCount = content.match(/ /g)?.length ?? 0
+    return (tabCount * tabSize) + (spaceCount * spaceSize)
   }
 
   useActiveEditorDecorations(AutoTabOptions, () =>
