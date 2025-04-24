@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-04-24: v0.5.10
+### Performance Optimization
+1. Avoid update twice when editor updates in `useActiveEditorDecorations`.
+
 ## 2025-04-23: v0.5.9
 ### Fix
 1. Bug in multiple line equations with compact form, regarding [#18](https://github.com/howcasperwhat/comment-formula/issues/18)

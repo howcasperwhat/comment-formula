@@ -1,17 +1,12 @@
 import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
 import process from 'node:process'
-import { sync as glob } from 'fast-glob'
-import { isAbsolute, join } from 'pathe'
 import {
   computed,
   defineConfigObject,
   shallowRef,
-  useFsWatcher,
   useIsDarkTheme,
-  watch,
 } from 'reactive-vscode'
-import { Uri, workspace } from 'vscode'
 import * as Meta from './generated/meta'
 
 // @see: https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/config/fontInfo.ts#L14
@@ -51,41 +46,6 @@ export const store = {
   formulas: shallowRef<Formula[]>([]),
   message: '**WRONG FORMULA FORMAT**',
   preload: shallowRef<string[]>([]),
-}
-
-function _resolve(path: string): Uri[] {
-  const folders = workspace.workspaceFolders
-  if (isAbsolute(path))
-    return glob(path).map(p => Uri.file(p))
-  if (!folders || !folders.length)
-    return []
-  return glob(join(
-    // TODO: support multiple workspace
-    folders[0].uri.fsPath,
-    path,
-  )).map(p => Uri.file(p))
-}
-
-function resolve() {
-  return Array.from(new Set(
-    config.extension.preload,
-  )).map(p => _resolve(p)).flat()
-}
-
-async function preload() {
-  store.preload.value = await Promise.all(
-    resolve().map(async uri =>
-      (await workspace.fs.readFile(uri)).toString(),
-    ),
-  )
-}
-
-export async function setupWatcher() {
-  const watcher = useFsWatcher(() => resolve().map(uri => uri.fsPath))
-  watcher.onDidChange(preload)
-  watcher.onDidCreate(preload)
-  watcher.onDidDelete(preload)
-  watch(() => config.extension.preload, preload, { immediate: true })
 }
 
 export function isLarge(height: number) {

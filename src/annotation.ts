@@ -10,7 +10,8 @@ import {
   watch,
 } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
-import { config, enabled, setupWatcher, store } from './config'
+import { config, enabled, store } from './config'
+import { setupWatcher } from './preload'
 import { transformer } from './transformer'
 import { debounce } from './utils'
 
