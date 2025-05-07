@@ -41,25 +41,29 @@ You are supposed to write formulas between `$$` and `$$`.
 
 <!-- configs -->
 
-| Key                          | Description                                                                                                                                 | Type      | Default                       |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------- |
-| `comment-formula.color`      | Color of rendered formulas.                                                                                                                 | `string`  | `"auto"`                      |
-| `comment-formula.inline`     | When will the inline formula preview be displayed.                                                                                          | `string`  | `"all"`                       |
-| `comment-formula.languages`  | Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers | `array`   | `["c","cpp","java","python"]` |
-| `comment-formula.scopes`     | Enable highlight in these scopes.                                                                                                           | `array`   | `[]`                          |
-| `comment-formula.interval`   | Formula update interval(ms).                                                                                                                | `number`  | `200`                         |
-| `comment-formula.code`       | Style of matched LaTeX code.                                                                                                                | `string`  | `"font-weight: bold;"`        |
-| `comment-formula.preview`    | Style of the inline formula preview.                                                                                                        | `string`  | `""`                          |
-| `comment-formula.annotation` | Enable render formula for preview or not.                                                                                                   | `boolean` | `true`                        |
-| `comment-formula.completion` | Enable intelligent completion.                                                                                                              | `boolean` | `true`                        |
-| `comment-formula.multiple`   | Set preview position of multiple line LaTeX or disable it.                                                                                  | `string`  | `"after"`                     |
-| `comment-formula.single`     | Set preview position of single line LaTeX or disable it.                                                                                    | `string`  | `"after"`                     |
-| `comment-formula.hidden`     | Enable hiding code when selections are out of range.                                                                                        | `string`  | `"scope"`                     |
-| `comment-formula.autotab`    | Enable auto tabbing rendered formulas.                                                                                                      | `boolean` | `true`                        |
-| `comment-formula.scale`      | Scale factor of the preview formula.                                                                                                        | `number`  | `1`                           |
-| `comment-formula.api.prefix` | API prefix (Experimental).                                                                                                                  | `string`  | `""`                          |
-| `comment-formula.api.suffix` | API suffix (Experimental).                                                                                                                  | `string`  | `""`                          |
-| `comment-formula.preload`    | Paths to files containing LaTeX preamble to preload.                                                                                        | `array`   | `[]`                          |
+| Key                            | Description                                                                                      | Type      | Default                       |
+| ------------------------------ | ------------------------------------------------------------------------------------------------ | --------- | ----------------------------- |
+| `comment-formula.color`        | Color of rendered formulas.                                                                      | `string`  | `"auto"`                      |
+| `comment-formula.inline`       | When will the inline formula preview be displayed.                                               | `string`  | `"all"`                       |
+| `comment-formula.languages`    | Enable extension in these languages id. https://code.visualstudio.com/docs/languages/identifiers | `array`   | `["c","cpp","java","python"]` |
+| `comment-formula.glob.include` | Enable extension in these file pattern.                                                          | `array`   | `[]`                          |
+| `comment-formula.glob.exclude` | Disable extension in these file pattern.                                                         | `array`   | `[]`                          |
+| `comment-formula.ext.include`  | Enable extension in files with these extnames.                                                   | `array`   | `[]`                          |
+| `comment-formula.ext.exclude`  | Disable extension in files with these extnames.                                                  | `array`   | `[]`                          |
+| `comment-formula.scopes`       | Enable highlight in these scopes.                                                                | `array`   | `[]`                          |
+| `comment-formula.interval`     | Formula update interval(ms).                                                                     | `number`  | `200`                         |
+| `comment-formula.code`         | Style of matched LaTeX code.                                                                     | `string`  | `"font-weight: bold;"`        |
+| `comment-formula.preview`      | Style of the inline formula preview.                                                             | `string`  | `""`                          |
+| `comment-formula.annotation`   | Enable render formula for preview or not.                                                        | `boolean` | `true`                        |
+| `comment-formula.completion`   | Enable intelligent completion.                                                                   | `boolean` | `true`                        |
+| `comment-formula.multiple`     | Set preview position of multiple line LaTeX or disable it.                                       | `string`  | `"after"`                     |
+| `comment-formula.single`       | Set preview position of single line LaTeX or disable it.                                         | `string`  | `"after"`                     |
+| `comment-formula.hidden`       | Enable hiding code when selections are out of range.                                             | `string`  | `"scope"`                     |
+| `comment-formula.autotab`      | Enable auto tabbing rendered formulas.                                                           | `boolean` | `true`                        |
+| `comment-formula.scale`        | Scale factor of the preview formula.                                                             | `number`  | `1`                           |
+| `comment-formula.api.prefix`   | API prefix (Experimental).                                                                       | `string`  | `""`                          |
+| `comment-formula.api.suffix`   | API suffix (Experimental).                                                                       | `string`  | `""`                          |
+| `comment-formula.preload`      | Paths to files containing LaTeX preamble to preload.                                             | `array`   | `[]`                          |
 
 <!-- configs -->
 

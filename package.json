@@ -51,7 +51,39 @@
             "java",
             "python"
           ],
-          "description": "Enable comment-formula in these languages. LanguageId: https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers"
+          "description": "Enable extension in these languages id. https://code.visualstudio.com/docs/languages/identifiers"
+        },
+        "comment-formula.glob.include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Enable extension in these file pattern."
+        },
+        "comment-formula.glob.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Disable extension in these file pattern."
+        },
+        "comment-formula.ext.include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Enable extension in files with these extnames."
+        },
+        "comment-formula.ext.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Disable extension in files with these extnames."
         },
         "comment-formula.scopes": {
           "type": "array",
@@ -59,6 +91,7 @@
             "type": "string"
           },
           "default": [],
+          "deprecationMessage": "Use MathJax Highlight instead, this feature would be removed in later versions. https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight",
           "description": "Enable highlight in these scopes."
         },
         "comment-formula.interval": {

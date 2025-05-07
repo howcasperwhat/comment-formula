@@ -1,6 +1,5 @@
 import { isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
-import { sync, async } from 'fast-glob'
 
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
