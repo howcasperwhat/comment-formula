@@ -1,6 +1,6 @@
-import { sync as glob } from 'fast-glob'
 import { isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
+import { sync, async } from 'fast-glob'
 
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
@@ -17,19 +17,14 @@ export function debounce<T extends (...args: any[]) => any>(
 
 export function resolve(path: string) {
   if (isAbsolute(path))
-    return glob(path)
+    return path
   const folders = workspace.workspaceFolders
-  if (!folders || !folders.length)
-    return []
-  return glob(join(
-    // TODO: support multiple workspace
-    folders[0].uri.fsPath,
-    path,
-  ))
+  return folders?.length
+    ? folders.map(f => join(f.uri.fsPath, path))
+    : []
 }
 
-export function resolves(paths: string[]) {
-  return Array.from(new Set(paths))
-    .map(p => resolve(p))
-    .flat()
+export function resolves(path: string | string[]) {
+  path = Array.isArray(path) ? path : [path]
+  return Array.from(new Set(path)).map(p => resolve(p)).flat()
 }

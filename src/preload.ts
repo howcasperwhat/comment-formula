@@ -2,10 +2,11 @@ import { useFsWatcher, watch } from 'reactive-vscode'
 import { Uri, workspace } from 'vscode'
 import { config, store } from './config'
 import { resolves } from './utils'
+import { sync as glob } from 'fast-glob'
 
 async function preload() {
   store.preload.value = await Promise.all(
-    resolves(config.extension.preload).map(async p =>
+    glob(resolves(config.extension.preload)).map(async p =>
       (await workspace.fs.readFile(Uri.file(p))).toString(),
     ),
   )
@@ -13,8 +14,8 @@ async function preload() {
 
 export async function setupWatcher() {
   const watcher = useFsWatcher(() =>
-    resolves(config.extension.preload)
-      .map(p => Uri.file(p).fsPath),
+    glob(resolves(config.extension.preload))
+    .map(p => Uri.file(p).fsPath),
   )
   watcher.onDidChange(preload)
   watcher.onDidCreate(preload)
