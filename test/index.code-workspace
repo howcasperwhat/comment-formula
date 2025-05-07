@@ -26,11 +26,10 @@
 		"comment-formula.preload": [    // default to []
 			"styles/1st.cls"
 		],
-		"comment-formula.scopes": [],         // recommended to use MathJax Highlight
 		"comment-formula.languages": ["*"],   // default to ["c", "cpp", "java", "python"]
 		"comment-formula.ext.include": [],
 		"comment-formula.ext.exclude": [],
 		"comment-formula.glob.include": [],
-		"comment-formula.glob.exclude": [],
+		"comment-formula.glob.exclude": []
 	}
 }

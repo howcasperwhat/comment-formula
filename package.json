@@ -51,7 +51,7 @@
             "java",
             "python"
           ],
-          "description": "Enable extension in these languages id. https://code.visualstudio.com/docs/languages/identifiers"
+          "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
         },
         "comment-formula.glob.include": {
           "type": "array",
@@ -91,8 +91,8 @@
             "type": "string"
           },
           "default": [],
-          "deprecationMessage": "Use MathJax Highlight instead, this feature would be removed in later versions. https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight",
-          "description": "Enable highlight in these scopes."
+          "description": "Enable highlight in these scopes.",
+          "markdownDeprecationMessage": "Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) instead, this feature would be removed in later versions."
         },
         "comment-formula.interval": {
           "type": "number",
