@@ -187,12 +187,13 @@ export function useAnnotation(context: ExtensionContext) {
             const line = (!before && !hide) ? longestLine(code, preview) : end
             const col = (before && !hide) ? getLeadingWhitespaceWidth(start) : 0
             const pos = (!before && hide) ? code.range : new Position(line, col)
+            const style = before ? 'position:absolute' : ''
 
             return decorate(
               pos,
               config.extension.multiple,
               preview.inline,
-              `${config.extension.preview};${INJECTION};position:absolute;top:${50 + ((start + end) / 2 - line) * 100}%`,
+              `${config.extension.preview};${INJECTION};${style};top:${50 + ((start + end) / 2 - line) * 100}%`,
               Uri.parse(preview.url),
             )
           }))
