@@ -1,5 +1,14 @@
 # ChangeLog
 
+## 2025-05-08: v0.5.11
+### Feature
+1. Support more flexible configuration strategies to enable extension.
+2. `preload` for multiple folders workspaces is available now.
+### Fix
+1. `preview` style display error.
+### Deprecation Warning
+1. The configuration `comment-formula.scopes` is now deprecated, and would be removed in the next version. Please use [MathJax Highlight](https://github.com/howcasperwhat/mathjax-highlight) instead.
+
 ## 2025-04-24: v0.5.10
 ### Performance Optimization
 1. Avoid update twice when editor updates in `useActiveEditorDecorations`.
