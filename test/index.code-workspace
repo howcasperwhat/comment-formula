@@ -1,39 +1,32 @@
 {
-	"folders": [
-		{
-			"path": "wokespace-2"
-		},
-		{
-			"path": "wokespace-1"
-		}
-	],
-	"settings": {
-		"editor.formatOnSave": false,
-		"editor.formatOnType": false,
-		"editor.formatOnPaste": false,
-		"comment-formula.annotation": true,
-		"comment-formula.completion": true,
-		"comment-formula.hidden": "scope",
-		"comment-formula.autotab": true,
-		"comment-formula.color": "auto",
-		"comment-formula.inline": "all",
-		"comment-formula.interval": 200,
-		"comment-formula.single": "after",
-		"comment-formula.multiple": "before",
-		"comment-formula.code": "",
-		"comment-formula.preview": "",  // default to "font-weight: bold;"
-		"comment-formula.scale": 0.9,   // default to 1.0
-		"comment-formula.preload": [    // default to []
-			"styles/1st.cls"
-		],
-		"comment-formula.lang.include": ["*"],
-		"comment-formula.lang.exclude": [],
-		"comment-formula.ext.include": [],
-		"comment-formula.ext.exclude": [],
-		"comment-formula.glob.include": [],
-		"comment-formula.glob.exclude": [],
-		// Deprecation Options
-		"comment-formula.languages": [],
-		"comment-formula.scopes": []
-	}
+  "folders": [
+    {
+      "path": "wokespace-2"
+    },
+    {
+      "path": "wokespace-1"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": false,
+    "comment-formula.annotation": true,
+    "comment-formula.completion": true,
+    "comment-formula.hidden": "scope",
+    "comment-formula.autotab": true,
+    "comment-formula.color": "auto",
+    "comment-formula.inline": "all",
+    "comment-formula.interval": 200,
+    "comment-formula.single": "after",
+    "comment-formula.multiple": "after",
+    "comment-formula.code": "",
+    "comment-formula.preview": "",  // default to "font-weight: bold;"
+    "comment-formula.scale": 0.9,   // default to 1.0
+    "comment-formula.preload": [    // default to []
+      "styles/1st.cls"
+    ],
+    "comment-formula.languages": [],
+    "comment-formula.patterns": ["*.py"],
+  }
 }

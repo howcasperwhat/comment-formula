@@ -1,4 +1,4 @@
-import type { CompletionItemProvider, ExtensionContext, TextDocument } from 'vscode'
+import type { CompletionItemProvider, DocumentSelector, ExtensionContext, TextDocument } from 'vscode'
 import {
   CompletionItem,
   CompletionItemKind,
@@ -14,6 +14,7 @@ import {
   DELIMITERS,
   ENVIRONMENTS,
 } from './store/mathjax'
+import { resolves } from './utils'
 
 export function useCompletion(context: ExtensionContext) {
   const symbol = '$'
@@ -120,14 +121,19 @@ export function useCompletion(context: ExtensionContext) {
     },
   }
 
+  const selector: DocumentSelector = [
+    ...config.extension.languages,
+    ...resolves(config.extension.patterns)
+      .map(pattern => ({ pattern })),
+  ]
   context.subscriptions.push(
     languages.registerCompletionItemProvider(
-      config.extension.languages,
+      selector,
       frame,
       symbol,
     ),
     languages.registerCompletionItemProvider(
-      config.extension.languages,
+      selector,
       unit,
       flag,
     ),

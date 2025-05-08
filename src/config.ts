@@ -1,8 +1,7 @@
 import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
 import process from 'node:process'
-import { sync } from 'fast-glob'
-import { extname } from 'pathe'
+import { isMatch } from 'micromatch'
 import {
   computed,
   defineConfigObject,
@@ -56,26 +55,13 @@ export function enabled(editor?: TextEditor) {
     return false
 
   const { fileName: fname, languageId: langid } = editor.document
-  const { languages, lang, ext, glob } = config.extension
+  const { languages, patterns } = config.extension
 
   if (languages.includes(langid))
     return true
 
-  if ((lang.include.includes('*') || lang.include.includes(langid))
-    && !lang.exclude.includes(langid)) {
+  if (isMatch(fname, resolves(patterns), { dot: true }))
     return true
-  }
-
-  const ename = extname(fname).slice(1)
-  if ((ext.include.includes('*') || ext.include.includes(ename))
-    && !ext.exclude.includes(ename)) {
-    return true
-  }
-
-  if ((sync(resolves(glob.include)).includes(fname))
-    && !sync(resolves(glob.exclude)).includes(fname)) {
-    return true
-  }
 
   return false
 }

@@ -40,53 +40,13 @@
           "default": "all",
           "description": "When will the inline formula preview be displayed."
         },
-        "comment-formula.lang.include": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
-        },
-        "comment-formula.lang.exclude": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "markdownDescription": "Disable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
-        },
-        "comment-formula.glob.include": {
+        "comment-formula.patterns": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": [],
           "description": "Enable extension in these file pattern."
-        },
-        "comment-formula.glob.exclude": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "Disable extension in these file pattern."
-        },
-        "comment-formula.ext.include": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "Enable extension in files with these extnames."
-        },
-        "comment-formula.ext.exclude": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "Disable extension in files with these extnames."
         },
         "comment-formula.languages": {
           "type": "array",
@@ -99,8 +59,7 @@
             "java",
             "python"
           ],
-          "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers).",
-          "markdownDeprecationMessage": "Use `comment-formula.lang.include` instead, this feature would be removed in later versions."
+          "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
         },
         "comment-formula.scopes": {
           "type": "array",
@@ -232,12 +191,14 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.2.0",
+    "@types/micromatch": "^4.0.9",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
     "@vscode/vsce": "^3.3.2",
     "eslint": "^9.20.0",
     "fast-glob": "^3.3.3",
     "mathjax-full": "^3.2.2",
+    "micromatch": "^4.0.8",
     "pathe": "^2.0.3",
     "reactive-vscode": "^0.2.13",
     "tsup": "^8.3.6",
