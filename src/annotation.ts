@@ -210,7 +210,7 @@ export function useAnnotation(context: ExtensionContext) {
               new Position(start + i, getLeadingWhitespaceWidth(start)),
               config.extension.multiple,
               preview.inline,
-              `width:${preview.width}px;${INJECTION}`,
+              `width:${preview.width}px;${INJECTION};`,
             ))
         }).flat())
   useActiveEditorDecorations(SinglePreviewOptions, () =>
