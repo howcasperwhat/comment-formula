@@ -40,18 +40,21 @@
           "default": "all",
           "description": "When will the inline formula preview be displayed."
         },
-        "comment-formula.languages": {
+        "comment-formula.lang.include": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "default": [
-            "c",
-            "cpp",
-            "java",
-            "python"
-          ],
+          "default": [],
           "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
+        },
+        "comment-formula.lang.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Disable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
         },
         "comment-formula.glob.include": {
           "type": "array",
@@ -85,13 +88,27 @@
           "default": [],
           "description": "Disable extension in files with these extnames."
         },
+        "comment-formula.languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "c",
+            "cpp",
+            "java",
+            "python"
+          ],
+          "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers).",
+          "markdownDeprecationMessage": "Use `comment-formula.lang.include` instead, this feature would be removed in later versions."
+        },
         "comment-formula.scopes": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": [],
-          "description": "Enable highlight in these scopes.",
+          "markdownDescription": "Enable highlight in these scopes. Use command `Developer: Inspect Editor Tokens and Scopes` to determine the global scopes.",
           "markdownDeprecationMessage": "Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) instead, this feature would be removed in later versions."
         },
         "comment-formula.interval": {

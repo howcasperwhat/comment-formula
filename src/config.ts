@@ -55,22 +55,25 @@ export function enabled(editor?: TextEditor) {
   if (!editor || !editor.document)
     return false
 
-  const { fileName: name, languageId: lang } = editor.document
-  const { languages, glob, ext } = config.extension
+  const { fileName: fname, languageId: langid } = editor.document
+  const { languages, lang, ext, glob } = config.extension
 
-  if (languages.includes('*')
-    || languages.includes(lang)) {
+  if (languages.includes(langid))
+    return true
+
+  if ((lang.include.includes('*') || lang.include.includes(langid))
+    && !lang.exclude.includes(langid)) {
     return true
   }
 
-  const ename = extname(name).slice(1)
+  const ename = extname(fname).slice(1)
   if ((ext.include.includes('*') || ext.include.includes(ename))
     && !ext.exclude.includes(ename)) {
     return true
   }
 
-  if ((sync(resolves(glob.include)).includes(name))
-    && !sync(resolves(glob.exclude)).includes(name)) {
+  if ((sync(resolves(glob.include)).includes(fname))
+    && !sync(resolves(glob.exclude)).includes(fname)) {
     return true
   }
 

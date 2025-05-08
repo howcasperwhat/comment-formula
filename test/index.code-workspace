@@ -19,17 +19,21 @@
 		"comment-formula.inline": "all",
 		"comment-formula.interval": 200,
 		"comment-formula.single": "after",
-		"comment-formula.multiple": "after",
+		"comment-formula.multiple": "before",
 		"comment-formula.code": "",
 		"comment-formula.preview": "",  // default to "font-weight: bold;"
 		"comment-formula.scale": 0.9,   // default to 1.0
 		"comment-formula.preload": [    // default to []
 			"styles/1st.cls"
 		],
-		"comment-formula.languages": ["*"],   // default to ["c", "cpp", "java", "python"]
+		"comment-formula.lang.include": ["*"],
+		"comment-formula.lang.exclude": [],
 		"comment-formula.ext.include": [],
 		"comment-formula.ext.exclude": [],
 		"comment-formula.glob.include": [],
-		"comment-formula.glob.exclude": []
+		"comment-formula.glob.exclude": [],
+		// Deprecation Options
+		"comment-formula.languages": [],
+		"comment-formula.scopes": []
 	}
 }
