@@ -64,12 +64,12 @@ export function enabled(editor?: TextEditor) {
   }
 
   const ename = extname(name).slice(1)
-  if (ext.include.includes(ename)
+  if ((ext.include.includes('*') || ext.include.includes(ename))
     && !ext.exclude.includes(ename)) {
     return true
   }
 
-  if (sync(resolves(glob.include)).includes(name)
+  if ((sync(resolves(glob.include)).includes(name))
     && !sync(resolves(glob.exclude)).includes(name)) {
     return true
   }
