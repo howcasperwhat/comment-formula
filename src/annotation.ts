@@ -82,7 +82,7 @@ export function useAnnotation(context: ExtensionContext) {
       ? {
           [relative]: {
             contentIconPath,
-            border: `none;${injection};${config.extension.preview};`,
+            border: `none;${injection};`,
           },
         }
       : undefined,
@@ -192,8 +192,7 @@ export function useAnnotation(context: ExtensionContext) {
               pos,
               config.extension.multiple,
               preview.inline,
-              `width:0;${INJECTION};top:${50 + ((start + end) / 2 - line) * 100
-              }%`,
+              `${config.extension.preview};${INJECTION};position:absolute;top:${50 + ((start + end) / 2 - line) * 100}%`,
               Uri.parse(preview.url),
             )
           }))
@@ -222,7 +221,7 @@ export function useAnnotation(context: ExtensionContext) {
             code.range,
             config.extension.single,
             preview.inline,
-            INJECTION,
+            `${config.extension.preview}${INJECTION}`,
             Uri.parse(preview.url),
           )))
   useActiveEditorDecorations(ShowCodeOptions, () =>
