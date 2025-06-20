@@ -1,7 +1,7 @@
 import type { TextEditor } from 'vscode'
 import type { Formula } from './types'
 import process from 'node:process'
-import { isMatch } from 'micromatch'
+import { matchesGlob } from 'pathe'
 import {
   computed,
   defineConfigObject,
@@ -60,7 +60,7 @@ export function enabled(editor?: TextEditor) {
   if (languages.includes(langid))
     return true
 
-  if (isMatch(fname, resolves(patterns), { dot: true }))
+  if (matchesGlob(fname, resolves(patterns)))
     return true
 
   return false

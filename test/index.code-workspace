@@ -21,12 +21,14 @@
     "comment-formula.single": "after",
     "comment-formula.multiple": "after",
     "comment-formula.code": "",
-    "comment-formula.preview": "",  // default to "font-weight: bold;"
-    "comment-formula.scale": 0.9,   // default to 1.0
-    "comment-formula.preload": [    // default to []
+    "comment-formula.preview": "", // default to "font-weight: bold;"
+    "comment-formula.scale": 0.9, // default to 1.0
+    "comment-formula.preload": [ // default to []
       "styles/1st.cls"
     ],
     "comment-formula.languages": [],
-    "comment-formula.patterns": ["*.py"],
+    "comment-formula.patterns": [
+      "*.py"
+    ],
   }
 }

@@ -1,4 +1,4 @@
-import { isAbsolute, join } from 'pathe'
+import { resolve as _resolve, isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
 
 export function debounce<T extends (...args: any[]) => any>(
@@ -16,7 +16,7 @@ export function debounce<T extends (...args: any[]) => any>(
 
 export function resolve(path: string) {
   if (isAbsolute(path))
-    return path
+    return _resolve(path)
   const folders = workspace.workspaceFolders
   return folders?.length
     ? folders.map(f => join(f.uri.fsPath, path))
