@@ -12,7 +12,7 @@ npm i
 
 ## Development
 
-Press `F5` to start the extension in a new VSCode window. Open `./test/` folder to test the extension.
+Press `F5` to start the extension in a new VSCode window. Open `./debug/` folder to test the extension.
 
 ## Update
 
