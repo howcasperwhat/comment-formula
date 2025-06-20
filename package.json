@@ -185,6 +185,7 @@
     "dev": "npm run build --watch",
     "prepare": "npm run update",
     "lint": "eslint .",
+    "test": "vitest",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
     "pack": "vsce package",
     "publish": "vsce publish"
@@ -201,6 +202,7 @@
     "reactive-vscode": "^0.2.13",
     "tsup": "^8.3.6",
     "typescript": "^5.7.3",
+    "vitest": "^3.2.4",
     "vscode-ext-gen": "^1.0.0"
   }
 }
