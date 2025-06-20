@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 2025-06-20: v0.5.12
+### Fix
+1. Use `matchesGlob` instead of `micromatch` to resolve the issue caused by `pathe` converting Windows drive letters to uppercase.
+
 ## 2025-05-08: v0.5.11
 ### Feature
 1. Support more flexible configuration strategies to enable extension.
