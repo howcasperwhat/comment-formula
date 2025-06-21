@@ -26,9 +26,9 @@
     "comment-formula.preload": [ // default to []
       "styles/1st.cls"
     ],
-    "comment-formula.languages": [],
-    "comment-formula.patterns": [
-      "*.py"
-    ],
+    "comment-formula.languages": ["py"],
+    "comment-formula.defines": {
+      "py": ["*.py"]
+    }
   }
 }

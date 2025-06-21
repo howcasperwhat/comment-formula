@@ -1,7 +1,7 @@
 import type { TextEditor } from 'vscode'
-import type { Formula } from './types'
+import type { Formula, Config } from './types'
 import process from 'node:process'
-import { matchesGlob } from 'pathe'
+import { matchesGlob as isMatch } from 'pathe'
 import {
   computed,
   defineConfigObject,
@@ -20,7 +20,7 @@ const BASE_HEIGHT = 24
 const isDark = useIsDarkTheme()
 
 export const config = {
-  extension: defineConfigObject<Meta.NestedScopedConfigs>(
+  extension: defineConfigObject<Config>(
     Meta.scopedConfigs.scope,
     Meta.scopedConfigs.defaults,
   ),
@@ -54,16 +54,18 @@ export function enabled(editor?: TextEditor) {
   if (!editor || !editor.document)
     return false
 
-  const { fileName: fname, languageId: langid } = editor.document
-  const { languages, patterns } = config.extension
+  const { fileName: fname, languageId: lang } = editor.document
+  const { languages: langs, defines } = config.extension
 
-  if (languages.includes(langid))
-    return true
+  const enabled = new Set(langs)
+  const current = new Set([
+    ...Object.keys(defines).filter((lang) => 
+      isMatch(fname, resolves(defines[lang]))
+    ),
+    lang,
+  ])
 
-  if (matchesGlob(fname, resolves(patterns)))
-    return true
-
-  return false
+  return enabled.intersection(current).size > 0
 }
 
 export function isLarge(height: number) {
