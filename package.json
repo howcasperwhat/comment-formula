@@ -40,14 +40,6 @@
           "default": "all",
           "description": "When will the inline formula preview be displayed."
         },
-        "comment-formula.patterns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "Enable extension in these file pattern."
-        },
         "comment-formula.languages": {
           "type": "array",
           "items": {
@@ -135,6 +127,21 @@
           "type": "number",
           "default": 1,
           "description": "Scale factor of the preview formula."
+        },
+        "comment-formula.defines": {
+          "type": "object",
+          "default": {},
+          "description": "Define Language with glob file patterns, where key is language id, value is a list of glob pattern."
+        },
+        "comment-formula.capture.comment": {
+          "type": "object",
+          "default": {},
+          "description": "Set RegExp for capturing comment scopes in each language."
+        },
+        "comment-formula.capture.formula": {
+          "type": "object",
+          "default": {},
+          "description": "Set RegExp for capturing math for rendering in comments."
         },
         "comment-formula.api.prefix": {
           "type": "string",
