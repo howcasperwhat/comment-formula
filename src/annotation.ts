@@ -1,21 +1,14 @@
 import type { DecorationOptions, DecorationRenderOptions, ExtensionContext } from 'vscode'
 import type { FormulaPreview } from './transformer'
 import type { RelativePosition } from './types'
-import {
-  computed,
-  useActiveTextEditor,
-  useDocumentText,
-  useEditorDecorations,
-  useTextEditorSelections,
-  watch,
-} from 'reactive-vscode'
+import { computed, useEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { config } from './config'
 import { getMessage } from './message'
 import { setupWatcher } from './preload'
-import { color, formulas, lineHeight, preloads } from './store/shared'
+import { activated, color, doc, editor, formulas, lineHeight, preloads, selections, text } from './store/shared'
 import { transformer } from './transformer'
-import { debounce, enabled } from './utils'
+import { debounce } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -41,10 +34,6 @@ export function useAnnotation(context: ExtensionContext) {
   const AutoTabOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
   }
-
-  const editor = useActiveTextEditor()
-  const selections = useTextEditorSelections(editor)
-  const text = useDocumentText(() => editor.value?.document)
 
   function useActiveEditorDecorations(
     decorationTypeOrOptions: Parameters<typeof useEditorDecorations>[1],
@@ -121,9 +110,9 @@ export function useAnnotation(context: ExtensionContext) {
     const codeStartLine = code.range.start.line
     const codeEndLine = code.range.end.line
     const midLine = (codeStartLine + codeEndLine) >> 1
-    if (!editor.value)
+    if (!doc.value)
       return midLine
-    const midChars = editor.value.document.lineAt(midLine).text.length
+    const midChars = doc.value.lineAt(midLine).text.length
     const previewHalfLines = Math.ceil((
       preview.height * 0.5
       + +!((codeStartLine + codeEndLine) % 2)
@@ -133,7 +122,7 @@ export function useAnnotation(context: ExtensionContext) {
     const previewEndLine = Math.min(codeEndLine, midLine + (previewHalfLines - 1))
     let [_maxChars, _maxLine] = [midChars, midLine]
     for (let line = previewStartLine; line <= previewEndLine; ++line) {
-      const chars = editor.value.document.lineAt(line).text.length
+      const chars = doc.value.lineAt(line).text.length
       if (chars > _maxChars)
         [_maxChars, _maxLine] = [chars, line]
     }
@@ -145,7 +134,7 @@ export function useAnnotation(context: ExtensionContext) {
   ) => {
     if (!editor.value)
       return 0
-    const content = editor.value.document.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
+    const content = doc.value!.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
     const tabSize = Number.parseInt(`${editor.value.options.tabSize}`) || 0
     const spaceSize = 1
     const tabCount = content.match(/\t/g)?.length ?? 0
@@ -247,10 +236,11 @@ export function useAnnotation(context: ExtensionContext) {
   const reg = /\$\$([\s\S]*?)\$\$/g
 
   const update = async () => {
-    if (!enabled(editor.value) || !config.extension.annotation)
+    if (!activated.value || !config.extension.annotation)
       return
     const codes: FormulaCode[] = []
-    const { document } = editor.value!
+    const document = doc.value!
+    // Match Comment In Document
     let match
     reg.lastIndex = 0
     // eslint-disable-next-line no-cond-assign

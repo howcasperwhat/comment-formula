@@ -1,5 +1,4 @@
-import type { TextEditor } from 'vscode'
-import { resolve as _resolve, isAbsolute, matchesGlob as isMatch, join } from 'pathe'
+import { resolve as _resolve, isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
 import { config } from './config'
 import { MATHJAX_TEX_EX } from './store/constant'
@@ -30,24 +29,6 @@ export function resolve(path: string) {
 export function resolves(path: string | string[]) {
   path = Array.isArray(path) ? path : [path]
   return Array.from(new Set(path)).map(p => resolve(p)).flat()
-}
-
-export function enabled(editor?: TextEditor) {
-  if (!editor || !editor.document)
-    return false
-
-  const { fileName: fname, languageId: lang } = editor.document
-  const { languages: langs, defines } = config.extension
-
-  const enabled = new Set(langs)
-  const current = new Set([
-    ...Object.keys(defines).filter(lang =>
-      isMatch(fname, resolves(defines[lang])),
-    ),
-    lang,
-  ])
-
-  return enabled.intersection(current).size > 0
 }
 
 export function isLarge(height: number) {
