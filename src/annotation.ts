@@ -274,7 +274,7 @@ export function useAnnotation(context: ExtensionContext) {
     transformer.reset(content.join('\n'))
     trigger()
   })
-  // Transformer haven't been set after constructed (before `reset` is called).
+  // Transformer haven't been init after constructed (before `reset` is called).
   // However, `setupWatcher` will setup `useFsWatcher` and `preload` watcher (immediate),
   // so `transformer` will be `reset` before `trigger` immediately by above `WatchCallback`.
   setupWatcher()

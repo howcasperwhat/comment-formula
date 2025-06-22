@@ -11,7 +11,8 @@ export function getMessage(_code: FormulaCode, _preview: FormulaPreview) {
   const tex = _code.tex
   const inline = config.extension.inline
   if (playground) {
-    result.push(`$(pencil) [Open in MathJax Playground](${PLAYGROUND_URL}?tex=${encodeURIComponent(tex)})`)
+    result.push(`$(pencil) [Open in MathJax Playground](${
+      PLAYGROUND_URL}?tex=${encodeURIComponent(tex)})`)
   }
   if (error) {
     result.push(`$(error) RENDER ERROR`)
