@@ -7,13 +7,14 @@ import {
   Range,
   SnippetString,
 } from 'vscode'
-import { config, store } from './config'
+import { config } from './config'
 import {
   CHARACTERS,
   COMMANDS,
   DELIMITERS,
   ENVIRONMENTS,
 } from './store/mathjax'
+import { formulas } from './store/shared'
 import { resolves } from './utils'
 
 export function useCompletion(context: ExtensionContext) {
@@ -30,7 +31,7 @@ export function useCompletion(context: ExtensionContext) {
       if (!line.endsWith(symbol))
         return
       const prefix = line.endsWith(`${symbol}${symbol}`) ? '' : symbol
-      if (store.formulas.value.find(
+      if (formulas.value.find(
         ({ code }) => code.range.contains(position),
       )) {
         return
@@ -75,7 +76,7 @@ export function useCompletion(context: ExtensionContext) {
         return
       if (line.endsWith(`${flag}${flag}`))
         return
-      if (!store.formulas.value.find(
+      if (!formulas.value.find(
         ({ code }) => code.range.contains(position),
       )) {
         return
@@ -123,8 +124,9 @@ export function useCompletion(context: ExtensionContext) {
 
   const selector: DocumentSelector = [
     ...config.extension.languages,
-    ...resolves(config.extension.patterns)
-      .map(pattern => ({ pattern })),
+    ...resolves(config.extension.languages.flatMap(
+      lang => config.extension.defines[lang] || [],
+    )).map(pattern => ({ pattern })),
   ]
   context.subscriptions.push(
     languages.registerCompletionItemProvider(

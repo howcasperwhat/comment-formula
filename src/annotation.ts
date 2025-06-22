@@ -10,10 +10,12 @@ import {
   watch,
 } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
-import { config, enabled, store } from './config'
+import { config } from './config'
+import { getMessage } from './message'
 import { setupWatcher } from './preload'
+import { color, formulas, lineHeight, preloads } from './store/shared'
 import { transformer } from './transformer'
-import { debounce } from './utils'
+import { debounce, enabled } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -125,8 +127,8 @@ export function useAnnotation(context: ExtensionContext) {
     const previewHalfLines = Math.ceil((
       preview.height * 0.5
       + +!((codeStartLine + codeEndLine) % 2)
-      * store.height.value * 0.5
-    ) / store.height.value)
+      * lineHeight.value * 0.5
+    ) / lineHeight.value)
     const previewStartLine = Math.max(codeStartLine, midLine - (previewHalfLines - 1))
     const previewEndLine = Math.min(codeEndLine, midLine + (previewHalfLines - 1))
     let [_maxChars, _maxLine] = [midChars, midLine]
@@ -154,7 +156,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(AutoTabOptions, () =>
     (!config.extension.hidden || !config.extension.autotab)
       ? []
-      : store.formulas.value
+      : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
             && !code.range.isSingleLine
@@ -176,7 +178,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
     config.extension.multiple === 'none'
       ? []
-      : store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
+      : formulas.value.filter(({ code }) => !code.range.isSingleLine)
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
@@ -200,7 +202,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(MockHeightOptions, () =>
     config.extension.multiple !== 'before'
       ? []
-      : store.formulas.value.filter(({ code }) =>
+      : formulas.value.filter(({ code }) =>
           !code.range.isSingleLine
           && !needHiding(code.range),
         ).map(({ code, preview }) => {
@@ -217,7 +219,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(SinglePreviewOptions, () =>
     config.extension.single === 'none'
       ? []
-      : store.formulas.value.filter(({ code }) => code.range.isSingleLine)
+      : formulas.value.filter(({ code }) => code.range.isSingleLine)
           .map(({ code, preview }) => decorate(
             code.range,
             config.extension.single,
@@ -226,17 +228,15 @@ export function useAnnotation(context: ExtensionContext) {
             Uri.parse(preview.url),
           )))
   useActiveEditorDecorations(ShowCodeOptions, () =>
-    store.formulas.value
+    formulas.value
       .map(({ code, preview }) => ({
         range: code.range,
-        hoverMessage: preview.error
-          ? store.message
-          : `![](${preview.url})`,
+        hoverMessage: getMessage(code, preview),
       })))
   useActiveEditorDecorations(HideCodeOptions, () =>
     !config.extension.hidden
       ? []
-      : store.formulas.value
+      : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
             && needHiding(code.range),
@@ -263,14 +263,14 @@ export function useAnnotation(context: ExtensionContext) {
       const range = new Range(startPos, endPos)
       codes.push({ range, tex })
     }
-    store.formulas.value = (await Promise.all(codes.map(
-      async code => transformer.from(code.tex, store.color.value)
+    formulas.value = (await Promise.all(codes.map(
+      async code => transformer.from(code.tex, color.value)
         .then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
   const trigger = debounce(update, config.extension.interval)
 
-  watch(store.preload, (content) => {
+  watch(preloads, (content) => {
     transformer.reset(content.join('\n'))
     trigger()
   })
@@ -283,7 +283,7 @@ export function useAnnotation(context: ExtensionContext) {
     // If don't clear the decorations when switching files, two problems will occur:
     // 1. Decorations are still visible after switching to a language that does not trigger the extension
     // 2. Decorations will still exist for `interval` milliseconds after switching files
-    store.formulas.value = []
+    formulas.value = []
     trigger()
   }, null, context.subscriptions)
 

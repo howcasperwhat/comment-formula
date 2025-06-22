@@ -1,6 +1,6 @@
 import type { FormulaCode } from './annotation'
+import type * as Meta from './generated/meta'
 import type { FormulaPreview } from './transformer'
-import * as Meta from './generated/meta'
 
 export interface Formula {
   code: FormulaCode
@@ -15,7 +15,7 @@ export interface RegExpOptions {
   capture?: number
 }
 
-export type ReplaceKeyType<T, K extends keyof T, N> = 
+export type ReplaceKeyType<T, K extends keyof T, N> =
   Omit<T, K> & { [P in K]: N }
 
 export type ConfigDefines = Record<string, string[]>

@@ -128,6 +128,17 @@
           "default": 1,
           "description": "Scale factor of the preview formula."
         },
+        "comment-formula.message.playground": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display link of mathjax-playground in hover message."
+        },
+        "comment-formula.message.preview": {
+          "type": "string",
+          "enum": ["all", "partial", "none"],
+          "default": "partial",
+          "description": "Display rendered formula in hover message."
+        },
         "comment-formula.defines": {
           "type": "object",
           "default": {},
@@ -193,6 +204,7 @@
     "prepare": "npm run update",
     "lint": "eslint .",
     "test": "vitest",
+    "typecheck": "tsc --noEmit",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
     "pack": "vsce package",
     "publish": "vsce publish"
