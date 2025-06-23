@@ -18,50 +18,6 @@ import { formulas } from './store/shared'
 import { resolves } from './utils'
 
 export function useCompletion(context: ExtensionContext) {
-  const symbol = '$'
-  const frame: CompletionItemProvider = {
-    provideCompletionItems(document: TextDocument, position: Position) {
-      if (!config.extension.completion)
-        return
-
-      const line = document.getText(new Range(
-        new Position(position.line, 0),
-        new Position(position.line, position.character),
-      ))
-      if (!line.endsWith(symbol))
-        return
-      const prefix = line.endsWith(`${symbol}${symbol}`) ? '' : symbol
-      if (formulas.value.find(
-        ({ code }) => code.range.contains(position),
-      )) {
-        return
-      }
-
-      const inline = new CompletionItem(
-        `${symbol}${symbol}.inline.${symbol}${symbol}`,
-        CompletionItemKind.Snippet,
-      )
-      inline.insertText = new SnippetString(
-        `${prefix} $1 ${symbol}${symbol}`,
-      )
-      inline.documentation = 'Insert an inline formula'
-
-      const block = new CompletionItem(
-        `${symbol}${symbol}.block.${symbol}${symbol}`,
-        CompletionItemKind.Snippet,
-      )
-      block.insertText = new SnippetString(
-        `${prefix}\n$1\n${symbol}${symbol}`,
-      )
-      block.documentation = 'Insert a block formula'
-
-      return [inline, block]
-    },
-    resolveCompletionItem(item: CompletionItem) {
-      return item
-    },
-  }
-
   const flag = '\\'
   const unit: CompletionItemProvider = {
     provideCompletionItems(document: TextDocument, position: Position) {
@@ -129,11 +85,6 @@ export function useCompletion(context: ExtensionContext) {
     )).map(pattern => ({ pattern })),
   ]
   context.subscriptions.push(
-    languages.registerCompletionItemProvider(
-      selector,
-      frame,
-      symbol,
-    ),
     languages.registerCompletionItemProvider(
       selector,
       unit,
