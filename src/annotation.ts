@@ -239,30 +239,17 @@ export function useAnnotation(context: ExtensionContext) {
     const codes: FormulaCode[] = []
     const document = doc.value!
 
-    let ranges: LiteRange[] = []
+    // To comfirm `cur < ranges.length`:
+    let ranges: LiteRange[] = [{ start: Infinity, end: Infinity }]
     const range: LiteRange[] = []
     for (const { regex, capture } of regexes.value) {
       regex.lastIndex = 0
       let cur = 0
       while (true) {
-        while (cur < ranges.length && regex.lastIndex > ranges[cur].start) {
+        while (regex.lastIndex > ranges[cur].start) {
           ++cur
         }
-        if (cur === ranges.length) {
-          const m = regex.exec(text.value!)
-          if (!m)
-            break
-          const [start, end] = [m.index, m.index + m[0].length]
-          range.push({ start, end })
-          codes.push({
-            range: new Range(
-              document.positionAt(start),
-              document.positionAt(end),
-            ),
-            tex: m[capture],
-          })
-        }
-        else if (regex.lastIndex === ranges[cur].start) {
+        if (regex.lastIndex === ranges[cur].start) {
           regex.lastIndex = ranges[cur].end
           ++cur
         }
