@@ -68,8 +68,8 @@ export const preloads = shallowRef<string[]>([])
 export const regexes = computed(() => {
   const captures = config.extension.capture
   const _default: RegExpOptions[] = [
-    { pattern: '\\$\\$(.*?)\\$\\$', flags: 'gs', capture: 1 },
-    { pattern: '(?<!\\$)\\$(?!\\$)(.*?)(?<!\\\\)\\$', flags: 'gm', capture: 1 },
+    { pattern: '\\$\\$(.+?)(?<!\\\\)\\$\\$', flags: 'gs', capture: 1 },
+    { pattern: '\\$(.+?)(?<!\\\\)\\$', flags: 'gm', capture: 1 },
   ]
 
   const options = languages.value.flatMap(lang => captures[lang] ?? [])

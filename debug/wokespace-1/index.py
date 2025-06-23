@@ -12,12 +12,12 @@ def comment_formula():
   '''
   pass
 
-# Single line formulas: $$ \mathrm{E = mc^2} $$. This is the Einstein's Equation.
-# $ \frac{1}{2} $
+# Single line formulas: $ \mathrm{E = mc^2} $. This is the Einstein's Equation.
+
 '''
 Preload Commands:
 $$ \textcolor{warning}{\circle} $$  In javascript, `Array.prototype.slice(l, r)` is used to
-   get a copy of a section $$ {\lcro{l, r}} $$ of an array.
+   get a copy of a section $ {\lcro{l, r}} $ of an array.
 $$ \textcolor{info}{\circle} $$  In css, `border: 1px solid;` is used to create a
-   border around an element looking like $$ \Box{\text{content}} $$.
+   border around an element looking like $ \Box{\text{content}} $.
 '''
