@@ -1,14 +1,14 @@
 import type { DecorationOptions, DecorationRenderOptions, ExtensionContext } from 'vscode'
 import type { FormulaPreview } from './transformer'
-import type { RelativePosition } from './types'
+import type { LiteRange, RelativePosition } from './types'
 import { computed, useEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { config } from './config'
 import { getMessage } from './message'
 import { setupWatcher } from './preload'
-import { activated, color, doc, editor, formulas, lineHeight, preloads, selections, text } from './store/shared'
+import { activated, color, doc, editor, formulas, lineHeight, preloads, regexes, selections, text } from './store/shared'
 import { transformer } from './transformer'
-import { debounce } from './utils'
+import { debounce, mergerSorted } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -233,26 +233,64 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code }) => ({ range: code.range }),
           ))
 
-  const reg = /\$\$([\s\S]*?)\$\$/g
-
   const update = async () => {
     if (!activated.value || !config.extension.annotation)
       return
     const codes: FormulaCode[] = []
     const document = doc.value!
-    // Match Comment In Document
-    let match
-    reg.lastIndex = 0
-    // eslint-disable-next-line no-cond-assign
-    while ((match = reg.exec(text.value!))) {
-      const tex = match[1]
-      if (!tex)
-        continue
-      const startPos = document.positionAt(match.index)
-      const endPos = document.positionAt(match.index + match[0].length)
-      const range = new Range(startPos, endPos)
-      codes.push({ range, tex })
+
+    let ranges: LiteRange[] = []
+    const range: LiteRange[] = []
+    for (const { regex, capture } of regexes.value) {
+      regex.lastIndex = 0
+      let cur = 0
+      while (true) {
+        while (cur < ranges.length && regex.lastIndex > ranges[cur].start) {
+          ++cur
+        }
+        if (cur === ranges.length) {
+          const m = regex.exec(text.value!)
+          if (!m)
+            break
+          const [start, end] = [m.index, m.index + m[0].length]
+          range.push({ start, end })
+          codes.push({
+            range: new Range(
+              document.positionAt(start),
+              document.positionAt(end),
+            ),
+            tex: m[capture],
+          })
+        }
+        else if (regex.lastIndex === ranges[cur].start) {
+          regex.lastIndex = ranges[cur].end
+          ++cur
+        }
+        else if (regex.lastIndex < ranges[cur].start) {
+          const m = regex.exec(text.value!)
+          if (!m)
+            break
+          const [start, end] = [m.index, m.index + m[0].length]
+          if (end > ranges[cur].start) {
+            regex.lastIndex = ranges[cur].end
+            ++cur
+          }
+          else {
+            range.push({ start, end })
+            codes.push({
+              range: new Range(
+                document.positionAt(start),
+                document.positionAt(end),
+              ),
+              tex: m[capture],
+            })
+          }
+        }
+        ranges = mergerSorted(ranges, range, (a, b) => a.start - b.start)
+        range.length = 0
+      }
     }
+
     formulas.value = (await Promise.all(codes.map(
       async code => transformer.from(code.tex, color.value)
         .then(preview => ({ code, preview })),

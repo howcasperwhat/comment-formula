@@ -42,3 +42,28 @@ export function isLarge(height: number) {
 export function exToPx(ex: number) {
   return ex * MATHJAX_TEX_EX
 }
+
+export function mergerSorted<T, R>(
+  lhs: T[],
+  rhs: R[],
+  compare: (a: T, b: R) => number,
+): (T | R)[] {
+  const result: (T | R)[] = []
+  let [i, j] = [0, 0]
+
+  while (i < lhs.length && j < rhs.length) {
+    result.push(
+      compare(lhs[i], rhs[j]) <= 0
+        ? lhs[i++]
+        : rhs[j++],
+    )
+  }
+  while (i < lhs.length) {
+    result.push(lhs[i++])
+  }
+  while (j < rhs.length) {
+    result.push(rhs[j++])
+  }
+
+  return result
+}

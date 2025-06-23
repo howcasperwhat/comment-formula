@@ -15,12 +15,16 @@ export interface RegExpOptions {
   capture?: number
 }
 
+export interface LiteRange {
+  start: number
+  end: number
+}
+
 export type ReplaceKeyType<T, K extends keyof T, N> =
   Omit<T, K> & { [P in K]: N }
 
 export type ConfigDefines = Record<string, string[]>
-export type ConfigCaptureComment = Record<string, RegExpOptions[]>
-export type ConfigCaptureFormula = Record<string, RegExpOptions[]>
+export type ConfigCapture = Record<string, RegExpOptions[]>
 
 export type Config = ReplaceKeyType<
   ReplaceKeyType<
@@ -29,8 +33,5 @@ export type Config = ReplaceKeyType<
     ConfigDefines
   >,
   'capture',
-  {
-    comment: ConfigCaptureComment
-    formula: ConfigCaptureFormula
-  }
+  ConfigCapture
 >

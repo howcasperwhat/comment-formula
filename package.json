@@ -128,6 +128,16 @@
           "default": 1,
           "description": "Scale factor of the preview formula."
         },
+        "comment-formula.defines": {
+          "type": "object",
+          "default": {},
+          "description": "Define Language with glob file patterns, where key is language id, value is a list of glob pattern."
+        },
+        "comment-formula.capture": {
+          "type": "object",
+          "default": {},
+          "description": "Set RegExp for capturing math for rendering in comments."
+        },
         "comment-formula.message.playground": {
           "type": "boolean",
           "default": true,
@@ -138,21 +148,6 @@
           "enum": ["all", "partial", "none"],
           "default": "partial",
           "description": "Display rendered formula in hover message."
-        },
-        "comment-formula.defines": {
-          "type": "object",
-          "default": {},
-          "description": "Define Language with glob file patterns, where key is language id, value is a list of glob pattern."
-        },
-        "comment-formula.capture.comment": {
-          "type": "object",
-          "default": {},
-          "description": "Set RegExp for capturing comment scopes in each language."
-        },
-        "comment-formula.capture.formula": {
-          "type": "object",
-          "default": {},
-          "description": "Set RegExp for capturing math for rendering in comments."
         },
         "comment-formula.api.prefix": {
           "type": "string",

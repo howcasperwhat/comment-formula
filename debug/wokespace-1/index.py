@@ -13,7 +13,7 @@ def comment_formula():
   pass
 
 # Single line formulas: $$ \mathrm{E = mc^2} $$. This is the Einstein's Equation.
-
+# $ \frac{1}{2} $
 '''
 Preload Commands:
 $$ \textcolor{warning}{\circle} $$  In javascript, `Array.prototype.slice(l, r)` is used to
