@@ -242,7 +242,7 @@ export function useAnnotation(context: ExtensionContext) {
     // To comfirm `cur < ranges.length`:
     let ranges: LiteRange[] = [{ start: Infinity, end: Infinity }]
     const range: LiteRange[] = []
-    for (const { regex, capture } of regexes.value) {
+    for (const regex of regexes.value) {
       regex.lastIndex = 0
       let cur = 0
       while (true) {
@@ -273,7 +273,7 @@ export function useAnnotation(context: ExtensionContext) {
                 document.positionAt(start),
                 document.positionAt(end),
               ),
-              tex: m[capture],
+              tex: m[1],
             })
           }
         }

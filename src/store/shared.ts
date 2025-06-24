@@ -72,7 +72,8 @@ export const regexOf = (opt: MinuteRegExpOptions) => {
       ? pattern.push(`\\${char}`)
       : pattern.push(char)
   }
-  opt.strict && pattern.push(`(?<!\\\\)`)
+  pattern.push('(.+?)')
+  opt.strict && pattern.push('(?<!\\\\)')
   for (const char of opt.suffix) {
     CHARACTERS_NEED_ESCAPING.has(char)
       ? pattern.push(`\\${char}`)
