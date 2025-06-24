@@ -9,11 +9,22 @@ export interface Formula {
 
 export type RelativePosition = 'before' | 'after' | 'none'
 
-export interface RegExpOptions {
-  pattern: string
-  flags?: string
-  capture?: number
+export interface BaseRegExpOptions {
+  strict?: boolean
+  breakable?: boolean
 }
+
+export interface MinuteRegExpOptions extends BaseRegExpOptions {
+  prefix: string
+  suffix: string
+}
+
+export interface UnshapedRegExpOptions extends BaseRegExpOptions {
+  marker: string
+}
+
+export type RegExpOptions =
+  MinuteRegExpOptions | UnshapedRegExpOptions
 
 export interface LiteRange {
   start: number

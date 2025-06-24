@@ -4,3 +4,7 @@ export const GLODEB_LINE_HEIGHT_RATIO = process.platform === 'darwin' ? 1.5 : 1.
 // use devtools to get the value of 1ex
 export const MATHJAX_TEX_EX = 8.64
 export const BASE_HEIGHT = 24
+export const CHARACTERS_NEED_ESCAPING = new Set([
+  '.', '^', '$', '*', '+', '?', '|',
+  '(', ')', '[', ']', '{', '}', '\\',
+])
