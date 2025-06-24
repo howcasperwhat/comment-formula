@@ -103,7 +103,7 @@ export function useAnnotation(context: ExtensionContext) {
     return false
   }
 
-  const longestLine = (
+  const longestLineOf = (
     code: FormulaCode,
     preview: FormulaPreview,
   ) => {
@@ -129,7 +129,7 @@ export function useAnnotation(context: ExtensionContext) {
     return _maxLine
   }
 
-  const getLeadingWhitespaceWidth = (
+  const tabWidthOf = (
     line: number,
   ) => {
     if (!editor.value)
@@ -159,7 +159,7 @@ export function useAnnotation(context: ExtensionContext) {
                 new Position(start + i + 1, 0),
                 'before',
                 preview.inline,
-                `width:${getLeadingWhitespaceWidth(start)}ch;${INJECTION};`,
+                `width:${tabWidthOf(start)}ch;${INJECTION};`,
               ),
             )
           })
@@ -175,8 +175,8 @@ export function useAnnotation(context: ExtensionContext) {
             const hide = needHiding(code.range)
             const before = config.extension.multiple === 'before'
 
-            const line = (!before && !hide) ? longestLine(code, preview) : end
-            const col = (before && !hide) ? getLeadingWhitespaceWidth(start) : 0
+            const line = (!before && !hide) ? longestLineOf(code, preview) : end
+            const col = (before && !hide) ? tabWidthOf(start) : 0
             const pos = (!before && hide) ? code.range : new Position(line, col)
             const style = before ? 'position:absolute' : ''
 
@@ -199,7 +199,7 @@ export function useAnnotation(context: ExtensionContext) {
           const end = code.range.end.line
           return Array.from({ length: end - start + 1 }, (_, i) =>
             decorate(
-              new Position(start + i, getLeadingWhitespaceWidth(start)),
+              new Position(start + i, tabWidthOf(start)),
               config.extension.multiple,
               preview.inline,
               `width:${preview.width}px;${INJECTION};`,
@@ -246,13 +246,17 @@ export function useAnnotation(context: ExtensionContext) {
       regex.lastIndex = 0
       let cur = 0
       while (true) {
+        // `cur` will be pushed to Infinity sooner or later
         while (regex.lastIndex > ranges[cur].start) {
           ++cur
         }
+        // `lastIndex` will be pushed to the end of the last range
         if (regex.lastIndex === ranges[cur].start) {
           regex.lastIndex = ranges[cur].end
           ++cur
         }
+        // So that match will be executed after the last range
+        // And match will finish executing sooner or later
         else if (regex.lastIndex < ranges[cur].start) {
           const m = regex.exec(text.value!)
           if (!m)
