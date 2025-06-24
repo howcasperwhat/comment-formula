@@ -18,6 +18,6 @@ def comment_formula():
 Preload Commands:
 $$ \textcolor{warning}{\circle} $$  In javascript, `Array.prototype.slice(l, r)` is used to
    get a copy of a section $ {\lcro{l, r}} $ of an array.
-$$ \textcolor{info}{\circle} $$  In css, `border: 1px solid;` is used to create a
-   border around an element looking like $ \Box{\text{content}} $.
+@@ \textcolor{info}{\circle} @@  In css, `border: 1px solid;` is used to create a
+   border around an element looking like @ \Box{\text{content}} @.
 '''

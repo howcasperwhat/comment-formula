@@ -13,7 +13,7 @@
     "editor.formatOnPaste": false,
     "comment-formula.annotation": true,
     "comment-formula.completion": true,
-    "comment-formula.hidden": "scope",
+    "comment-formula.hidden": "line",
     "comment-formula.autotab": true,
     "comment-formula.color": "auto",
     "comment-formula.inline": "all",
@@ -31,6 +31,26 @@
     "comment-formula.languages": ["py"],
     "comment-formula.defines": {
       "py": ["*.py"]
+    },
+    "comment-formula.capture": {
+      "py": [
+        {
+          "marker": "$$",
+          "breakable": true,
+        },
+        {
+          "marker": "@@",
+          "breakable": true,
+        },
+        {
+          "marker": "$",
+          "breakable": false,
+        },
+        {
+          "marker": "@",
+          "breakable": false,
+        }
+      ]
     }
   }
 }
