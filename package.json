@@ -53,15 +53,6 @@
           ],
           "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
         },
-        "comment-formula.scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "markdownDescription": "Enable highlight in these scopes. Use command `Developer: Inspect Editor Tokens and Scopes` to determine the global scopes.",
-          "markdownDeprecationMessage": "Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) instead, this feature would be removed in later versions."
-        },
         "comment-formula.interval": {
           "type": "number",
           "default": 200,
@@ -168,29 +159,7 @@
           "description": "Paths to files containing LaTeX preamble to preload."
         }
       }
-    },
-    "languages": [
-      {
-        "id": "litemath",
-        "aliases": [],
-        "extensions": []
-      }
-    ],
-    "grammars": [
-      {
-        "language": "litemath",
-        "scopeName": "text.html.markdown.litemath",
-        "path": "./syntaxes/litemath.json"
-      },
-      {
-        "path": "./syntaxes/formula.json",
-        "scopeName": "comment-formula.injection",
-        "injectTo": [],
-        "embeddedLanguages": {
-          "meta.embedded.litemath.markdown": "latex"
-        }
-      }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
