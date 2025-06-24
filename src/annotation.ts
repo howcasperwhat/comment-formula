@@ -273,9 +273,9 @@ export function useAnnotation(context: ExtensionContext) {
             })
           }
         }
-        ranges = mergerSorted(ranges, range, (a, b) => a.start - b.start)
-        range.length = 0
       }
+      ranges = mergerSorted(ranges, range, (a, b) => a.start - b.start)
+      range.length = 0
     }
 
     formulas.value = (await Promise.all(codes.map(
