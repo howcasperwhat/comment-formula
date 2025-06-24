@@ -2,7 +2,7 @@
   "publisher": "howcasperwhat",
   "name": "comment-formula",
   "displayName": "Comment Formula",
-  "version": "0.5.12",
+  "version": "1.0.0",
   "description": "Preview LaTeX formulas within the line of your editor.",
   "author": "Casper Huang",
   "repository": {
@@ -136,7 +136,11 @@
         },
         "comment-formula.message.preview": {
           "type": "string",
-          "enum": ["all", "partial", "none"],
+          "enum": [
+            "all",
+            "partial",
+            "none"
+          ],
           "default": "partial",
           "description": "Display rendered formula in hover message."
         },
