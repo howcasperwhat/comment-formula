@@ -1,7 +1,8 @@
+import type { MinuteRegExpOptions, RegExpOptions } from './types'
 import { resolve as _resolve, isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
 import { config } from './config'
-import { MATHJAX_TEX_EX } from './store/constant'
+import { CHARACTERS_NEED_ESCAPING, MATHJAX_TEX_EX } from './store/constant'
 import { lineHeight } from './store/shared'
 
 export function debounce<T extends (...args: any[]) => any>(
@@ -66,4 +67,46 @@ export function mergerSorted<T, R>(
   }
 
   return result
+}
+
+export function duplicate<T>(arr: T[]): T[] {
+  const seen = new Set<string>()
+  const result: T[] = []
+  for (const item of arr) {
+    const key = JSON.stringify(item)
+    if (!seen.has(key)) {
+      seen.add(key)
+      result.push(item)
+    }
+  }
+  return result
+}
+
+export function escapeRegExpKeywords(str: string) {
+  const ans: string[] = []
+  for (const char of str) {
+    CHARACTERS_NEED_ESCAPING.has(char)
+      ? ans.push(`\\${char}`)
+      : ans.push(char)
+  }
+  return ans.join('')
+}
+
+export function normRegExpOption(
+  options: RegExpOptions,
+): Required<MinuteRegExpOptions> {
+  return {
+    prefix: escapeRegExpKeywords(
+      'marker' in options
+        ? options.marker
+        : options.prefix,
+    ),
+    suffix: escapeRegExpKeywords(
+      'marker' in options
+        ? options.marker
+        : options.suffix,
+    ),
+    strict: options.strict ?? true,
+    breakable: options.breakable ?? true,
+  }
 }

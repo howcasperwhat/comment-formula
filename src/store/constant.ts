@@ -8,3 +8,7 @@ export const CHARACTERS_NEED_ESCAPING = new Set([
   '.', '^', '$', '*', '+', '?', '|',
   '(', ')', '[', ']', '{', '}', '\\',
 ])
+export const DEFAULT_CAPTURE = [
+  { marker: '$$', breakable: true },
+  { marker: '$', breakable: false }
+]

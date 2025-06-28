@@ -8,10 +8,10 @@ import {
   useDocumentText
 } from "reactive-vscode"
 import { config } from '../config'
-import { GLODEB_LINE_HEIGHT_RATIO, BASE_HEIGHT, CHARACTERS_NEED_ESCAPING } from './constant'
+import { GLODEB_LINE_HEIGHT_RATIO, BASE_HEIGHT, CHARACTERS_NEED_ESCAPING, DEFAULT_CAPTURE } from './constant'
 import type { Formula, MinuteRegExpOptions, RegExpOptions } from '../types'
 import { matchesGlob as isMatch } from "pathe"
-import { resolves } from '../utils'
+import { duplicate, normRegExpOption, resolves } from '../utils'
 
 export const isDark = useIsDarkTheme()
 export const editor = useActiveTextEditor()
@@ -65,52 +65,22 @@ export const scale = computed(() => {
 export const formulas = shallowRef<Formula[]>([])
 export const preloads = shallowRef<string[]>([])
 
-export const regexOf = (opt: MinuteRegExpOptions) => {
-  const pattern = []
-  for (const char of opt.prefix) {
-    CHARACTERS_NEED_ESCAPING.has(char)
-      ? pattern.push(`\\${char}`)
-      : pattern.push(char)
-  }
-  pattern.push('(.+?)')
-  opt.strict && pattern.push('(?<!\\\\)')
-  for (const char of opt.suffix) {
-    CHARACTERS_NEED_ESCAPING.has(char)
-      ? pattern.push(`\\${char}`)
-      : pattern.push(char)
-  }
-  return new RegExp(
-    pattern.join(''),
-    opt.breakable ? 'gs' : 'g',
-  )
-}
-
 export const regexes = computed(() => {
   const captures = config.extension.capture
-  const _default: RegExpOptions[] = [
-    { marker: '$$', breakable: true },
-    { marker: '$', breakable: false }
-  ]
 
-  const options = languages.value.flatMap(lang => captures[lang] ?? [])
-  const regexes = options.length > 0
-    ? options
-    : captures['default'] ?? _default
+  const _options = languages.value.flatMap(lang => captures[lang] ?? [])
+  const options = _options.length > 0
+    ? _options
+    : captures['default'] ?? DEFAULT_CAPTURE
 
-  const filtered: Required<MinuteRegExpOptions>[] = []
-  const seen = new Set<string>()
-  for (const regex of regexes) {
-    const key = JSON.stringify(regex)
-    if (!seen.has(key)) {
-      seen.add(key)
-      filtered.push({
-        prefix: 'marker' in regex ? regex.marker : regex.prefix,
-        suffix: 'marker' in regex ? regex.marker : regex.suffix,
-        strict: regex.strict ?? true,
-        breakable: regex.breakable ?? true,
-      })
-    }
-  }
-
-  return filtered.map(opt => regexOf(opt))
+  return duplicate(
+    options.map(normRegExpOption)
+  ).map(opt => new RegExp([
+      opt.prefix,
+      '(.+?)',
+      opt.strict ? '(?<!\\\\)' : '',
+      opt.suffix,
+    ].join(''),
+    opt.breakable ? 'gs' : 'g'
+  ))
 })
