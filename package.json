@@ -181,7 +181,7 @@
     "@antfu/eslint-config": "^4.2.0",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
-    "@vscode/vsce": "^3.5.0",
+    "@vscode/vsce": "^3.6.0",
     "eslint": "^9.20.0",
     "fast-glob": "^3.3.3",
     "mathjax-full": "^3.2.2",
