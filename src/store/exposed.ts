@@ -1,5 +1,5 @@
 import { config } from "../config"
-import { computed } from "reactive-vscode"
+import { computed, watch } from "reactive-vscode"
 import { duplicate, normRegExpOption } from "../utils"
 import { DEFAULT_CAPTURE } from "./constant"
 
@@ -16,3 +16,6 @@ export const captures = computed(() => {
     ])
   )
 })
+
+// Force cancel the lazy evaluation of captures
+watch(captures, () => {})
