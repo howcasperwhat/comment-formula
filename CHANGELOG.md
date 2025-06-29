@@ -1,5 +1,13 @@
 # ChangeLog
 
+## 2025-06-29: v1.0.7
+### Breaking Change
+1. Remove `comment-formula.patterns` option, use `comment-formula.defines` instead.
+2. Remove deprecated `comment-formula.scopes` option, use [MathJax Highlight](https://github.com/howcasperwhat/mathjax-highlight) instead.
+### Feature
+1. Support `comment-formula.captures` to customize the RegExp for capturing math in comments in different languages, key is language id or language defined in `comment-formula.defines`, value is a list of RegExp options.
+2. Support `comment-formula.defines` to define languages with glob file patterns. You can define a language not in the default list, and enable then in `comment-formula.languages`.
+
 ## 2025-06-20: v0.5.12
 ### Fix
 1. Use `matchesGlob` instead of `micromatch` to resolve the issue caused by `pathe` converting Windows drive letters to uppercase.
