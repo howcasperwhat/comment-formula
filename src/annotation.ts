@@ -8,7 +8,7 @@ import { getMessage } from './message'
 import { setupWatcher } from './preload'
 import { activated, color, doc, editor, formulas, lineHeight, preloads, regexes, selections, text } from './store/shared'
 import { transformer } from './transformer'
-import { debounce, mergerSorted } from './utils'
+import { debounce, mergeRanges } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -239,46 +239,31 @@ export function useAnnotation(context: ExtensionContext) {
     const codes: FormulaCode[] = []
     const document = doc.value!
 
-    // To comfirm `cur < ranges.length`:
     let ranges: LiteRange[] = [{ start: Infinity, end: Infinity }]
     const range: LiteRange[] = []
+    let match, cur
     for (const regex of regexes.value) {
       regex.lastIndex = 0
-      let cur = 0
-      while (true) {
-        // `cur` will be pushed to Infinity sooner or later
-        while (regex.lastIndex > ranges[cur].start) {
-          ++cur
-        }
-        // `lastIndex` will be pushed to the end of the last range
-        if (regex.lastIndex === ranges[cur].start) {
+      cur = 0
+      // eslint-disable-next-line no-cond-assign
+      while ((match = regex.exec(text.value!))) {
+        const [start, end] = [match.index, match.index + match[0].length]
+        if (end > ranges[cur].start) {
           regex.lastIndex = ranges[cur].end
           ++cur
         }
-        // So that match will be executed after the last range
-        // And match will finish executing sooner or later
-        else if (regex.lastIndex < ranges[cur].start) {
-          const m = regex.exec(text.value!)
-          if (!m)
-            break
-          const [start, end] = [m.index, m.index + m[0].length]
-          if (end > ranges[cur].start) {
-            regex.lastIndex = ranges[cur].end
-            ++cur
-          }
-          else {
-            range.push({ start, end })
-            codes.push({
-              range: new Range(
-                document.positionAt(start),
-                document.positionAt(end),
-              ),
-              tex: m[1],
-            })
-          }
+        else {
+          range.push({ start, end })
+          codes.push({
+            range: new Range(
+              document.positionAt(start),
+              document.positionAt(end),
+            ),
+            tex: match[1],
+          })
         }
       }
-      ranges = mergerSorted(ranges, range, (a, b) => a.start - b.start)
+      ranges = mergeRanges(ranges, range)
       range.length = 0
     }
 

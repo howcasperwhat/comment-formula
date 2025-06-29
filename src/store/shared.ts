@@ -8,8 +8,8 @@ import {
   useDocumentText
 } from "reactive-vscode"
 import { config } from '../config'
-import { GLODEB_LINE_HEIGHT_RATIO, BASE_HEIGHT, CHARACTERS_NEED_ESCAPING, DEFAULT_CAPTURE } from './constant'
-import type { Formula, MinuteRegExpOptions, RegExpOptions } from '../types'
+import { GLODEB_LINE_HEIGHT_RATIO, BASE_HEIGHT, DEFAULT_CAPTURE } from './constant'
+import type { Formula } from '../types'
 import { matchesGlob as isMatch } from "pathe"
 import { duplicate, normRegExpOption, resolves } from '../utils'
 

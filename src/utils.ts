@@ -1,4 +1,4 @@
-import type { MinuteRegExpOptions, RegExpOptions } from './types'
+import type { LiteRange, MinuteRegExpOptions, RegExpOptions } from './types'
 import { resolve as _resolve, isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
 import { config } from './config'
@@ -44,26 +44,41 @@ export function exToPx(ex: number) {
   return ex * MATHJAX_TEX_EX
 }
 
-export function mergerSorted<T, R>(
-  lhs: T[],
-  rhs: R[],
-  compare: (a: T, b: R) => number,
-): (T | R)[] {
-  const result: (T | R)[] = []
+// Make sure `range.start >= last.end`
+export function mergeRange(ranges: LiteRange[], range: LiteRange) {
+  if (ranges.length === 0) {
+    ranges.push(range)
+  }
+  const last = ranges.at(-1)!
+  if (last.end === range.start) {
+    last.end = range.end
+  }
+  else {
+    ranges.push(range)
+  }
+}
+
+// Make sure ranges is sorted and non-overlapping
+export function mergeRanges(
+  lhs: LiteRange[],
+  rhs: LiteRange[],
+): LiteRange[] {
+  const result: LiteRange[] = []
   let [i, j] = [0, 0]
 
   while (i < lhs.length && j < rhs.length) {
-    result.push(
-      compare(lhs[i], rhs[j]) <= 0
+    mergeRange(
+      result,
+      lhs[i].start <= rhs[j].start
         ? lhs[i++]
         : rhs[j++],
     )
   }
   while (i < lhs.length) {
-    result.push(lhs[i++])
+    mergeRange(result, lhs[i++])
   }
   while (j < rhs.length) {
-    result.push(rhs[j++])
+    mergeRange(result, rhs[j++])
   }
 
   return result
