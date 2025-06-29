@@ -32,12 +32,61 @@ A VSCode extensions to preview LaTeX formulas within the lines of your editor.
 
 You are supposed to write formulas between `$$` and `$$`.
 
-> [!IMPORTANT]
-> Two ways to enable highlight:
-> 1. Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight). (**Recommended**)
-> 2. Config `scopes` in User Settings, see [MathJax Highlight Configurations](https://github.com/howcasperwhat/mathjax-highlight?tab=readme-ov-file#configurations) for `scopes` configuration guide.
+**HIGHLIGHT:** Install [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) to highlight LaTeX code in comments. Reload the Window to make the highlight work when update `comment-formula.languages` or `comment-formula.capture`.
 
 ## Configurations
+
+### `comment-formula.defines`
+``` json
+{
+  "comment-formula.defines": {
+    "matlab": [
+      "*.m",
+    ],
+    "quarto": [
+      "*.qmd"
+    ],
+    "foo": [
+      "*.bar"
+    ]
+  }
+}
+```
+
+### `comment-formula.capture`
+1. Set 'marker' or set 'prefix' and 'suffix' simultaneously. When `prefix` and `suffix` are the same, you can use `marker` instead.
+2. `strict` is a boolean value to determine the last character of captured content isn't the escape character `\`. (default to `true`)
+3. `breakable` is boolean value to control whether the captured content can be split across multiple lines. (default to `true`)
+4. If a language haven't set capture patterns, we will use the pattern of `default`.
+
+``` json
+{
+  "comment-formula.capture": {
+    "default": [
+      {
+        "marker": "$$",
+        "breakable": true,
+      },
+      {
+        "marker": "$",
+        "breakable": false,
+      }
+    ],
+    "cpp": [
+      {
+        "marker": "\\f$",
+        "breakable": false,
+      },
+      {
+        "prefix": "\\f[",
+        "suffix": "\\f]",
+        "breakable": true,
+      }
+    ],
+    "foo": []
+  }
+}
+```
 
 <!-- configs -->
 
