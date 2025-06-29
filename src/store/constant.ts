@@ -5,10 +5,22 @@ export const GLODEB_LINE_HEIGHT_RATIO = process.platform === 'darwin' ? 1.5 : 1.
 export const MATHJAX_TEX_EX = 8.64
 export const BASE_HEIGHT = 24
 export const CHARACTERS_NEED_ESCAPING = new Set([
-  '.', '^', '$', '*', '+', '?', '|',
-  '(', ')', '[', ']', '{', '}', '\\',
+  '.',
+  '^',
+  '$',
+  '*',
+  '+',
+  '?',
+  '|',
+  '(',
+  ')',
+  '[',
+  ']',
+  '{',
+  '}',
+  '\\',
 ])
 export const DEFAULT_CAPTURE = [
   { marker: '$$', breakable: true },
-  { marker: '$', breakable: false }
+  { marker: '$', breakable: false },
 ]

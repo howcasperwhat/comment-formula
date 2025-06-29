@@ -1,17 +1,16 @@
-
+import type { Formula } from '../types'
+import { matchesGlob as isMatch } from 'pathe'
 import {
-  useIsDarkTheme,
   computed,
   shallowRef,
   useActiveTextEditor,
+  useDocumentText,
+  useIsDarkTheme,
   useTextEditorSelections,
-  useDocumentText
-} from "reactive-vscode"
+} from 'reactive-vscode'
 import { config } from '../config'
-import { GLODEB_LINE_HEIGHT_RATIO, BASE_HEIGHT, DEFAULT_CAPTURE } from './constant'
-import type { Formula } from '../types'
-import { matchesGlob as isMatch } from "pathe"
 import { duplicate, normRegExpOption, resolves } from '../utils'
+import { BASE_HEIGHT, DEFAULT_CAPTURE, GLODEB_LINE_HEIGHT_RATIO } from './constant'
 
 export const isDark = useIsDarkTheme()
 export const editor = useActiveTextEditor()
@@ -34,15 +33,15 @@ export const languages = computed(() => {
 })
 
 export const activated = computed(() => {
-    if (!doc.value)
-      return false
+  if (!doc.value)
+    return false
 
-    const langs = config.extension.languages
-  
-    const enabled = new Set(langs)
-    const current = new Set(languages.value)
-  
-    return enabled.intersection(current).size > 0
+  const langs = config.extension.languages
+
+  const enabled = new Set(langs)
+  const current = new Set(languages.value)
+
+  return enabled.intersection(current).size > 0
 })
 
 export const lineHeight = computed(() => {
@@ -71,16 +70,14 @@ export const regexes = computed(() => {
   const _options = languages.value.flatMap(lang => captures[lang] ?? [])
   const options = _options.length > 0
     ? _options
-    : captures['default'] ?? DEFAULT_CAPTURE
+    : captures.default ?? DEFAULT_CAPTURE
 
   return duplicate(
-    options.map(normRegExpOption)
+    options.map(normRegExpOption),
   ).map(opt => new RegExp([
-      opt.prefix,
-      '(.+?)',
-      opt.strict ? '(?<!\\\\)' : '',
-      opt.suffix,
-    ].join(''),
-    opt.breakable ? 'gs' : 'g'
-  ))
+    opt.prefix,
+    '(.+?)',
+    opt.strict ? '(?<!\\\\)' : '',
+    opt.suffix,
+  ].join(''), opt.breakable ? 'gs' : 'g'))
 })
