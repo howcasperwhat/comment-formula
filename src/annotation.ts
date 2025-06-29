@@ -1,19 +1,14 @@
 import type { DecorationOptions, DecorationRenderOptions, ExtensionContext } from 'vscode'
 import type { FormulaPreview } from './transformer'
-import type { RelativePosition } from './types'
-import {
-  computed,
-  useActiveTextEditor,
-  useDocumentText,
-  useEditorDecorations,
-  useTextEditorSelections,
-  watch,
-} from 'reactive-vscode'
+import type { LiteRange, RelativePosition } from './types'
+import { computed, useEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
-import { config, enabled, store } from './config'
+import { config } from './config'
+import { getMessage } from './message'
 import { setupWatcher } from './preload'
+import { activated, color, doc, editor, formulas, lineHeight, preloads, regexes, selections, text } from './store/shared'
 import { transformer } from './transformer'
-import { debounce } from './utils'
+import { debounce, mergeRanges } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -39,10 +34,6 @@ export function useAnnotation(context: ExtensionContext) {
   const AutoTabOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
   }
-
-  const editor = useActiveTextEditor()
-  const selections = useTextEditorSelections(editor)
-  const text = useDocumentText(() => editor.value?.document)
 
   function useActiveEditorDecorations(
     decorationTypeOrOptions: Parameters<typeof useEditorDecorations>[1],
@@ -112,38 +103,38 @@ export function useAnnotation(context: ExtensionContext) {
     return false
   }
 
-  const longestLine = (
+  const longestLineOf = (
     code: FormulaCode,
     preview: FormulaPreview,
   ) => {
     const codeStartLine = code.range.start.line
     const codeEndLine = code.range.end.line
     const midLine = (codeStartLine + codeEndLine) >> 1
-    if (!editor.value)
+    if (!doc.value)
       return midLine
-    const midChars = editor.value.document.lineAt(midLine).text.length
+    const midChars = doc.value.lineAt(midLine).text.length
     const previewHalfLines = Math.ceil((
       preview.height * 0.5
       + +!((codeStartLine + codeEndLine) % 2)
-      * store.height.value * 0.5
-    ) / store.height.value)
+      * lineHeight.value * 0.5
+    ) / lineHeight.value)
     const previewStartLine = Math.max(codeStartLine, midLine - (previewHalfLines - 1))
     const previewEndLine = Math.min(codeEndLine, midLine + (previewHalfLines - 1))
     let [_maxChars, _maxLine] = [midChars, midLine]
     for (let line = previewStartLine; line <= previewEndLine; ++line) {
-      const chars = editor.value.document.lineAt(line).text.length
+      const chars = doc.value.lineAt(line).text.length
       if (chars > _maxChars)
         [_maxChars, _maxLine] = [chars, line]
     }
     return _maxLine
   }
 
-  const getLeadingWhitespaceWidth = (
+  const tabWidthOf = (
     line: number,
   ) => {
     if (!editor.value)
       return 0
-    const content = editor.value.document.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
+    const content = doc.value!.lineAt(line).text.match(/^\s+/)?.at(0) ?? ''
     const tabSize = Number.parseInt(`${editor.value.options.tabSize}`) || 0
     const spaceSize = 1
     const tabCount = content.match(/\t/g)?.length ?? 0
@@ -154,7 +145,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(AutoTabOptions, () =>
     (!config.extension.hidden || !config.extension.autotab)
       ? []
-      : store.formulas.value
+      : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
             && !code.range.isSingleLine
@@ -168,7 +159,7 @@ export function useAnnotation(context: ExtensionContext) {
                 new Position(start + i + 1, 0),
                 'before',
                 preview.inline,
-                `width:${getLeadingWhitespaceWidth(start)}ch;${INJECTION};`,
+                `width:${tabWidthOf(start)}ch;${INJECTION};`,
               ),
             )
           })
@@ -176,7 +167,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
     config.extension.multiple === 'none'
       ? []
-      : store.formulas.value.filter(({ code }) => !code.range.isSingleLine)
+      : formulas.value.filter(({ code }) => !code.range.isSingleLine)
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
@@ -184,8 +175,8 @@ export function useAnnotation(context: ExtensionContext) {
             const hide = needHiding(code.range)
             const before = config.extension.multiple === 'before'
 
-            const line = (!before && !hide) ? longestLine(code, preview) : end
-            const col = (before && !hide) ? getLeadingWhitespaceWidth(start) : 0
+            const line = (!before && !hide) ? longestLineOf(code, preview) : end
+            const col = (before && !hide) ? tabWidthOf(start) : 0
             const pos = (!before && hide) ? code.range : new Position(line, col)
             const style = before ? 'position:absolute' : ''
 
@@ -200,7 +191,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(MockHeightOptions, () =>
     config.extension.multiple !== 'before'
       ? []
-      : store.formulas.value.filter(({ code }) =>
+      : formulas.value.filter(({ code }) =>
           !code.range.isSingleLine
           && !needHiding(code.range),
         ).map(({ code, preview }) => {
@@ -208,7 +199,7 @@ export function useAnnotation(context: ExtensionContext) {
           const end = code.range.end.line
           return Array.from({ length: end - start + 1 }, (_, i) =>
             decorate(
-              new Position(start + i, getLeadingWhitespaceWidth(start)),
+              new Position(start + i, tabWidthOf(start)),
               config.extension.multiple,
               preview.inline,
               `width:${preview.width}px;${INJECTION};`,
@@ -217,7 +208,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(SinglePreviewOptions, () =>
     config.extension.single === 'none'
       ? []
-      : store.formulas.value.filter(({ code }) => code.range.isSingleLine)
+      : formulas.value.filter(({ code }) => code.range.isSingleLine)
           .map(({ code, preview }) => decorate(
             code.range,
             config.extension.single,
@@ -226,17 +217,15 @@ export function useAnnotation(context: ExtensionContext) {
             Uri.parse(preview.url),
           )))
   useActiveEditorDecorations(ShowCodeOptions, () =>
-    store.formulas.value
+    formulas.value
       .map(({ code, preview }) => ({
         range: code.range,
-        hoverMessage: preview.error
-          ? store.message
-          : `![](${preview.url})`,
+        hoverMessage: getMessage(code, preview),
       })))
   useActiveEditorDecorations(HideCodeOptions, () =>
     !config.extension.hidden
       ? []
-      : store.formulas.value
+      : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
             && needHiding(code.range),
@@ -244,37 +233,52 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code }) => ({ range: code.range }),
           ))
 
-  const reg = /\$\$([\s\S]*?)\$\$/g
-
   const update = async () => {
-    if (!enabled(editor.value) || !config.extension.annotation)
+    if (!activated.value || !config.extension.annotation)
       return
     const codes: FormulaCode[] = []
-    const { document } = editor.value!
-    let match
-    reg.lastIndex = 0
-    // eslint-disable-next-line no-cond-assign
-    while ((match = reg.exec(text.value!))) {
-      const tex = match[1]
-      if (!tex)
-        continue
-      const startPos = document.positionAt(match.index)
-      const endPos = document.positionAt(match.index + match[0].length)
-      const range = new Range(startPos, endPos)
-      codes.push({ range, tex })
+    const document = doc.value!
+
+    let ranges: LiteRange[] = [{ start: Infinity, end: Infinity }]
+    const range: LiteRange[] = []
+    let match, cur
+    for (const regex of regexes.value) {
+      regex.lastIndex = 0
+      cur = 0
+      // eslint-disable-next-line no-cond-assign
+      while ((match = regex.exec(text.value!))) {
+        const [start, end] = [match.index, match.index + match[0].length]
+        if (end > ranges[cur].start) {
+          regex.lastIndex = ranges[cur].end
+          ++cur
+        }
+        else {
+          range.push({ start, end })
+          codes.push({
+            range: new Range(
+              document.positionAt(start),
+              document.positionAt(end),
+            ),
+            tex: match[1],
+          })
+        }
+      }
+      ranges = mergeRanges(ranges, range)
+      range.length = 0
     }
-    store.formulas.value = (await Promise.all(codes.map(
-      async code => transformer.from(code.tex, store.color.value)
+
+    formulas.value = (await Promise.all(codes.map(
+      async code => transformer.from(code.tex, color.value)
         .then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
   const trigger = debounce(update, config.extension.interval)
 
-  watch(store.preload, (content) => {
+  watch(preloads, (content) => {
     transformer.reset(content.join('\n'))
     trigger()
   })
-  // Transformer haven't been set after constructed (before `reset` is called).
+  // Transformer haven't been init after constructed (before `reset` is called).
   // However, `setupWatcher` will setup `useFsWatcher` and `preload` watcher (immediate),
   // so `transformer` will be `reset` before `trigger` immediately by above `WatchCallback`.
   setupWatcher()
@@ -283,7 +287,7 @@ export function useAnnotation(context: ExtensionContext) {
     // If don't clear the decorations when switching files, two problems will occur:
     // 1. Decorations are still visible after switching to a language that does not trigger the extension
     // 2. Decorations will still exist for `interval` milliseconds after switching files
-    store.formulas.value = []
+    formulas.value = []
     trigger()
   }, null, context.subscriptions)
 

@@ -6,4 +6,5 @@ tsconfig.json
 eslint.config.ts
 package-lock.json
 .gitignore
+debug/
 test/

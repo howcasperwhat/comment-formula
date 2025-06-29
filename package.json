@@ -2,7 +2,7 @@
   "publisher": "howcasperwhat",
   "name": "comment-formula",
   "displayName": "Comment Formula",
-  "version": "0.5.12",
+  "version": "1.0.6",
   "description": "Preview LaTeX formulas within the line of your editor.",
   "author": "Casper Huang",
   "repository": {
@@ -40,14 +40,6 @@
           "default": "all",
           "description": "When will the inline formula preview be displayed."
         },
-        "comment-formula.patterns": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "description": "Enable extension in these file pattern."
-        },
         "comment-formula.languages": {
           "type": "array",
           "items": {
@@ -56,19 +48,10 @@
           "default": [
             "c",
             "cpp",
-            "java",
+            "matlab",
             "python"
           ],
           "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
-        },
-        "comment-formula.scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [],
-          "markdownDescription": "Enable highlight in these scopes. Use command `Developer: Inspect Editor Tokens and Scopes` to determine the global scopes.",
-          "markdownDeprecationMessage": "Use [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) instead, this feature would be removed in later versions."
         },
         "comment-formula.interval": {
           "type": "number",
@@ -136,6 +119,31 @@
           "default": 1,
           "description": "Scale factor of the preview formula."
         },
+        "comment-formula.defines": {
+          "type": "object",
+          "default": {},
+          "description": "Define Language with glob file patterns, where key is language id, value is a list of glob pattern."
+        },
+        "comment-formula.capture": {
+          "type": "object",
+          "default": {},
+          "description": "Set RegExp for capturing math for rendering in comments."
+        },
+        "comment-formula.message.playground": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display link of mathjax-playground in hover message."
+        },
+        "comment-formula.message.preview": {
+          "type": "string",
+          "enum": [
+            "all",
+            "partial",
+            "none"
+          ],
+          "default": "partial",
+          "description": "Display rendered formula in hover message."
+        },
         "comment-formula.api.prefix": {
           "type": "string",
           "default": "",
@@ -155,29 +163,7 @@
           "description": "Paths to files containing LaTeX preamble to preload."
         }
       }
-    },
-    "languages": [
-      {
-        "id": "litemath",
-        "aliases": [],
-        "extensions": []
-      }
-    ],
-    "grammars": [
-      {
-        "language": "litemath",
-        "scopeName": "text.html.markdown.litemath",
-        "path": "./syntaxes/litemath.json"
-      },
-      {
-        "path": "./syntaxes/formula.json",
-        "scopeName": "comment-formula.injection",
-        "injectTo": [],
-        "embeddedLanguages": {
-          "meta.embedded.litemath.markdown": "latex"
-        }
-      }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
@@ -185,6 +171,7 @@
     "dev": "npm run build --watch",
     "prepare": "npm run update",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
     "pack": "vsce package",
     "publish": "vsce publish"
@@ -193,7 +180,7 @@
     "@antfu/eslint-config": "^4.2.0",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
-    "@vscode/vsce": "^3.5.0",
+    "@vscode/vsce": "^3.6.0",
     "eslint": "^9.20.0",
     "fast-glob": "^3.3.3",
     "mathjax-full": "^3.2.2",

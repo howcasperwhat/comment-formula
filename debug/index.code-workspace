@@ -13,7 +13,7 @@
     "editor.formatOnPaste": false,
     "comment-formula.annotation": true,
     "comment-formula.completion": true,
-    "comment-formula.hidden": "scope",
+    "comment-formula.hidden": "line",
     "comment-formula.autotab": true,
     "comment-formula.color": "auto",
     "comment-formula.inline": "all",
@@ -21,14 +21,36 @@
     "comment-formula.single": "after",
     "comment-formula.multiple": "after",
     "comment-formula.code": "",
+    "comment-formula.message.playground": true,
+    "comment-formula.message.preview": "all", // default to "partial"
     "comment-formula.preview": "", // default to "font-weight: bold;"
     "comment-formula.scale": 0.9, // default to 1.0
     "comment-formula.preload": [ // default to []
       "styles/1st.cls"
     ],
-    "comment-formula.languages": [],
-    "comment-formula.patterns": [
-      "*.py"
-    ],
+    "comment-formula.languages": ["py"],
+    "comment-formula.defines": {
+      "py": ["*.py"]
+    },
+    "comment-formula.capture": {
+      "py": [
+        {
+          "marker": "$$",
+          "breakable": true,
+        },
+        {
+          "marker": "@@",
+          "breakable": true,
+        },
+        {
+          "marker": "$",
+          "breakable": false,
+        },
+        {
+          "marker": "@",
+          "breakable": false,
+        }
+      ]
+    }
   }
 }

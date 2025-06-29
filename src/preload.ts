@@ -1,11 +1,12 @@
 import { sync as glob } from 'fast-glob'
 import { useFsWatcher, watch } from 'reactive-vscode'
 import { Uri, workspace } from 'vscode'
-import { config, store } from './config'
+import { config } from './config'
+import { preloads } from './store/shared'
 import { resolves } from './utils'
 
 async function preload() {
-  store.preload.value = await Promise.all(
+  preloads.value = await Promise.all(
     glob(resolves(config.extension.preload)).map(async p =>
       (await workspace.fs.readFile(Uri.file(p))).toString(),
     ),
