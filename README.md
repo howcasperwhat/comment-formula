@@ -41,7 +41,7 @@ You are supposed to write formulas between `$$` and `$$`.
 {
   "comment-formula.defines": {
     "matlab": [
-      "*.m",
+      "*.m"
     ],
     "quarto": [
       "*.qmd"
@@ -65,22 +65,22 @@ You are supposed to write formulas between `$$` and `$$`.
     "default": [
       {
         "marker": "$$",
-        "breakable": true,
+        "breakable": true
       },
       {
         "marker": "$",
-        "breakable": false,
+        "breakable": false
       }
     ],
     "cpp": [
       {
         "marker": "\\f$",
-        "breakable": false,
+        "breakable": false
       },
       {
         "prefix": "\\f[",
         "suffix": "\\f]",
-        "breakable": true,
+        "breakable": true
       }
     ],
     "foo": []
