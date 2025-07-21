@@ -1,9 +1,8 @@
 import type { LiteRange, MinuteRegExpOptions, RegExpOptions } from './types'
 import { resolve as _resolve, isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
-import { config } from './config'
 import { CHARACTERS_NEED_ESCAPING, MATHJAX_TEX_EX } from './store/constant'
-import { lineHeight } from './store/shared'
+import { config, lineHeight } from './store/shared'
 
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,

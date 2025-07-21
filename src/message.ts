@@ -1,8 +1,8 @@
 import type { FormulaCode } from './annotation'
 import type { FormulaPreview } from './transformer'
 import { MarkdownString } from 'vscode'
-import { config } from './config'
 import { PLAYGROUND_URL } from './store/constant'
+import { config } from './store/shared'
 
 export function getMessage(_code: FormulaCode, _preview: FormulaPreview) {
   const result: string[] = []

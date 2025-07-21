@@ -7,8 +7,7 @@ import { AllPackages } from 'mathjax-full/js/input/tex/AllPackages'
 import { mathjax } from 'mathjax-full/js/mathjax'
 import { SVG } from 'mathjax-full/js/output/svg'
 import { computed } from 'reactive-vscode'
-import { config } from './config'
-import { scale } from './store/shared'
+import { config, scale } from './store/shared'
 import { exToPx, isLarge } from './utils'
 
 export class FormulaPreview {

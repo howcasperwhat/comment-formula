@@ -3,10 +3,9 @@ import type { FormulaPreview } from './transformer'
 import type { LiteRange, RelativePosition } from './types'
 import { computed, useEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
-import { config } from './config'
 import { getMessage } from './message'
 import { setupWatcher } from './preload'
-import { activated, color, doc, editor, formulas, lineHeight, preloads, regexes, selections, text } from './store/shared'
+import { activated, color, config, doc, editor, formulas, lineHeight, perf, preloads, regexes, selections, text } from './store/shared'
 import { transformer } from './transformer'
 import { debounce, mergeRanges } from './utils'
 
@@ -272,7 +271,12 @@ export function useAnnotation(context: ExtensionContext) {
         .then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
-  const trigger = debounce(update, config.extension.interval)
+  const trigger = debounce(async () => {
+    const begin = Date.now()
+    await update()
+    const end = Date.now()
+    config.extension.inspect && perf.tick(end - begin)
+  }, config.extension.interval)
 
   watch(preloads, (content) => {
     transformer.reset(content.join('\n'))

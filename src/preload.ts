@@ -1,8 +1,7 @@
 import { sync as glob } from 'fast-glob'
 import { useFsWatcher, watch } from 'reactive-vscode'
 import { Uri, workspace } from 'vscode'
-import { config } from './config'
-import { preloads } from './store/shared'
+import { config, preloads } from './store/shared'
 import { resolves } from './utils'
 
 async function preload() {

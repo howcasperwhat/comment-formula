@@ -7,14 +7,13 @@ import {
   Range,
   SnippetString,
 } from 'vscode'
-import { config } from './config'
 import {
   CHARACTERS,
   COMMANDS,
   DELIMITERS,
   ENVIRONMENTS,
 } from './store/mathjax'
-import { formulas } from './store/shared'
+import { config, formulas } from './store/shared'
 import { resolves } from './utils'
 
 export function useCompletion(context: ExtensionContext) {

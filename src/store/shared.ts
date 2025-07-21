@@ -1,16 +1,29 @@
-import type { Formula } from '../types'
+import type { Config, Formula } from '../types'
 import { matchesGlob as isMatch } from 'pathe'
 import {
   computed,
+  defineConfigObject,
   shallowRef,
   useActiveTextEditor,
   useDocumentText,
   useIsDarkTheme,
   useTextEditorSelections,
 } from 'reactive-vscode'
-import { config } from '../config'
+import * as Meta from '../generated/meta'
+import { Performance } from '../performance'
 import { duplicate, normRegExpOption, resolves } from '../utils'
 import { BASE_HEIGHT, DEFAULT_CAPTURE, GLODEB_LINE_HEIGHT_RATIO } from './constant'
+
+export const config = {
+  extension: defineConfigObject<Config>(
+    Meta.scopedConfigs.scope,
+    Meta.scopedConfigs.defaults,
+  ),
+  editor: defineConfigObject<{ fontSize: number }>(
+    'editor',
+    { fontSize: 14 },
+  ),
+}
 
 export const isDark = useIsDarkTheme()
 export const editor = useActiveTextEditor()
@@ -63,6 +76,8 @@ export const scale = computed(() => {
 
 export const formulas = shallowRef<Formula[]>([])
 export const preloads = shallowRef<string[]>([])
+
+export const perf = new Performance('Main')
 
 export const regexes = computed(() => {
   const captures = config.extension.capture
