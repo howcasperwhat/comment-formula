@@ -30,9 +30,12 @@ A VSCode extensions to preview LaTeX formulas within the lines of your editor.
 
 ## Usage
 
-You are supposed to write formulas between `$$` and `$$`.
+You are supposed to write formulas between `$$` and `$$` by default, or you can customize the capture patterns in the setting option `comment-formula.capture`.
 
-**HIGHLIGHT:** Install [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) to highlight LaTeX code in comments. Reload the Window to make the highlight work when update `comment-formula.languages` or `comment-formula.capture`.
+> [!IMPORTANT]
+> **HIGHLIGHT:** Install [MathJax Highlight](https://marketplace.visualstudio.com/items?itemName=howcasperwhat.mathjax-highlight) to highlight LaTeX code in comments. Reload the Window to make the highlight work when update `comment-formula.languages` or `comment-formula.capture`.
+>
+> Note that this extension modifies the local syntax configuration file of the plugin based on your settings, which may trigger disruptive notifications from VS Code. If this affects the usage, you can set the `comment-formula.color` or include CSS styles in `comment-formula.code` to customize the style of the code.
 
 ## Configurations
 
