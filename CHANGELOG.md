@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2025-07-21: v1.0.9
+### Feature
+1. Support `comment-formula.inspect` that you can see the performance of formula parser in the status bar when set to `true`.
+
+## 2025-06-29: v1.0.8
+No significant changes.
+
 ## 2025-06-29: v1.0.7
 ### Breaking Change
 1. Remove `comment-formula.patterns` option, use `comment-formula.defines` instead.
