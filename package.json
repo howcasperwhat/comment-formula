@@ -165,7 +165,7 @@
         "comment-formula.inspect": {
           "type": "boolean",
           "default": false,
-          "description": "Enable inspect mode to view the parsing performance."
+          "description": "Enable inspecting performance of formula parser."
         }
       }
     }
