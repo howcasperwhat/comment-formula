@@ -3,6 +3,7 @@ import type { StatusBarItem } from 'vscode'
 import { computed, ref, useDisposable, watch } from 'reactive-vscode'
 import { ThemeColor, window } from 'vscode'
 import * as Meta from './generated/meta'
+import { config } from './store/shared'
 import { debounce } from './utils'
 
 interface Record {
@@ -62,10 +63,18 @@ export class Performance {
           : 'editorWarning.foreground'
         : 'editorInfo.foreground')
 
-      this.status.show()
+      config.extension.inspect && this.status.show()
     }
     const trigger = debounce(update, 1000)
 
     watch(this.perf, trigger, { immediate: true })
+    watch(
+      () => config.extension.inspect,
+      () => {
+        config.extension.inspect
+          ? this.status.show()
+          : this.status.hide()
+      },
+    )
   }
 }

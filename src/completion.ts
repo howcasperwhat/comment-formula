@@ -41,7 +41,7 @@ export function useCompletion(context: ExtensionContext) {
         ...Array.from(new Set(CHARACTERS)).map(
           func => Object.assign(new CompletionItem(
             flag + func,
-            CompletionItemKind.Function,
+            CompletionItemKind.Constant,
           ), {
             insertText: new SnippetString(`${func}`),
           }),
@@ -57,7 +57,7 @@ export function useCompletion(context: ExtensionContext) {
         ...Array.from(new Set(DELIMITERS)).map(
           func => Object.assign(new CompletionItem(
             flag + func,
-            CompletionItemKind.Function,
+            CompletionItemKind.Constant,
           ), {
             insertText: new SnippetString(`${func}`),
           }),
