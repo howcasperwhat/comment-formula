@@ -131,7 +131,7 @@
         },
         "comment-formula.message.playground": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Display link of mathjax-playground in hover message."
         },
         "comment-formula.message.preview": {
@@ -161,6 +161,11 @@
           },
           "default": [],
           "description": "Paths to files containing LaTeX preamble to preload."
+        },
+        "comment-formula.inspect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable inspect mode to view the parsing performance."
         }
       }
     }
