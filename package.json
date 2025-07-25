@@ -166,12 +166,44 @@
           "type": "boolean",
           "default": false,
           "description": "Enable inspecting performance of formula parser."
+        },
+        "comment-formula.mode": {
+          "type": "string",
+          "default": "both",
+          "enum": [
+            "edit",
+            "view",
+            "both"
+          ],
+          "description": "Mode of the extension."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "mathjax-intellisense.edit",
+        "title": "MathJax IntelliSense: Edit Mode",
+        "category": "MathJax IntelliSense"
+      },
+      {
+        "command": "mathjax-intellisense.view",
+        "title": "MathJax IntelliSense: View Mode",
+        "category": "MathJax IntelliSense"
+      },
+      {
+        "command": "mathjax-intellisense.both",
+        "title": "MathJax IntelliSense: Both Modes",
+        "category": "MathJax IntelliSense"
+      },
+      {
+        "command": "mathjax-intellisense.toggle",
+        "title": "MathJax IntelliSense: Toggle Mode",
+        "category": "MathJax IntelliSense"
+      }
+    ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
+    "vscode:prepublish": "npm run update && npm run build",
     "build": "tsup src/index.ts --external vscode",
     "dev": "npm run build --watch",
     "prepare": "npm run update",

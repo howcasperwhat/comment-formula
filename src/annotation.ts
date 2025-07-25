@@ -78,9 +78,13 @@ export function useAnnotation(context: ExtensionContext) {
       : undefined,
   })
 
-  const needHiding = (
+  const hidden = (
     range: Range,
   ): boolean => {
+    if (config.extension.mode === 'edit')
+      return false
+    if (config.extension.mode === 'view')
+      return true
     if (range.isSingleLine && config.extension.single === 'none')
       return false
     if (!range.isSingleLine && config.extension.multiple === 'none')
@@ -148,7 +152,7 @@ export function useAnnotation(context: ExtensionContext) {
           .filter(({ code, preview }) =>
             preview.inline
             && !code.range.isSingleLine
-            && needHiding(code.range),
+            && hidden(code.range),
           )
           .map(({ code, preview }) => {
             const start = code.range.start.line
@@ -164,14 +168,14 @@ export function useAnnotation(context: ExtensionContext) {
           })
           .flat())
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
-    config.extension.multiple === 'none'
+    config.extension.multiple === 'none' || config.extension.mode === 'edit'
       ? []
       : formulas.value.filter(({ code }) => !code.range.isSingleLine)
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
 
-            const hide = needHiding(code.range)
+            const hide = hidden(code.range)
             const before = config.extension.multiple === 'before'
 
             const line = (!before && !hide) ? longestLineOf(code, preview) : end
@@ -192,7 +196,7 @@ export function useAnnotation(context: ExtensionContext) {
       ? []
       : formulas.value.filter(({ code }) =>
           !code.range.isSingleLine
-          && !needHiding(code.range),
+          && !hidden(code.range),
         ).map(({ code, preview }) => {
           const start = code.range.start.line
           const end = code.range.end.line
@@ -205,7 +209,7 @@ export function useAnnotation(context: ExtensionContext) {
             ))
         }).flat())
   useActiveEditorDecorations(SinglePreviewOptions, () =>
-    config.extension.single === 'none'
+    config.extension.single === 'none' || config.extension.mode === 'edit'
       ? []
       : formulas.value.filter(({ code }) => code.range.isSingleLine)
           .map(({ code, preview }) => decorate(
@@ -227,7 +231,7 @@ export function useAnnotation(context: ExtensionContext) {
       : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
-            && needHiding(code.range),
+            && hidden(code.range),
           )
           .map(({ code }) => ({ range: code.range }),
           ))
