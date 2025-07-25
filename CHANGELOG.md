@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 2025-07-25: v1.1.0
+### Feature
+1. Support `comment-formula.mode` to control the preview rendering and code hiding behavior.
+### Miscellaneous
+1. Update `README.md` to migrate the documentation to [MathJax IntelliSense](https://github.com/howcasperwhat/mathjax-intellisense).
+
 ## 2025-07-21: v1.0.9
 ### Feature
 1. Support `comment-formula.inspect` that you can see the performance of formula parser in the status bar when set to `true`.
