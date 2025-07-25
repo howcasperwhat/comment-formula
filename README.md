@@ -20,7 +20,7 @@ Unified · Language Agnostic · Customizable
 <a href="https://github.com/howcasperwhat/comment-formula" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/howcasperwhat/comment-formula?style=social"></a>
 <br>
 <p align="center">
-<a href="https://howcasperwhat.github.io/mathjax-intellisense/extensions/comment-formula.html">📚 Documentation</a>
+<a href="https://howcasperwhat.github.io/mathjax-intellisense/extensions/comment-formula">📚 Documentation</a>
 |
 <a href="https://marketplace.visualstudio.com/items?itemName=howcasperwhat.comment-formula">🛒 Install</a>
 </p>
