@@ -11,16 +11,17 @@ import { config, scale } from './store/shared'
 import { exToPx, isLarge } from './utils'
 
 export class FormulaPreview {
-  public readonly width: number
-  public readonly height: number
   public readonly code: string
   public readonly error: boolean
   public readonly large: boolean
   public readonly inline: boolean
   public readonly url: string
-  public constructor(width: number, height: number, code: string, color?: string) {
-    this.width = width
-    this.height = height
+  public constructor(
+    public readonly width: number,
+    public readonly height: number,
+    code: string,
+    color?: string,
+  ) {
     this.code = color ? code.replaceAll('currentColor', color) : code
     this.error = code.includes('data-mjx-error')
     this.large = isLarge(height)

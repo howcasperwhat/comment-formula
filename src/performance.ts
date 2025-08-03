@@ -17,12 +17,9 @@ export class Performance {
 
   private records: Ref<Record>
   private perf: ComputedRef<number>
-  private name: string
   private status: StatusBarItem
 
-  public constructor(name: string, immediate = true) {
-    this.name = name
-
+  public constructor(private name: string, immediate = true) {
     this.records = ref({
       times: Array.from({ length: Performance.WINDOW_SIZE }, () => 0),
       index: 0,
