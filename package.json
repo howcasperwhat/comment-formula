@@ -49,7 +49,8 @@
             "c",
             "cpp",
             "matlab",
-            "python"
+            "python",
+            "markdown"
           ],
           "markdownDescription": "Enable extension in these [languages id](https://code.visualstudio.com/docs/languages/identifiers)."
         },

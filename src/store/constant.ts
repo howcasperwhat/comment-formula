@@ -24,4 +24,11 @@ export const CHARACTERS_NEED_ESCAPING = new Set([
 export const DEFAULT_CAPTURE = [
   { marker: '$$', breakable: true },
   { marker: '$', breakable: false },
+  {
+    prefix: '```latex',
+    suffix: '```',
+    strict: true,
+    breakable: true,
+    sanitize: ['*', '//'],
+  },
 ]
