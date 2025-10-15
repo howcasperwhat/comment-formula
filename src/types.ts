@@ -12,6 +12,7 @@ export type RelativePosition = 'before' | 'after' | 'none'
 export interface BaseRegExpOptions {
   strict?: boolean
   breakable?: boolean
+  sanitize?: string[]
 }
 
 export interface MinuteRegExpOptions extends BaseRegExpOptions {

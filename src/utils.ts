@@ -122,5 +122,6 @@ export function normRegExpOption(
     ),
     strict: options.strict ?? true,
     breakable: options.breakable ?? true,
+    sanitize: options.sanitize ?? [],
   }
 }

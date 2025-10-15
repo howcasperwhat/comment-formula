@@ -11,7 +11,7 @@ import {
 } from 'reactive-vscode'
 import * as Meta from '../generated/meta'
 import { Performance } from '../performance'
-import { duplicate, normRegExpOption, resolves } from '../utils'
+import { duplicate, escapeRegExpKeywords, normRegExpOption, resolves } from '../utils'
 import { BASE_HEIGHT, DEFAULT_CAPTURE, GLODEB_LINE_HEIGHT_RATIO } from './constant'
 
 export const config = {
@@ -83,16 +83,43 @@ export const regexes = computed(() => {
   const captures = config.extension.capture
 
   const _options = languages.value.flatMap(lang => captures[lang] ?? [])
-  const options = _options.length > 0
-    ? _options
-    : captures.default ?? DEFAULT_CAPTURE
+  const options = duplicate(
+    (
+      _options.length > 0
+        ? _options
+        : captures.default ?? DEFAULT_CAPTURE
+    ).map(normRegExpOption),
+  )
 
-  return duplicate(
-    options.map(normRegExpOption),
-  ).map(opt => new RegExp([
-    opt.prefix,
-    '(.+?)',
-    opt.strict ? '(?<!\\\\)' : '',
-    opt.suffix,
-  ].join(''), opt.breakable ? 'gs' : 'g'))
+  return options.map((opt) => {
+    const sanitizeTokens = opt.breakable && opt.sanitize
+      ? opt.sanitize
+          .map(escapeRegExpKeywords)
+      : []
+    const sanitize = opt.breakable && opt.sanitize
+      ? new RegExp([
+        '^\\s*',
+        '(?:',
+        sanitizeTokens.join('|'),
+        ')?',
+      ].join(''), 'gm')
+      : null
+
+    return {
+      match: new RegExp([
+        ...(opt.breakable && opt.sanitize
+          ? [
+              '(?:',
+              sanitizeTokens.join('|'),
+              ')?\\s*',
+            ]
+          : []),
+        opt.prefix,
+        '(.+?)',
+        opt.strict ? '(?<!\\\\)' : '',
+        opt.suffix,
+      ].join(''), opt.breakable ? 'gs' : 'g'),
+      sanitize,
+    }
+  })
 })
