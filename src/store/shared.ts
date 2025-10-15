@@ -111,7 +111,7 @@ export const regexes = computed(() => {
           ? [
               '(?:',
               sanitizeTokens.join('|'),
-              ')?\\s*',
+              '\\s*)?',
             ]
           : []),
         opt.prefix,
