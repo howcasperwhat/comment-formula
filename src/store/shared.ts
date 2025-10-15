@@ -83,23 +83,19 @@ export const regexes = computed(() => {
   const captures = config.extension.capture
 
   const _options = languages.value.flatMap(lang => captures[lang] ?? [])
-  const options = duplicate(
-    (
-      _options.length > 0
-        ? _options
-        : captures.default ?? DEFAULT_CAPTURE
-    ).map(normRegExpOption),
-  )
+  const options = _options.length > 0
+    ? _options
+    : captures.default ?? DEFAULT_CAPTURE
 
-  return options.map((opt) => {
+  return duplicate(
+    options.map(normRegExpOption),
+  ).map((opt) => {
     const sanitizeTokens = opt.breakable && opt.sanitize
-      ? opt.sanitize
-          .map(escapeRegExpKeywords)
+      ? opt.sanitize.map(escapeRegExpKeywords)
       : []
     const sanitize = opt.breakable && opt.sanitize
       ? new RegExp([
-        '^\\s*',
-        '(?:',
+        '^(?:\\s*',
         sanitizeTokens.join('|'),
         ')?',
       ].join(''), 'gm')
