@@ -56,6 +56,17 @@ class Transformer {
         packages: [...AllPackages.filter(
           name => !this.mmlPackages.includes(name),
         ), 'physics'],
+
+        // https://docs.mathjax.org/en/latest/web/errors.html
+        formatError: (jax: TeX<unknown, unknown, unknown>, error: Error & { id: string }) => {
+          const factory = jax.parseOptions.nodeFactory
+          const merror = factory.create('node', 'merror', [
+            factory.create('node', 'mtext', [], {}, factory.create('text', error.message)),
+          ], {
+            'data-mjx-error': `[${error.id ?? 'Error'}]: ${error.message}`,
+          })
+          return merror
+        },
       }),
       OutputJax: new SVG({
         fontCache: 'local',

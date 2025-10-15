@@ -15,7 +15,7 @@ export function getMessage(_code: FormulaCode, _preview: FormulaPreview) {
       PLAYGROUND_URL}?tex=${encodeURIComponent(tex)})`)
   }
   if (error) {
-    result.push(`$(error) RENDER ERROR`)
+    result.push(`$(error) ERROR\n\n---\n\n${_preview.code}`)
   }
   else if (preview === 'all'
     || (preview === 'partial' && inline === 'partial' && large)
