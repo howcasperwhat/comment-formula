@@ -91,7 +91,12 @@ export const regexes = computed(() => {
     options.map(normRegExpOption),
   ).map((opt) => {
     const sanitizeTokens = opt.breakable && opt.sanitize
-      ? opt.sanitize.map(escapeRegExpKeywords)
+      ? opt.sanitize
+        // Fixes passing ['#', '##']
+        // The produced regexp will match '#' first
+        // leaving an undesired '#' in case the value is '##'
+          .sort((a, b) => b.length - a.length)
+          .map(escapeRegExpKeywords)
       : []
     const sanitize = opt.breakable && opt.sanitize
       ? new RegExp([
