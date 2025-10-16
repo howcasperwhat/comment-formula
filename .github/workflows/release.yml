@@ -1,0 +1,40 @@
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # Create release page with changelog
+      - run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      # Generate .vsix file
+      - name: Generate .vsix file
+        run: npx vsce package --no-dependencies
+
+      # Publish extension to all platforms
+      # Or you can skip publishing to specific platforms in CI and run npx vsxpub locally without configuring secrets
+      - name: Publish Extension
+        run: npx vsxpub --no-dependencies
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          VSCE_PAT: ${{secrets.VSCE_PAT}}
+          OVSX_PAT: ${{secrets.OVSX_PAT}}
