@@ -13,6 +13,7 @@ import { exToPx, isLarge } from './utils'
 export class FormulaPreview {
   public readonly code: string
   public readonly error: boolean
+  public readonly errorMessage: string
   public readonly large: boolean
   public readonly inline: boolean
   public readonly url: string
@@ -24,6 +25,7 @@ export class FormulaPreview {
   ) {
     this.code = color ? code.replaceAll('currentColor', color) : code
     this.error = code.includes('data-mjx-error')
+    this.errorMessage = this.code.match(/data-mjx-error="([^"]*)"/)?.[1] ?? ''
     this.large = isLarge(height)
     this.inline = !this.large && !this.error
     this.url = `data:image/svg+xml;base64,${Buffer.from(this.code).toString('base64')}`
