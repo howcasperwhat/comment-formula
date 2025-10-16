@@ -33,3 +33,13 @@ npm run lint -- --fix
 ```
 
 Be sure to fix all linting errors before submitting a pull request.
+
+## Publishing (for maintainers)
+
+To publish the extensions, run
+
+```bash
+npm version <patch/minor/major>
+```
+
+, and push the changes. This will trigger a GitHub Action to publish the extensions.
