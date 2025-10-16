@@ -15,7 +15,7 @@ export function getMessage(_code: FormulaCode, _preview: FormulaPreview) {
       PLAYGROUND_URL}?tex=${encodeURIComponent(tex)})`)
   }
   if (error) {
-    result.push(`$(error) ERROR\n\n---\n\n${_preview.errorMessage}`)
+    result.push(`$(error) \`${_preview.errorMessage}\``)
   }
   else if (preview === 'all'
     || (preview === 'partial' && inline === 'partial' && large)
@@ -23,5 +23,8 @@ export function getMessage(_code: FormulaCode, _preview: FormulaPreview) {
   ) {
     result.push(`![](${url})`)
   }
-  return new MarkdownString(result.join('\n\n---\n\n'), true)
+  if (result.length) {
+    result.unshift('**Comment Formula**')
+  }
+  return new MarkdownString(result.join('\n\n'), true)
 }
