@@ -21,3 +21,5 @@ $$ \textcolor{warning}{\circle} $$  In javascript, `Array.prototype.slice(l, r)`
 @@ \textcolor{info}{\circle} @@  In css, `border: 1px solid;` is used to create a
    border around an element looking like @ \Box{\text{content}} @.
 '''
+
+# Error Message: $ \frac{1} $, `Missing argument for \frac`

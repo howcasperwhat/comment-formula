@@ -23,8 +23,6 @@ export function getMessage(_code: FormulaCode, _preview: FormulaPreview) {
   ) {
     result.push(`![](${url})`)
   }
-  if (result.length) {
-    result.unshift('**Comment Formula**')
-  }
+  result.length && result.unshift('**Comment Formula**')
   return new MarkdownString(result.join('\n\n'), true)
 }
