@@ -7,7 +7,7 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "${workspaceFolder}/debug/wokespace-1",
+        "${workspaceFolder}/debug/index.code-workspace",
         "--extensionDevelopmentPath=${workspaceFolder}"
       ],
       "outFiles": [
