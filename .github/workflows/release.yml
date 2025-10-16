@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Install dependencies with npm
+        run: npm install
+
       # Create release page with changelog
       - run: npx changelogithub
         env:
