@@ -245,12 +245,15 @@ export function useAnnotation(context: ExtensionContext) {
     let ranges: LiteRange[] = [{ start: Infinity, end: Infinity }]
     const range: LiteRange[] = []
     let match, cur
-    for (const regex of regexes.value) {
+    for (const { match: regex, sanitize } of regexes.value) {
       regex.lastIndex = 0
       cur = 0
       // eslint-disable-next-line no-cond-assign
       while ((match = regex.exec(text.value!))) {
-        const [start, end] = [match.index, match.index + match[0].length]
+        const [start, end] = [
+          match.index + (sanitize ? Math.max(0, match[0].search(sanitize)) : 0),
+          match.index + match[0].length,
+        ]
         if (end > ranges[cur].start) {
           regex.lastIndex = ranges[cur].end
           ++cur
@@ -262,7 +265,7 @@ export function useAnnotation(context: ExtensionContext) {
               document.positionAt(start),
               document.positionAt(end),
             ),
-            tex: match[1],
+            tex: sanitize ? match[1].replaceAll(sanitize, '') : match[1],
           })
         }
       }

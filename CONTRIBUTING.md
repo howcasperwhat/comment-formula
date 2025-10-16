@@ -29,7 +29,7 @@ We use [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://github.
 To lint the code, run
 
 ```bash
-npm run lint --fix
+npm run lint -- --fix
 ```
 
 Be sure to fix all linting errors before submitting a pull request.

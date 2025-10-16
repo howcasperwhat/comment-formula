@@ -38,6 +38,7 @@
         {
           "marker": "$$",
           "breakable": true,
+          "sanitize": ["#"]
         },
         {
           "marker": "@@",
