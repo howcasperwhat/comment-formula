@@ -2,7 +2,7 @@
   "publisher": "howcasperwhat",
   "name": "comment-formula",
   "displayName": "Comment Formula",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Preview LaTeX formulas within the line of your editor.",
   "author": "Casper Huang",
   "repository": {
