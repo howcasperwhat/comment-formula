@@ -100,9 +100,9 @@ export const regexes = computed(() => {
       : []
     const sanitize = opt.breakable && opt.sanitize
       ? new RegExp([
-        '^(?:\\s*',
+        '^(?:\\s*(?:',
         sanitizeTokens.join('|'),
-        ')?',
+        '))?',
       ].join(''), 'gm')
       : null
 
@@ -110,9 +110,9 @@ export const regexes = computed(() => {
       match: new RegExp([
         ...(opt.breakable && opt.sanitize
           ? [
-              '(?:',
+              '(?:(?:',
               sanitizeTokens.join('|'),
-              '\\s*)?',
+              ')\\s*)?',
             ]
           : []),
         opt.prefix,
