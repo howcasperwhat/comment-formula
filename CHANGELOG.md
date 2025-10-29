@@ -1,5 +1,7 @@
 # ChangeLog
 
+**WARNING: ChangeLog here might not be updated, please refer to the [release notes](https://github.com/howcasperwhat/comment-formula/releases) in the GitHub repository.**
+
 ## 2025-07-25: v1.1.0
 ### Feature
 1. Support `comment-formula.mode` to control the preview rendering and code hiding behavior.
