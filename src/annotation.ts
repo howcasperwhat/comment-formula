@@ -10,7 +10,8 @@ import { transformer } from './transformer'
 import { debounce, mergeRanges } from './utils'
 
 export interface FormulaCode {
-  range: Range
+  boundingRange: Range
+  visibleRange: Range
   tex: string
 }
 
@@ -110,8 +111,8 @@ export function useAnnotation(context: ExtensionContext) {
     code: FormulaCode,
     preview: FormulaPreview,
   ) => {
-    const codeStartLine = code.range.start.line
-    const codeEndLine = code.range.end.line
+    const codeStartLine = code.visibleRange.start.line
+    const codeEndLine = code.visibleRange.end.line
     const midLine = (codeStartLine + codeEndLine) >> 1
     if (!doc.value)
       return midLine
@@ -151,12 +152,12 @@ export function useAnnotation(context: ExtensionContext) {
       : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
-            && !code.range.isSingleLine
-            && hidden(code.range),
+            && !code.visibleRange.isSingleLine
+            && hidden(code.visibleRange),
           )
           .map(({ code, preview }) => {
-            const start = code.range.start.line
-            const end = code.range.end.line
+            const start = code.visibleRange.start.line
+            const end = code.visibleRange.end.line
             return Array.from({ length: end - start }).map((_, i) =>
               decorate(
                 new Position(start + i + 1, 0),
@@ -170,24 +171,25 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(MultiplePreviewOptions, () =>
     config.extension.multiple === 'none' || config.extension.mode === 'edit'
       ? []
-      : formulas.value.filter(({ code }) => !code.range.isSingleLine)
+      : formulas.value.filter(({ code }) => !code.visibleRange.isSingleLine)
           .map(({ code, preview }) => {
-            const start = code.range.start.line
-            const end = code.range.end.line
+            const start = code.visibleRange.start.line
+            const end = code.visibleRange.end.line
+            const mid = (code.boundingRange.start.line + code.boundingRange.end.line) / 2
 
-            const hide = hidden(code.range)
+            const hide = hidden(code.visibleRange)
             const before = config.extension.multiple === 'before'
 
             const line = (!before && !hide) ? longestLineOf(code, preview) : end
             const col = (before && !hide) ? tabWidthOf(start) : 0
-            const pos = (!before && hide) ? code.range : new Position(line, col)
+            const pos = (!before && hide) ? code.visibleRange : new Position(line, col)
             const style = before ? 'position:absolute' : ''
 
             return decorate(
               pos,
               config.extension.multiple,
               preview.inline,
-              `${config.extension.preview};${INJECTION};${style};top:${50 + ((start + end) / 2 - line) * 100}%`,
+              `${config.extension.preview};${INJECTION};${style};top:${50 + (mid - line) * 100}%`,
               Uri.parse(preview.url),
             )
           }))
@@ -195,11 +197,11 @@ export function useAnnotation(context: ExtensionContext) {
     config.extension.multiple !== 'before'
       ? []
       : formulas.value.filter(({ code }) =>
-          !code.range.isSingleLine
-          && !hidden(code.range),
+          !code.visibleRange.isSingleLine
+          && !hidden(code.visibleRange),
         ).map(({ code, preview }) => {
-          const start = code.range.start.line
-          const end = code.range.end.line
+          const start = code.visibleRange.start.line
+          const end = code.visibleRange.end.line
           return Array.from({ length: end - start + 1 }, (_, i) =>
             decorate(
               new Position(start + i, tabWidthOf(start)),
@@ -211,9 +213,9 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(SinglePreviewOptions, () =>
     config.extension.single === 'none' || config.extension.mode === 'edit'
       ? []
-      : formulas.value.filter(({ code }) => code.range.isSingleLine)
+      : formulas.value.filter(({ code }) => code.visibleRange.isSingleLine)
           .map(({ code, preview }) => decorate(
-            code.range,
+            code.visibleRange,
             config.extension.single,
             preview.inline,
             `${config.extension.preview}${INJECTION}`,
@@ -222,7 +224,7 @@ export function useAnnotation(context: ExtensionContext) {
   useActiveEditorDecorations(ShowCodeOptions, () =>
     formulas.value
       .map(({ code, preview }) => ({
-        range: code.range,
+        range: code.visibleRange,
         hoverMessage: getMessage(code, preview),
       })))
   useActiveEditorDecorations(HideCodeOptions, () =>
@@ -231,9 +233,9 @@ export function useAnnotation(context: ExtensionContext) {
       : formulas.value
           .filter(({ code, preview }) =>
             preview.inline
-            && hidden(code.range),
+            && hidden(code.visibleRange),
           )
-          .map(({ code }) => ({ range: code.range }),
+          .map(({ code }) => ({ range: code.visibleRange }),
           ))
 
   const update = async () => {
@@ -261,7 +263,11 @@ export function useAnnotation(context: ExtensionContext) {
         else {
           range.push({ start, end })
           codes.push({
-            range: new Range(
+            visibleRange: new Range(
+              document.positionAt(start),
+              document.positionAt(end),
+            ),
+            boundingRange: new Range(
               document.positionAt(start),
               document.positionAt(end),
             ),
@@ -301,6 +307,15 @@ export function useAnnotation(context: ExtensionContext) {
     formulas.value = []
     trigger()
   }, null, context.subscriptions)
+
+  window.onDidChangeTextEditorVisibleRanges((ev) => {
+    const range = ev.visibleRanges.slice(1)
+      .reduce((union, curr) => union.union(curr), ev.visibleRanges[0])
+    formulas.value = formulas.value.map((value) => {
+      value.code.visibleRange = range.intersection(value.code.boundingRange) ?? value.code.boundingRange
+      return value
+    })
+  })
 
   void ([
     window.onDidChangeActiveColorTheme,

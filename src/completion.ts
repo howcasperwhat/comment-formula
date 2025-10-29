@@ -32,7 +32,7 @@ export function useCompletion(context: ExtensionContext) {
       if (line.endsWith(`${flag}${flag}`))
         return
       if (!formulas.value.find(
-        ({ code }) => code.range.contains(position),
+        ({ code }) => code.visibleRange.contains(position),
       )) {
         return
       }
