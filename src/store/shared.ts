@@ -90,7 +90,7 @@ export const regexes = computed(() => {
   return duplicate(
     options.map(normRegExpOption),
   ).map((opt) => {
-    const sanitizeTokens = opt.breakable && opt.sanitize
+    const sanitizeTokens = opt.breakable && opt.sanitize.length
       ? opt.sanitize
         // Fixes passing ['#', '##']
         // The produced regexp will match '#' first
@@ -98,7 +98,7 @@ export const regexes = computed(() => {
           .sort((a, b) => b.length - a.length)
           .map(escapeRegExpKeywords)
       : []
-    const sanitize = opt.breakable && opt.sanitize
+    const sanitize = opt.breakable && opt.sanitize.length
       ? new RegExp([
         '^(?:\\s*(?:',
         sanitizeTokens.join('|'),
@@ -108,7 +108,7 @@ export const regexes = computed(() => {
 
     return {
       match: new RegExp([
-        ...(opt.breakable && opt.sanitize
+        ...(opt.breakable && opt.sanitize.length
           ? [
               '(?:(?:',
               sanitizeTokens.join('|'),
