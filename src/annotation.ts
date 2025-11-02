@@ -5,7 +5,7 @@ import { computed, useEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { getMessage } from './message'
 import { setupWatcher } from './preload'
-import { activated, color, config, doc, editor, formulas, lineHeight, perf, preloads, regexes, selections, text } from './store/shared'
+import { activated, color, config, doc, editor, formulas, lineHeight, perf, preloads, regexes, selections, text, vinterval } from './store/shared'
 import { transformer } from './transformer'
 import { debounce, mergeRanges } from './utils'
 
@@ -114,7 +114,7 @@ export function useAnnotation(context: ExtensionContext) {
     const codeEndLine = code.range.end.line
     const midLine = (codeStartLine + codeEndLine) >> 1
     if (!doc.value)
-      return midLine
+      return { index: midLine, length: 0 }
     const midChars = doc.value.lineAt(midLine).text.length
     const previewHalfLines = Math.ceil((
       preview.height * 0.5
@@ -129,7 +129,10 @@ export function useAnnotation(context: ExtensionContext) {
       if (chars > _maxChars)
         [_maxChars, _maxLine] = [chars, line]
     }
-    return _maxLine
+    return {
+      index: _maxLine,
+      length: _maxChars,
+    }
   }
 
   const tabWidthOf = (
@@ -157,9 +160,9 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
-            return Array.from({ length: end - start }).map((_, i) =>
+            return Array.from({ length: end - start + 1 }).map((_, i) =>
               decorate(
-                new Position(start + i + 1, 0),
+                new Position(start + i, 0),
                 'before',
                 preview.inline,
                 `width:${tabWidthOf(start)}ch;${INJECTION};`,
@@ -178,16 +181,29 @@ export function useAnnotation(context: ExtensionContext) {
             const hide = hidden(code.range)
             const before = config.extension.multiple === 'before'
 
-            const line = (!before && !hide) ? longestLineOf(code, preview) : end
-            const col = (before && !hide) ? tabWidthOf(start) : 0
-            const pos = (!before && hide) ? code.range : new Position(line, col)
-            const style = before ? 'position:absolute' : ''
-
+            const overflow = config.extension.optimize.overflow && vinterval.value
+              && !vinterval.value.contains(code.range)
+              && vinterval.value.intersection(code.range)
+            const line = overflow
+              ? (vinterval.value!.start.line + vinterval.value!.end.line) >> 1
+              : (!before && !hide) ? longestLineOf(code, preview).index : end
+            const col = (before && !hide)
+              ? tabWidthOf(start)
+              : 0
+            const pos = (!before && hide && !overflow)
+              ? code.range
+              : new Position(line, col)
+            const top = 50 + ((start + end) / 2 - line) * 100
+            const left = overflow
+              ? hide ? tabWidthOf(start) :longestLineOf(code, preview).length
+              : 0
+            const style = `${overflow ? 'position:absolute;' : ''}top:${top}%;left:${left}ch;`
+            console.log(overflow, vinterval.value, code.range, left)
             return decorate(
               pos,
               config.extension.multiple,
               preview.inline,
-              `${config.extension.preview};${INJECTION};${style};top:${50 + ((start + end) / 2 - line) * 100}%`,
+              `${config.extension.preview};${INJECTION};${style}`,
               Uri.parse(preview.url),
             )
           }))
@@ -200,7 +216,9 @@ export function useAnnotation(context: ExtensionContext) {
         ).map(({ code, preview }) => {
           const start = code.range.start.line
           const end = code.range.end.line
-          return Array.from({ length: end - start + 1 }, (_, i) =>
+          // Assert before-decoration is anchored at the last line,
+          // so we needn't decorate the last line to mock height
+          return Array.from({ length: end - start }, (_, i) =>
             decorate(
               new Position(start + i, tabWidthOf(start)),
               config.extension.multiple,
