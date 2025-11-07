@@ -7,7 +7,7 @@ import { getMessage } from './message'
 import { setupWatcher } from './preload'
 import { activated, color, config, doc, editor, formulas, lineHeight, perf, preloads, regexes, selections, text, vinterval } from './store/shared'
 import { transformer } from './transformer'
-import { debounce, mergeRanges } from './utils'
+import { debounce, isTruthy, mergeRanges } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -19,6 +19,9 @@ export function useAnnotation(context: ExtensionContext) {
     textDecoration: `none; vertical-align:top;`,
   }
   const MultiplePreviewOptions: DecorationRenderOptions = {
+    textDecoration: `none; vertical-align:top;`,
+  }
+  const OverflowPreviewOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
   }
   const ShowCodeOptions = computed<DecorationRenderOptions>(() => ({
@@ -181,32 +184,54 @@ export function useAnnotation(context: ExtensionContext) {
             const hide = hidden(code.range)
             const before = config.extension.multiple === 'before'
 
-            const overflow = config.extension.optimize.overflow && vinterval.value
-              && !vinterval.value.contains(code.range)
-              && vinterval.value.intersection(code.range)
-            const line = overflow
-              ? (vinterval.value!.start.line + vinterval.value!.end.line) >> 1
-              : (!before && !hide) ? longestLineOf(code, preview).index : end
-            const col = (before && !hide)
-              ? tabWidthOf(start)
-              : 0
-            const pos = (!before && hide && !overflow)
-              ? code.range
-              : new Position(line, col)
-            const top = 50 + ((start + end) / 2 - line) * 100
-            const left = overflow
-              ? hide ? tabWidthOf(start) :longestLineOf(code, preview).length
-              : 0
-            const style = `${overflow ? 'position:absolute;' : ''}top:${top}%;left:${left}ch;`
-            console.log(overflow, vinterval.value, code.range, left)
+            const line = before ? end : longestLineOf(code, preview).index
+            const col = (before && !hide) ? tabWidthOf(start) : 0
+            const style = `top:${50 + ((start + end) / 2 - line) * 100}%`
+
             return decorate(
-              pos,
+              new Position(line, col),
               config.extension.multiple,
               preview.inline,
               `${config.extension.preview};${INJECTION};${style}`,
               Uri.parse(preview.url),
             )
           }))
+  useActiveEditorDecorations(OverflowPreviewOptions, () =>
+    config.extension.multiple === 'none' || config.extension.mode === 'edit'
+    || !config.extension.optimize.overflow
+      ? []
+      : formulas.value.filter(({ code }) => !code.range.isSingleLine)
+          .map(({ code, preview }) => {
+            const start = code.range.start.line
+            const end = code.range.end.line
+            const before = config.extension.multiple === 'before'
+
+            const anchor = before ? end : longestLineOf(code, preview).index
+            const overflow = Boolean(vinterval.value
+            // Anchor line of the decoration is outside of visible ranges, so vscode hides it
+              && (vinterval.value.start.line > anchor || vinterval.value.end.line < anchor)
+              // Decoration is partially inside the visible ranges, might should be shown
+              && vinterval.value.intersection(code.range))
+            if (!overflow)
+              return undefined
+
+            const hide = hidden(code.range)
+
+            const line = (vinterval.value!.start.line + vinterval.value!.end.line) >> 1
+            const col = (before && !hide) ? tabWidthOf(start) : 0
+            const top = 50 + ((start + end) / 2 - line) * 100
+            const left = hide || before ? tabWidthOf(start) : longestLineOf(code, preview).length
+            const style = `position:absolute;top:${top}%;left:${left}ch;`
+
+            return decorate(
+              new Position(line, col),
+              config.extension.multiple,
+              preview.inline,
+              `${config.extension.preview};${INJECTION};${style}`,
+              Uri.parse(preview.url),
+            )
+          })
+          .filter(isTruthy))
   useActiveEditorDecorations(MockHeightOptions, () =>
     config.extension.multiple !== 'before'
       ? []
