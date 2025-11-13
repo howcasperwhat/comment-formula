@@ -4,6 +4,10 @@ import { workspace } from 'vscode'
 import { CHARACTERS_NEED_ESCAPING, MATHJAX_TEX_EX } from './store/constant'
 import { config, lineHeight } from './store/shared'
 
+export function isTruthy<T>(value: T | false | null | undefined): value is T {
+  return Boolean(value)
+}
+
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delay: number,

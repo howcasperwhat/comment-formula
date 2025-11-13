@@ -8,7 +8,9 @@ import {
   useDocumentText,
   useIsDarkTheme,
   useTextEditorSelections,
+  useTextEditorVisibleRanges,
 } from 'reactive-vscode'
+import { Range } from 'vscode'
 import * as Meta from '../generated/meta'
 import { Performance } from '../performance'
 import { duplicate, escapeRegExpKeywords, normRegExpOption, resolves } from '../utils'
@@ -123,4 +125,14 @@ export const regexes = computed(() => {
       sanitize,
     }
   })
+})
+
+export const vranges = useTextEditorVisibleRanges(editor)
+export const vinterval = computed(() => {
+  if (!config.extension.optimize.overflow || vranges.value.length === 0)
+    return undefined
+  return new Range(
+    vranges.value.at(0)!.start,
+    vranges.value.at(-1)!.end,
+  )
 })

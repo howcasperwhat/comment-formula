@@ -5,9 +5,9 @@ import { computed, useEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { getMessage } from './message'
 import { setupWatcher } from './preload'
-import { activated, color, config, doc, editor, formulas, lineHeight, perf, preloads, regexes, selections, text } from './store/shared'
+import { activated, color, config, doc, editor, formulas, lineHeight, perf, preloads, regexes, selections, text, vinterval } from './store/shared'
 import { transformer } from './transformer'
-import { debounce, mergeRanges } from './utils'
+import { debounce, isTruthy, mergeRanges } from './utils'
 
 export interface FormulaCode {
   range: Range
@@ -19,6 +19,9 @@ export function useAnnotation(context: ExtensionContext) {
     textDecoration: `none; vertical-align:top;`,
   }
   const MultiplePreviewOptions: DecorationRenderOptions = {
+    textDecoration: `none; vertical-align:top;`,
+  }
+  const OverflowPreviewOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
   }
   const ShowCodeOptions = computed<DecorationRenderOptions>(() => ({
@@ -114,7 +117,7 @@ export function useAnnotation(context: ExtensionContext) {
     const codeEndLine = code.range.end.line
     const midLine = (codeStartLine + codeEndLine) >> 1
     if (!doc.value)
-      return midLine
+      return { index: midLine, length: 0 }
     const midChars = doc.value.lineAt(midLine).text.length
     const previewHalfLines = Math.ceil((
       preview.height * 0.5
@@ -129,7 +132,10 @@ export function useAnnotation(context: ExtensionContext) {
       if (chars > _maxChars)
         [_maxChars, _maxLine] = [chars, line]
     }
-    return _maxLine
+    return {
+      index: _maxLine,
+      length: _maxChars,
+    }
   }
 
   const tabWidthOf = (
@@ -157,9 +163,9 @@ export function useAnnotation(context: ExtensionContext) {
           .map(({ code, preview }) => {
             const start = code.range.start.line
             const end = code.range.end.line
-            return Array.from({ length: end - start }).map((_, i) =>
+            return Array.from({ length: end - start + 1 }).map((_, i) =>
               decorate(
-                new Position(start + i + 1, 0),
+                new Position(start + i, 0),
                 'before',
                 preview.inline,
                 `width:${tabWidthOf(start)}ch;${INJECTION};`,
@@ -178,19 +184,54 @@ export function useAnnotation(context: ExtensionContext) {
             const hide = hidden(code.range)
             const before = config.extension.multiple === 'before'
 
-            const line = (!before && !hide) ? longestLineOf(code, preview) : end
+            const line = before ? end : longestLineOf(code, preview).index
             const col = (before && !hide) ? tabWidthOf(start) : 0
-            const pos = (!before && hide) ? code.range : new Position(line, col)
-            const style = before ? 'position:absolute' : ''
+            const style = `top:${50 + ((start + end) / 2 - line) * 100}%`
 
             return decorate(
-              pos,
+              new Position(line, col),
               config.extension.multiple,
               preview.inline,
-              `${config.extension.preview};${INJECTION};${style};top:${50 + ((start + end) / 2 - line) * 100}%`,
+              `${config.extension.preview};${INJECTION};${style}`,
               Uri.parse(preview.url),
             )
           }))
+  useActiveEditorDecorations(OverflowPreviewOptions, () =>
+    config.extension.multiple === 'none' || config.extension.mode === 'edit'
+    || !config.extension.optimize.overflow
+      ? []
+      : formulas.value.filter(({ code }) => !code.range.isSingleLine)
+          .map(({ code, preview }) => {
+            const start = code.range.start.line
+            const end = code.range.end.line
+            const before = config.extension.multiple === 'before'
+
+            const anchor = before ? end : longestLineOf(code, preview).index
+            const overflow = Boolean(vinterval.value
+            // Anchor line of the decoration is outside of visible ranges, so vscode hides it
+              && (vinterval.value.start.line > anchor || vinterval.value.end.line < anchor)
+              // Decoration is partially inside the visible ranges, might should be shown
+              && vinterval.value.intersection(code.range))
+            if (!overflow)
+              return undefined
+
+            const hide = hidden(code.range)
+
+            const line = (vinterval.value!.start.line + vinterval.value!.end.line) >> 1
+            const col = (before && !hide) ? tabWidthOf(start) : 0
+            const top = 50 + ((start + end) / 2 - line) * 100
+            const left = hide || before ? tabWidthOf(start) : longestLineOf(code, preview).length
+            const style = `position:absolute;top:${top}%;left:${left}ch;`
+
+            return decorate(
+              new Position(line, col),
+              config.extension.multiple,
+              preview.inline,
+              `${config.extension.preview};${INJECTION};${style}`,
+              Uri.parse(preview.url),
+            )
+          })
+          .filter(isTruthy))
   useActiveEditorDecorations(MockHeightOptions, () =>
     config.extension.multiple !== 'before'
       ? []
@@ -200,7 +241,9 @@ export function useAnnotation(context: ExtensionContext) {
         ).map(({ code, preview }) => {
           const start = code.range.start.line
           const end = code.range.end.line
-          return Array.from({ length: end - start + 1 }, (_, i) =>
+          // Assert before-decoration is anchored at the last line,
+          // so we needn't decorate the last line to mock height
+          return Array.from({ length: end - start }, (_, i) =>
             decorate(
               new Position(start + i, tabWidthOf(start)),
               config.extension.multiple,

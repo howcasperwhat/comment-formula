@@ -33,6 +33,7 @@
     "comment-formula.defines": {
       "py": ["*.py"]
     },
+    "comment-formula.optimize.overflow": true,
     "comment-formula.capture": {
       "py": [
         {

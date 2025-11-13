@@ -176,6 +176,11 @@
             "both"
           ],
           "description": "Mode of the extension."
+        },
+        "comment-formula.optimize.overflow": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto transform position of rendered formula when overflow."
         }
       }
     },
