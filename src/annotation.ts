@@ -317,8 +317,12 @@ export function useAnnotation(context: ExtensionContext) {
     }
 
     formulas.value = (await Promise.all(codes.map(
-      async code => transformer.from(code.tex, color.value)
-        .then(preview => ({ code, preview })),
+      async code => transformer.from(
+        `${code.range.isSingleLine
+          ? config.extension.preamble.single
+          : config.extension.preamble.multiple}${code.tex}`,
+        color.value
+      ).then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
   const trigger = debounce(async () => {

@@ -54,6 +54,8 @@
           "breakable": false,
         }
       ]
-    }
+    },
+    "comment-formula.preamble.single": "\\textstyle",
+    "comment-formula.preamble.multiple": "",
   }
 }

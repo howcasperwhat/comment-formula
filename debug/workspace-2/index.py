@@ -58,3 +58,5 @@ $$ \textcolor{warning}{\circle} $$  In javascript, `Array.prototype.slice(l, r)`
 '''
 
 # Error Message: $ \frac{1} $, `Missing argument for \frac`
+
+# When `preamble` is enabled: $ \sum_{i=1}^{n} i^2 = \frac{n(n+1)(2n+1)}{6} $

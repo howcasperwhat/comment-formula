@@ -181,6 +181,16 @@
           "type": "boolean",
           "default": false,
           "description": "Auto transform position of rendered formula when overflow."
+        },
+        "comment-formula.preamble.single": {
+          "type": "string",
+          "default": "",
+          "description": "LaTeX preamble prepended before rendering single-line formulas."
+        },
+        "comment-formula.preamble.multiple": {
+          "type": "string",
+          "default": "",
+          "description": "LaTeX preamble prepended before rendering multi-line (display) formulas."
         }
       }
     },
