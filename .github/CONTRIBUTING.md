@@ -39,7 +39,7 @@ Be sure to fix all linting errors before submitting a pull request.
 To publish the extensions, run
 
 ```bash
-nr release
+pnpm run release
 ```
 
 , and push the changes. This will trigger a GitHub Action to publish the extensions.
