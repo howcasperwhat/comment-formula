@@ -1,7 +1,7 @@
 import type { DecorationOptions, DecorationRenderOptions, ExtensionContext } from 'vscode'
 import type { FormulaPreview } from './transformer'
 import type { LiteRange, RelativePosition } from './types'
-import { computed, useEditorDecorations, watch } from 'reactive-vscode'
+import { computed, useActiveEditorDecorations, watch } from 'reactive-vscode'
 import { Position, Range, Uri, window, workspace } from 'vscode'
 import { getMessage } from './message'
 import { setupWatcher } from './preload'
@@ -25,28 +25,16 @@ export function useAnnotation(context: ExtensionContext) {
     textDecoration: `none; vertical-align:top;`,
   }
   const ShowCodeOptions = computed<DecorationRenderOptions>(() => ({
-    textDecoration: `none; vertical-align:top; ${config.extension.code}`,
+    textDecoration: `none; vertical-align:top; ${config.extension.code};`,
   }))
   const HideCodeOptions: DecorationRenderOptions = {
     textDecoration: 'none; vertical-align:top; display: none;',
   }
   const MockHeightOptions: DecorationRenderOptions = {
-    textDecoration: `none; vertical-align:top;;`,
+    textDecoration: `none; vertical-align:top;`,
   }
   const AutoTabOptions: DecorationRenderOptions = {
     textDecoration: `none; vertical-align:top;`,
-  }
-
-  function useActiveEditorDecorations(
-    decorationTypeOrOptions: Parameters<typeof useEditorDecorations>[1],
-    rangesOrOptions: Parameters<typeof useEditorDecorations>[2],
-  ) {
-    useEditorDecorations(
-      editor,
-      decorationTypeOrOptions,
-      rangesOrOptions,
-      { updateOn: ['effect'] },
-    )
   }
 
   const INJECTION = [

@@ -42,8 +42,8 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       reactive-vscode:
-        specifier: ^0.2.13
-        version: 0.2.22(@types/vscode@1.106.1)
+        specifier: ^0.4.1
+        version: 0.4.1(@types/vscode@1.106.1)
       simple-git-hooks:
         specifier: ^2.13.1
         version: 2.13.1
@@ -347,8 +347,8 @@ packages:
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
 
-  '@reactive-vscode/reactivity@0.2.22':
-    resolution: {integrity: sha512-+ltivl/R1c4vapZsRrejNQVyeQICayQ39wn0l/VjFqVcCs8ADVpNo4j53feMcM8oEbJv0StvVcODIyRFfqTGsg==}
+  '@reactive-vscode/reactivity@0.4.1':
+    resolution: {integrity: sha512-ThNXTkTNK9LHvdlBcyzqSywlfF61FIQDlVDqv12+rkRQCCUjWsD+oilbIYYi5uAJkQ2h/yLyowx3f0YVEY1bxQ==}
 
   '@rolldown/binding-android-arm64@1.0.0-beta.53':
     resolution: {integrity: sha512-Ok9V8o7o6YfSdTTYA/uHH30r3YtOxLD6G3wih/U9DO0ucBBFq8WPt/DslU53OgfteLRHITZny9N/qCUxMf9kjQ==}
@@ -2196,10 +2196,10 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  reactive-vscode@0.2.22:
-    resolution: {integrity: sha512-bJq3AkoKt157CIw5Bz8Jp71dhSEG4M6O1Txjx5BLj97O+D1lQ7XghOGGngFWLTnWX4BwXxzYV7MvQmzNLqPuOg==}
+  reactive-vscode@0.4.1:
+    resolution: {integrity: sha512-meh1p9cF3A0kRKQARo84PASHwa27cFMD3bLWfV7DypERf51678f420my8btKAyMHl3P6pI7LcivrrwbfrIgmNg==}
     peerDependencies:
-      '@types/vscode': ^1.99.1
+      '@types/vscode': ^1.101.0
 
   read-pkg@9.0.1:
     resolution: {integrity: sha512-9viLL4/n1BJUCT1NXVTdS1jtm80yDEgR5T4yCelII49Mbj0v1rZdKqj7zCiYdbB0CuCgdrvHcNogAKTFPBocFA==}
@@ -3086,7 +3086,7 @@ snapshots:
     dependencies:
       quansync: 1.0.0
 
-  '@reactive-vscode/reactivity@0.2.22': {}
+  '@reactive-vscode/reactivity@0.4.1': {}
 
   '@rolldown/binding-android-arm64@1.0.0-beta.53':
     optional: true
@@ -5257,9 +5257,9 @@ snapshots:
       strip-json-comments: 2.0.1
     optional: true
 
-  reactive-vscode@0.2.22(@types/vscode@1.106.1):
+  reactive-vscode@0.4.1(@types/vscode@1.106.1):
     dependencies:
-      '@reactive-vscode/reactivity': 0.2.22
+      '@reactive-vscode/reactivity': 0.4.1
       '@types/vscode': 1.106.1
 
   read-pkg@9.0.1:
