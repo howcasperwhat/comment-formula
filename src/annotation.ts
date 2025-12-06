@@ -68,9 +68,9 @@ export function useAnnotation(context: ExtensionContext) {
     range: position instanceof Range
       ? position
       : new Range(
-        position,
-        position.translate(0, Number.MAX_SAFE_INTEGER),
-      ),
+          position,
+          position.translate(0, Number.MAX_SAFE_INTEGER),
+        ),
     renderOptions: inline
       ? {
           [relative]: {
@@ -320,9 +320,7 @@ export function useAnnotation(context: ExtensionContext) {
       async code => transformer.from(
         [code.range.isSingleLine
           ? config.extension.preamble.single
-          : config.extension.preamble.multiple,
-          code.tex
-        ].filter(Boolean).join(' '),
+          : config.extension.preamble.multiple, code.tex].filter(Boolean).join(' '),
         color.value,
       ).then(preview => ({ code, preview })),
     ))).filter(Boolean)

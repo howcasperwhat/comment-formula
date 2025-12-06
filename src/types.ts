@@ -24,16 +24,16 @@ export interface UnshapedRegExpOptions extends BaseRegExpOptions {
   marker: string
 }
 
-export type RegExpOptions =
-  MinuteRegExpOptions | UnshapedRegExpOptions
+export type RegExpOptions
+  = MinuteRegExpOptions | UnshapedRegExpOptions
 
 export interface LiteRange {
   start: number
   end: number
 }
 
-export type ReplaceKeyType<T, K extends keyof T, N> =
-  Omit<T, K> & { [P in K]: N }
+export type ReplaceKeyType<T, K extends keyof T, N>
+  = Omit<T, K> & { [P in K]: N }
 
 export type ConfigDefines = Record<string, string[]>
 export type ConfigCapture = Record<string, RegExpOptions[]>

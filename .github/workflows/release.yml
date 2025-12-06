@@ -21,8 +21,10 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Install dependencies with npm
-        run: npm install
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+
+      - run: pnpm install
 
       # Create release page with changelog
       - run: npx changelogithub

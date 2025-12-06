@@ -102,10 +102,10 @@ export const regexes = computed(() => {
       : []
     const sanitize = opt.breakable && opt.sanitize.length
       ? new RegExp([
-        '^(?:\\s*(?:',
-        sanitizeTokens.join('|'),
-        '))?',
-      ].join(''), 'gm')
+          '^(?:\\s*(?:',
+          sanitizeTokens.join('|'),
+          '))?',
+        ].join(''), 'gm')
       : null
 
     return {

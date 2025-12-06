@@ -4,10 +4,10 @@ Thank you for being interested in this project! We are excited to have you here.
 
 ## Setup (locally)
 
-To set up the project locally, you need to have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed.
+To set up the project locally, you need to have [Node.js](https://nodejs.org/en/) and [pnpm](https://pnpm.io/) installed. Once you have them, follow these steps:
 
 ```bash
-npm i
+pnpm i
 ```
 
 ## Development
@@ -19,7 +19,7 @@ Press `F5` to start the extension in a new VSCode window. Open `./debug/` folder
 Every time you add or update a config in `package.json`, run
 
 ```bash
-npm run update
+pnpm run update
 ```
 
 ## Code Style
@@ -29,7 +29,7 @@ We use [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://github.
 To lint the code, run
 
 ```bash
-npm run lint -- --fix
+pnpm run lint -- --fix
 ```
 
 Be sure to fix all linting errors before submitting a pull request.
@@ -39,7 +39,7 @@ Be sure to fix all linting errors before submitting a pull request.
 To publish the extensions, run
 
 ```bash
-npm version <patch/minor/major>
+nr release
 ```
 
 , and push the changes. This will trigger a GitHub Action to publish the extensions.

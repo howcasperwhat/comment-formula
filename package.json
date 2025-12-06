@@ -3,6 +3,7 @@
   "name": "comment-formula",
   "displayName": "Comment Formula",
   "version": "1.2.5",
+  "packageManager": "pnpm@10.7.0",
   "description": "Preview LaTeX formulas within the line of your editor.",
   "author": "Casper Huang",
   "repository": {
@@ -218,28 +219,39 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run update && npm run build",
+    "vscode:prepublish": "pnpm run update && pnpm run build",
     "build": "tsup src/index.ts --external vscode",
-    "dev": "npm run build --watch",
-    "prepare": "npm run update",
+    "dev": "pnpm run build -- --watch",
+    "prepare": "pnpm run update",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "update": "vscode-ext-gen --output src/generated/meta.ts",
-    "pack": "vsce package",
-    "publish": "vsce publish"
+    "release": "bumpp",
+    "pack": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.2.0",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
     "@vscode/vsce": "^3.6.0",
+    "bumpp": "^10.3.2",
     "eslint": "^9.20.0",
     "fast-glob": "^3.3.3",
+    "jiti": "^2.6.1",
+    "lint-staged": "^16.2.7",
     "mathjax-full": "^3.2.2",
     "pathe": "^2.0.3",
     "reactive-vscode": "^0.2.13",
+    "simple-git-hooks": "^2.13.1",
     "tsup": "^8.3.6",
     "typescript": "^5.7.3",
     "vscode-ext-gen": "^1.0.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
