@@ -318,10 +318,12 @@ export function useAnnotation(context: ExtensionContext) {
 
     formulas.value = (await Promise.all(codes.map(
       async code => transformer.from(
-        `${code.range.isSingleLine
+        [code.range.isSingleLine
           ? config.extension.preamble.single
-          : config.extension.preamble.multiple}${code.tex}`,
-        color.value
+          : config.extension.preamble.multiple,
+          code.tex
+        ].filter(Boolean).join(' '),
+        color.value,
       ).then(preview => ({ code, preview })),
     ))).filter(Boolean)
   }
