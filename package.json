@@ -2,7 +2,9 @@
   "publisher": "howcasperwhat",
   "name": "comment-formula",
   "displayName": "Comment Formula",
+  "type": "module",
   "version": "1.2.6",
+  "private": true,
   "packageManager": "pnpm@10.7.0",
   "description": "Preview LaTeX formulas within the line of your editor.",
   "author": "Casper Huang",
@@ -14,7 +16,7 @@
     "Visualization",
     "Snippets"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
   "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.84.0"
@@ -220,7 +222,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm run update && pnpm run build",
-    "build": "tsup src/index.ts --external vscode",
+    "build": "tsdown src/index.ts --external vscode",
     "dev": "pnpm run build -- --watch",
     "prepare": "pnpm run update",
     "lint": "eslint .",
@@ -244,7 +246,7 @@
     "pathe": "^2.0.3",
     "reactive-vscode": "^0.2.13",
     "simple-git-hooks": "^2.13.1",
-    "tsup": "^8.3.6",
+    "tsdown": "^0.17.0",
     "typescript": "^5.7.3",
     "vscode-ext-gen": "^1.0.0"
   },
