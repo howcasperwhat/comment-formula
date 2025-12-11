@@ -36,6 +36,15 @@ Unified · Language Agnostic · Customizable
 <img src="https://github.com/howcasperwhat/comment-formula/blob/main/assets/feature.png?raw=true" alt="feature" />
 </p>
 
+## Credit
+
+This project is inspired by [Iconify IntelliSense](https://github.com/antfu/vscode-iconify).
+
+This project also uses and benefits from:
+
+- [MathJax](https://www.mathjax.org/): A JavaScript display engine for mathematics.
+- [Reactive VSCode](https://github.com/kermanx/reactive-vscode): Vue Reactivity for VSCode Extension API.
+
 ## License
 
 ### Code
