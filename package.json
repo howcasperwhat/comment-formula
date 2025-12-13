@@ -16,7 +16,7 @@
     "Visualization",
     "Snippets"
   ],
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.84.0"
@@ -222,7 +222,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm run update && pnpm run build",
-    "build": "tsdown src/index.ts --external vscode",
+    "build": "tsdown src/index.ts --external vscode --platform node --format cjs --fixedExtension",
     "dev": "pnpm run build -- --watch",
     "prepare": "pnpm run update",
     "lint": "eslint .",
