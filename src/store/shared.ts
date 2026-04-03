@@ -13,7 +13,7 @@ import {
 import { Range } from 'vscode'
 import * as Meta from '../generated/meta'
 import { Performance } from '../performance'
-import { duplicate, escapeRegExpKeywords, normRegExpOption, resolves } from '../utils'
+import { duplicate, escapeRegExpKeywords, isTruthy, normRegExpOption, resolves } from '../utils'
 import { BASE_HEIGHT, DEFAULT_CAPTURE, GLODEB_LINE_HEIGHT_RATIO } from './constant'
 
 export const config = {
@@ -92,37 +92,25 @@ export const regexes = computed(() => {
   return duplicate(
     options.map(normRegExpOption),
   ).map((opt) => {
-    const sanitizeTokens = opt.breakable && opt.sanitize.length
-      ? opt.sanitize
-        // Fixes passing ['#', '##']
-        // The produced regexp will match '#' first
-        // leaving an undesired '#' in case the value is '##'
-          .sort((a, b) => b.length - a.length)
-          .map(escapeRegExpKeywords)
-      : []
     const sanitize = opt.breakable && opt.sanitize.length
-      ? new RegExp([
-          '^(?:\\s*(?:',
-          sanitizeTokens.join('|'),
-          '))?',
-        ].join(''), 'gm')
-      : null
-
+      // remove `<whitespace>#` for each line, so use `^` and `gm`
+      // ['#', '##'] => ['##', '#'] (match prefix later)
+      ? new RegExp(`^\\s*${opt.sanitize
+          .toSorted((a, b) => b.length - a.length)
+          .map(escapeRegExpKeywords)
+          .join('|')}`, 'gm')
+      : undefined
+    const sanitizer = sanitize
+      ? (content: string) => content.replaceAll(sanitize, '')
+      : undefined
     return {
-      match: new RegExp([
-        ...(opt.breakable && opt.sanitize.length
-          ? [
-              '(?:(?:',
-              sanitizeTokens.join('|'),
-              ')\\s*)?',
-            ]
-          : []),
+      matcher: new RegExp([
         opt.prefix,
         '(.+?)',
         opt.strict ? '(?<!\\\\)' : '',
         opt.suffix,
       ].join(''), opt.breakable ? 'gs' : 'g'),
-      sanitize,
+      processers: [sanitizer].filter(isTruthy),
     }
   })
 })
