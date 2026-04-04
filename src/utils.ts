@@ -1,4 +1,4 @@
-import type { LiteRange, MinuteRegExpOptions, RegExpOptions } from './types'
+import type { AdvancedRegExpOptions, BasicRegExpOptions, LiteRange, Marker, MarkerOptions, RegExpOptions } from './types'
 import { resolve as _resolve, isAbsolute, join } from 'pathe'
 import { workspace } from 'vscode'
 import { CHARACTERS_NEED_ESCAPING, MATHJAX_TEX_EX } from './store/constant'
@@ -6,6 +6,10 @@ import { config, lineHeight } from './store/shared'
 
 export function isTruthy<T>(value: T | false | null | undefined): value is T {
   return Boolean(value)
+}
+
+export function isString(value: any): value is string {
+  return typeof value === 'string'
 }
 
 export function debounce<T extends (...args: any[]) => any>(
@@ -110,22 +114,71 @@ export function escapeRegExpKeywords(str: string) {
   return ans.join('')
 }
 
-export function normRegExpOption(
-  options: RegExpOptions,
-): Required<MinuteRegExpOptions> {
+const processers = {
+  str: escapeRegExpKeywords,
+  reg: (str: string) => str,
+}
+
+export function normMarkerOptions(
+  marker: Marker,
+): Required<MarkerOptions> {
+  marker = isString(marker)
+    ? { type: 'str', value: marker }
+    : marker
   return {
-    prefix: escapeRegExpKeywords(
-      'marker' in options
-        ? options.marker
-        : options.prefix,
-    ),
-    suffix: escapeRegExpKeywords(
-      'marker' in options
-        ? options.marker
-        : options.suffix,
-    ),
+    type: marker.type,
+    value: marker.value,
+    include: marker.include ?? false,
+  }
+}
+
+export function normBasicRegExpOption(
+  options: BasicRegExpOptions,
+) {
+  const [prefix, suffix] = [
+    'marker' in options ? options.marker : options.prefix,
+    'marker' in options ? options.marker : options.suffix,
+  ].map(normMarkerOptions)
+  return {
+    prefix: {
+      value: processers[prefix.type](prefix.value),
+      include: prefix.include,
+    },
+    suffix: {
+      value: processers[suffix.type](suffix.value),
+      include: suffix.include,
+    },
     strict: options.strict ?? true,
     breakable: options.breakable ?? true,
     sanitize: options.sanitize ?? [],
+  }
+}
+
+export function normRegExpOption(
+  options: RegExpOptions,
+): Required<AdvancedRegExpOptions> {
+  if ('pattern' in options) {
+    return {
+      pattern: options.pattern,
+      flags: options.flags ?? '',
+      group: options.group ?? 0,
+      sanitize: options.sanitize ?? [],
+    }
+  }
+  const minute = normBasicRegExpOption(options)
+  const [pi, si] = [minute.prefix.include, minute.suffix.include]
+  return {
+    pattern: [
+      pi ? '(' : '',
+      minute.prefix.value,
+      pi ? '' : '(',
+      '.+?',
+      si ? '' : ')',
+      minute.suffix.value,
+      si ? ')' : '',
+    ].join(''),
+    flags: minute.breakable ? 'gs' : 'g',
+    group: 1,
+    sanitize: minute.sanitize,
   }
 }

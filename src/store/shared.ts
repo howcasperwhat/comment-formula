@@ -92,7 +92,7 @@ export const regexes = computed(() => {
   return duplicate(
     options.map(normRegExpOption),
   ).map((opt) => {
-    const sanitize = opt.breakable && opt.sanitize.length
+    const sanitize = opt.flags.includes('s') && opt.sanitize.length
       // remove `<whitespace>#` for each line, so use `^` and `gm`
       // ['#', '##'] => ['##', '#'] (match prefix later)
       ? new RegExp(`^\\s*${opt.sanitize
@@ -104,12 +104,8 @@ export const regexes = computed(() => {
       ? (content: string) => content.replaceAll(sanitize, '')
       : undefined
     return {
-      matcher: new RegExp([
-        opt.prefix,
-        '(.+?)',
-        opt.strict ? '(?<!\\\\)' : '',
-        opt.suffix,
-      ].join(''), opt.breakable ? 'gs' : 'g'),
+      matcher: new RegExp(opt.pattern, opt.flags),
+      group: opt.group,
       processers: [sanitizer].filter(isTruthy),
     }
   })

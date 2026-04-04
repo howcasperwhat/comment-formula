@@ -276,7 +276,7 @@ export function useAnnotation(context: ExtensionContext) {
     let ranges: LiteRange[] = [{ start: Infinity, end: Infinity }]
     const range: LiteRange[] = []
     let match, cur
-    for (const { matcher, processers } of regexes.value) {
+    for (const { matcher, group, processers } of regexes.value) {
       matcher.lastIndex = 0
       cur = 0
       // eslint-disable-next-line no-cond-assign
@@ -298,7 +298,7 @@ export function useAnnotation(context: ExtensionContext) {
             ),
             tex: processers.reduce(
               (acc, fn) => fn(acc),
-              match[1],
+              match[group],
             ),
           })
         }

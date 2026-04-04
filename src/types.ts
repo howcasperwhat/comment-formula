@@ -9,23 +9,43 @@ export interface Formula {
 
 export type RelativePosition = 'before' | 'after' | 'none'
 
-export interface BaseRegExpOptions {
-  strict?: boolean
-  breakable?: boolean
+export interface MarkerOptions {
+  type: 'str' | 'reg'
+  value: string
+  include?: boolean
+}
+
+export type Marker = MarkerOptions | string
+
+export interface SharedRegExpOptions {
   sanitize?: string[]
 }
 
-export interface MinuteRegExpOptions extends BaseRegExpOptions {
-  prefix: string
-  suffix: string
+export interface BasicBaseRegExpOptions extends SharedRegExpOptions {
+  strict?: boolean
+  breakable?: boolean
 }
 
-export interface UnshapedRegExpOptions extends BaseRegExpOptions {
-  marker: string
+export interface MinuteRegExpOptions extends BasicBaseRegExpOptions {
+  prefix: Marker
+  suffix: Marker
 }
+
+export interface UnshapedRegExpOptions extends BasicBaseRegExpOptions {
+  marker: Marker
+}
+
+export interface AdvancedRegExpOptions extends SharedRegExpOptions {
+  pattern: string
+  flags?: string
+  group?: number
+}
+
+export type BasicRegExpOptions
+  = MinuteRegExpOptions | UnshapedRegExpOptions
 
 export type RegExpOptions
-  = MinuteRegExpOptions | UnshapedRegExpOptions
+  = BasicRegExpOptions | AdvancedRegExpOptions
 
 export interface LiteRange {
   start: number
